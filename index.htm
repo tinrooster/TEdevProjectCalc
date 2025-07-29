@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KGO Engineering Project Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+            height: calc(100vh - 200px);
+        }
+        
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 600;
+        }
+        
+        .input-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .input-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .input-group h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #3498db;
+            background: #fff;
+            color: #3498db;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .preset-selector {
+            margin-bottom: 15px;
+        }
+        
+        .labor-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .split-section {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #b3d9ff;
+        }
+        
+        .split-section h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .results h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        
+        .result-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .result-card h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .result-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .result-detail {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .breakdown {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #3498db;
+        }
+        
+        .breakdown h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #bdc3c7;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .equipment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .equipment-item label {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        
+        .equipment-item input {
+            width: 80px;
+            margin-left: 10px;
+        }
+        
+        .project-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .header-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 10px 0;
+        }
+        
+        .header-item label {
+            display: block;
+            margin-bottom: 3px;
+            color: #bdc3c7;
+            font-size: 0.8em;
+        }
+        
+        .header-item input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #34495e;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 13px;
+        }
+        
+        .header-item input::placeholder {
+            color: #95a5a6;
+        }
+        
+        .save-btn, .load-btn, .reset-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 0 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .reset-btn {
+            background: #e74c3c;
+        }
+        
+        .save-btn:hover, .load-btn:hover, .reset-btn:hover {
+            background: #2980b9;
+        }
+        
+        .line-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .line-item input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .line-item button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .add-item-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .add-item-btn:hover {
+            background: #229954;
+        }
+        
+        .vendor-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .vendor-details label {
+            margin-bottom: 5px;
+        }
+        
+        .vendor-details input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .toggle-btn.active {
+            background: #3498db;
+            color: white;
+            position: relative;
+        }
+        
+        .toggle-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #27ae60;
+            border-radius: 0 0 6px 6px;
+        }
+        
+        .vendor-name-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .vendor-name-row label {
+            margin-bottom: 0;
+            min-width: 120px;
+        }
+        
+        .vendor-name-row input[type="text"] {
+            flex: 1;
+        }
+        
+        .vendor-active-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #ddd;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .vendor-active-toggle.active {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+        
+        .vendor-active-toggle.inactive {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+        
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .setup-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .setup-item label {
+            margin-bottom: 5px;
+        }
+        
+        .updating {
+            background: #fff3cd !important;
+            transition: background-color 0.3s ease;
+        }
+        
+
+    </style>
+</head>
+<body>
+            <div class="container">
+        <!-- Project Header Information -->
+        <div class="project-header">
+            <div class="header-grid">
+                <div class="header-item">
+                    <label for="projectName">Project Name:</label>
+                    <input type="text" id="projectName" placeholder="Enter project name">
+                </div>
+                <div class="header-item">
+                    <label for="projectDescription">Description:</label>
+                    <input type="text" id="projectDescription" placeholder="Brief project description">
+                </div>
+                <div class="header-item">
+                    <label for="projectRevision">Revision:</label>
+                    <input type="text" id="projectRevision" value="1.0" placeholder="1.0">
+                </div>
+                <div class="header-item">
+                    <label for="projectDate">Date:</label>
+                    <input type="date" id="projectDate" value="">
+                </div>
+            </div>
+        </div>
+        <input type="file" id="projectFile" accept=".json" style="display: none;" onchange="importProject(event)">
+        
+        <div class="main-layout">
+            <!-- Left Panel: Results and Controls -->
+            <div class="left-panel">
+                <!-- Project Summary -->
+                <div class="results" id="results">
+                    <h2>📊 Project Summary</h2>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <h4>🔌 Total Cables</h4>
+                            <div class="result-value" id="totalCables">1</div>
+                            <div class="result-detail">cables to install</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🔌 Total Terminations</h4>
+                            <div class="result-value" id="totalTerminations">2</div>
+                            <div class="result-detail">connections to complete</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>⏱️ Termination Time</h4>
+                            <div class="result-value" id="terminationHours">0.05 hrs</div>
+                            <div class="result-detail" id="terminationDetails">3.0 minutes</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📅 Project Duration</h4>
+                            <div class="result-value" id="projectDays">0.6 days</div>
+                            <div class="result-detail" id="totalHours">5 total hours</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>💰 Labor Cost</h4>
+                            <div class="result-value" id="laborCost">$375</div>
+                            <div class="result-detail" id="laborDetails">2 techs × 2.5 hrs × $75/hr</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🧰 Material Cost</h4>
+                            <div class="result-value" id="materialCost">$130</div>
+                            <div class="result-detail">cables + terminations</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🔧 Equipment Cost</h4>
+                            <div class="result-value" id="equipmentCost">$0</div>
+                            <div class="result-detail">materials & equipment line items</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📋 Vendor Quotes</h4>
+                            <div class="result-value" id="vendorQuotesTotal">$0</div>
+                            <div class="result-detail">total vendor quotes</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🏷️ Active Vendor Items</h4>
+                            <div class="result-value" id="activeVendorTotal">$0</div>
+                            <div class="result-detail">active vendor pricing items</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>🧰 Other Materials</h4>
+                            <div class="result-value" id="otherMaterialsTotal">$0</div>
+                            <div class="result-detail">additional materials</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>👥 Staff Hours</h4>
+                            <div class="result-value" id="staffHoursTotal">0.0</div>
+                            <div class="result-detail">total staff hours</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>📦 Cable Spools</h4>
+                            <div class="result-value" id="spoolsRequired">1</div>
+                            <div class="result-detail" id="spoolDetails">50ft needed + 7.5% waste</div>
+                        </div>
+                        
+                        <div class="result-card">
+                            <h4>💵 Total Project Cost</h4>
+                            <div class="result-value" id="totalCost">$550</div>
+                            <div class="result-detail">labor + materials + equipment + quotes + other + active vendor</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Spool Mismatch Notification -->
+                    <div id="spoolMismatchNotification" style="display: none; margin-top: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; color: #856404;">
+                        <div style="display: flex; align-items: center;">
+                            <span style="margin-right: 10px;">⚠️</span>
+                            <div>
+                                <strong>Cable Quantity Mismatch:</strong>
+                                <div id="mismatchMessage" style="margin-top: 5px; font-size: 0.9em;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Time Breakdown -->
+                <div class="breakdown">
+                    <h3>🔍 Time Breakdown</h3>
+                    <div class="breakdown-item">
+                        <span>Termination Work:</span>
+                        <span id="breakdownTermination">0.05 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Cable Running:</span>
+                        <span id="breakdownRunning">0.05 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Testing & Verification:</span>
+                        <span id="breakdownTesting">0.03 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Labeling:</span>
+                        <span id="breakdownLabeling">0.01 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Cleanup:</span>
+                        <span id="breakdownCleanup">0.5 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Cutover:</span>
+                        <span id="breakdownCutover">1.5 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Decommissioning:</span>
+                        <span id="breakdownDecommissioning">0.5 hours</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Rack Setup:</span>
+                        <span id="breakdownRack">1.0 hours</span>
+                    </div>
+                    <div class="breakdown-item" style="border-top: 2px solid #2c3e50; margin-top: 10px; padding-top: 10px; color: #2c3e50;">
+                        <strong>Total Project Time:</strong>
+                        <strong id="breakdownTotal">3.6 hours</strong>
+                    </div>
+                </div>
+                
+                <!-- Chart Container -->
+                <div id="chartContainer" style="display: none; background: white; padding: 20px; border-radius: 10px; border: 2px solid #3498db;">
+    
+                    <div style="text-align: center;">
+                        <canvas id="projectChart" width="600" height="400" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
+                    </div>
+                    <button onclick="hideChart()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; margin-top: 15px; cursor: pointer;">Hide Chart</button>
+                </div>
+                
+                <!-- Control Buttons -->
+                <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+                    <button onclick="showChart()" style="background: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">📊 Show Time Chart</button>
+                    <button onclick="showCostChart()" style="background: #e67e22; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">💰 Show Cost Chart</button>
+                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">📄 Download CSV</button>
+                    <button onclick="saveProject()" class="save-btn">💾 Save Project</button>
+                    <button onclick="loadProject()" class="load-btn">📂 Load Project</button>
+                    <button onclick="resetToDefaults()" class="reset-btn">🔄 Reset to Defaults</button>
+                </div>
+            </div>
+            
+            <!-- Right Panel: Input Fields -->
+            <div class="right-panel">
+                <div class="input-grid">
+            <div class="input-group">
+                <h3>📡 Cable Configuration</h3>
+                <div class="toggle-group" style="margin-top: 15px;">
+                    <div class="toggle-btn active" onclick="setCableLengthMode('average')">Average Length</div>
+                    <div class="toggle-btn" onclick="setCableLengthMode('calculated')">Calculated Quantity and Length</div>
+                </div>
+                
+                <div id="averageLengthMode">
+                    <div class="line-item">
+                        <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
+                            <option value="1855">1855</option>
+                            <option value="1505">1505</option>
+                            <option value="1694">1694</option>
+                            <option value="cat6">Cat6</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="numCables">Number of Cables:</label>
+                        <input type="number" id="numCables" value="1" min="1" oninput="calculate()" onchange="calculate()">
+                        <label for="avgCableLength">Average Length (ft):</label>
+                        <input type="number" id="avgCableLength" value="25" min="1" oninput="calculate()" onchange="calculate()">
+                    </div>
+                </div>
+                
+                <div id="calculatedLengthMode" style="display: none;">
+                    <div id="cableLengths">
+                        <div class="line-item">
+                            <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;">
+                                <option value="1855">1855</option>
+                                <option value="1505">1505</option>
+                                <option value="1694">1694</option>
+                                <option value="cat6">Cat6</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="number" placeholder="Qty" class="cable-qty" min="1" value="1" style="width: 60px;" oninput="calculate()" onchange="calculate()">
+                            <input type="number" placeholder="Length" class="cable-length" min="1" style="width: 80px;" oninput="calculate()" onchange="calculate()">
+                            <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                        </div>
+                    </div>
+                    <button onclick="addCableLength()" class="add-item-btn">➕ Add Cable</button>
+                    
+                    <div style="margin-top: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 500; color: #2c3e50;">Total Cables:</span>
+                            <span id="calculatedTotalCables" style="font-weight: bold; color: #3498db;">0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                            <span style="font-weight: 500; color: #2c3e50;">Total Length:</span>
+                            <span id="calculatedTotalLength" style="font-weight: bold; color: #3498db;">0 ft</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            
+
+            
+            <div class="input-group">
+                <h3>🧰 Materials & Equipment</h3>
+                <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                    <strong>Note:</strong> Use this section for line items such as cable management, rack panels, labeling supplies, and other equipment or materials needed for the project.
+                </div>
+                
+                <div id="otherMaterials">
+                    <div class="line-item">
+                        <input type="text" placeholder="Description" class="other-material-desc">
+                        <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="1" oninput="calculate()" onchange="calculate()">
+                        <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()">
+                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                    </div>
+                </div>
+                <button onclick="addOtherMaterial()" class="add-item-btn">➕ Add Material/Equipment</button>
+            </div>
+            
+            <div class="input-group">
+                <h3>📋 Cable Supplier</h3>
+                <div id="vendorQuotes">
+                    <div class="line-item">
+                        <input type="text" placeholder="Vendor Name" class="vendor-name">
+                        <input type="text" placeholder="Item Description/Part #" class="vendor-desc">
+                        <input type="text" placeholder="Quote #" class="vendor-quote">
+                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()">
+                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                    </div>
+                </div>
+                <button onclick="addVendorQuote()" class="add-item-btn">➕ Add Cable Supplier</button>
+            </div>
+            
+            <div class="input-group">
+                <h3>👥 Staff Line Items</h3>
+                <div id="staffLineItems">
+                    <div class="line-item">
+                        <input type="text" placeholder="Description" class="staff-desc">
+                        <input type="text" placeholder="Note" class="staff-note">
+                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()">
+                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                    </div>
+                </div>
+                <button onclick="addStaffLineItem()" class="add-item-btn">➕ Add Staff Line Item</button>
+            </div>
+            
+
+            
+            <div class="input-group">
+                <h3>🏷️ Vendor Pricing</h3>
+                <div class="toggle-group">
+                    <div class="toggle-btn active" onclick="setVendor(1)">Vendor 1</div>
+                    <div class="toggle-btn" onclick="setVendor(2)">Vendor 2</div>
+                    <div class="toggle-btn" onclick="setVendor(3)">Vendor 3</div>
+                </div>
+                
+                <div id="vendor1Details" class="vendor-details">
+                    <div class="vendor-name-row">
+                        <label for="vendor1Name">Vendor 1 Name:</label>
+                        <input type="text" id="vendor1Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <div class="vendor-active-toggle active" onclick="toggleVendorActive(1)">
+                            <span>ACTIVE</span>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
+                    <div id="vendor1Items">
+                        <div class="line-item">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="1" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                        </div>
+                    </div>
+                    <button onclick="addVendorItem(1)" class="add-item-btn">➕ Add Line Item</button>
+                </div>
+                
+                <div id="vendor2Details" class="vendor-details" style="display: none;">
+                    <div class="vendor-name-row">
+                        <label for="vendor2Name">Vendor 2 Name:</label>
+                        <input type="text" id="vendor2Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <div class="vendor-active-toggle inactive" onclick="toggleVendorActive(2)">
+                            <span>INACTIVE</span>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
+                    <div id="vendor2Items">
+                        <div class="line-item">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="1" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                        </div>
+                    </div>
+                    <button onclick="addVendorItem(2)" class="add-item-btn">➕ Add Line Item</button>
+                </div>
+                
+                <div id="vendor3Details" class="vendor-details" style="display: none;">
+                    <div class="vendor-name-row">
+                        <label for="vendor3Name">Vendor 3 Name:</label>
+                        <input type="text" id="vendor3Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <div class="vendor-active-toggle inactive" onclick="toggleVendorActive(3)">
+                            <span>INACTIVE</span>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
+                    <div id="vendor3Items">
+                        <div class="line-item">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="1" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                        </div>
+                    </div>
+                    <button onclick="addVendorItem(3)" class="add-item-btn">➕ Add Line Item</button>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>⚡ Installation Tasks</h3>
+                <div class="setup-grid">
+                    <div class="setup-item">
+                        <label for="cableRunTime">Cable Running Time (min/cable):</label>
+                        <input type="number" id="cableRunTime" value="1" min="0" step="0.5">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="testingTime">Testing Time (min/cable):</label>
+                        <input type="number" id="testingTime" value="1" min="0" step="0.5">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="rackSetupTime">Rack Setup Time (hours):</label>
+                        <input type="number" id="rackSetupTime" value="1" min="0" step="0.5">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="labelingTime">Labeling Time (min/cable):</label>
+                        <input type="number" id="labelingTime" value="0.5" min="0" step="0.1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="cleanupTime">Cleanup Time (hours):</label>
+                        <input type="number" id="cleanupTime" value="0.5" min="0" step="0.1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="cutoverTime">Cutover Time (hours):</label>
+                        <input type="number" id="cutoverTime" value="1.5" min="0" step="0.5">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="decommissioningTime">Decommissioning Time (hours):</label>
+                        <input type="number" id="decommissioningTime" value="0.5" min="0" step="0.5">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <h3>👥 Labor Configuration</h3>
+                <div class="preset-selector">
+                    <label for="laborPreset">Labor Preset:</label>
+                    <select id="laborPreset" onchange="applyLaborPreset()">
+                        <option value="custom">Custom Configuration</option>
+                        <option value="zeroed">Zeroed Labor (Equipment Only)</option>
+                        <option value="rateA">Rate A ($25/hr)</option>
+                        <option value="rateB">Rate B ($55/hr)</option>
+                        <option value="rateC">Rate C ($75/hr)</option>
+                        <option value="rateD">Rate D ($125/hr)</option>
+                    </select>
+                </div>
+                
+                <div class="toggle-group">
+                    <div class="toggle-btn active" onclick="setLaborMode('single')">Single Rate</div>
+                    <div class="toggle-btn" onclick="setLaborMode('split')">Project Lead + Tech</div>
+                </div>
+                
+                <div id="singleLabor">
+                    <label for="numTechnicians">Number of Technicians:</label>
+                    <input type="number" id="numTechnicians" value="1" min="1">
+                    
+                    <label for="hourlyRate">Hourly Rate ($):</label>
+                    <input type="number" id="hourlyRate" value="60" min="1">
+                </div>
+                
+                <div id="splitLabor" style="display: none;">
+                    <div class="labor-split">
+                        <div class="split-section">
+                            <h4>Project Lead</h4>
+                            <label for="numLeads">Number of Leads:</label>
+                            <input type="number" id="numLeads" value="1" min="0">
+                            
+                            <label for="leadRate">Lead Rate ($/hr):</label>
+                            <input type="number" id="leadRate" value="85" min="1">
+                        </div>
+                        <div class="split-section">
+                            <h4>Technicians</h4>
+                            <label for="numTechs">Number of Techs:</label>
+                            <input type="number" id="numTechs" value="2" min="0">
+                            
+                            <label for="techRate">Tech Rate ($/hr):</label>
+                            <input type="number" id="techRate" value="55" min="1">
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; padding: 8px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                        <strong>Note:</strong> Time is split 30% for leads, 70% for technicians
+                    </div>
+                </div>
+                
+                <label for="workHoursPerDay">Work Hours per Day:</label>
+                <input type="number" id="workHoursPerDay" value="8" min="1" max="12">
+                
+                <label for="overtimeToggle">
+                    <input type="checkbox" id="overtimeToggle" style="width: auto; margin-right: 8px;">
+                    Apply Overtime Rules (1.5x after 8hrs, 2x after 12hrs)
+                </label>
+            </div>
+            
+            <div class="input-group">
+                <h3>⚙️ Setup Configuration</h3>
+                <div class="setup-grid">
+                    <div class="setup-item">
+                        <label for="terminationsPerCable">Terminations per Cable:</label>
+                        <input type="number" id="terminationsPerCable" value="2" min="1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="timePerTermination">Time per Termination (minutes):</label>
+                        <input type="number" id="timePerTermination" value="1.5" min="0.1" step="0.1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="wasteFactor">Cable Waste Factor (%):</label>
+                        <input type="number" id="wasteFactor" value="7.5" min="0" max="20" step="0.1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="connectorWasteFactor">Connector Waste Factor (%):</label>
+                        <input type="number" id="connectorWasteFactor" value="3.0" min="0" max="20" step="0.1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="spoolLength">Cable Spool Length (feet):</label>
+                        <input type="number" id="spoolLength" value="1000" min="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        </div>
+    </div>
+
+    <script>
+        // Vendor pricing data
+        const vendorPricing = {
+            1: { 
+                name: '', 
+                items: [],
+                active: true 
+            },
+            2: { 
+                name: '', 
+                items: [],
+                active: false 
+            },
+            3: { 
+                name: '', 
+                items: [],
+                active: false 
+            }
+        };
+        
+        let currentVendor = 1;
+        let currentLaborMode = 'single';
+        let cableLengthMode = 'average';
+        
+        // Load saved vendor pricing on page load
+        function loadVendorPricing() {
+            const savedPricing = localStorage.getItem('vendorPricing');
+            if (savedPricing) {
+                const parsed = JSON.parse(savedPricing);
+                Object.assign(vendorPricing, parsed);
+            }
+            
+            const savedVendor = localStorage.getItem('currentVendor');
+            if (savedVendor) {
+                currentVendor = parseInt(savedVendor);
+            }
+            
+            // Update UI to reflect saved vendor
+            document.querySelectorAll('.toggle-group .toggle-btn').forEach((btn, index) => {
+                if (index === currentVendor - 1) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // Load all vendor data and show current vendor
+            for (let i = 1; i <= 3; i++) {
+                const vendor = vendorPricing[i];
+                document.getElementById('vendor' + i + 'Name').value = vendor.name;
+                
+                // Update the visual state of the active toggle
+                const toggleDiv = document.querySelector('#vendor' + i + 'Details .vendor-active-toggle');
+                const span = toggleDiv.querySelector('span');
+                if (vendor.active) {
+                    toggleDiv.className = 'vendor-active-toggle active';
+                    span.textContent = 'ACTIVE';
+                } else {
+                    toggleDiv.className = 'vendor-active-toggle inactive';
+                    span.textContent = 'INACTIVE';
+                }
+            }
+            
+            // Show current vendor details
+            setVendor(currentVendor);
+        }
+        
+        // Save vendor pricing to localStorage
+        function saveVendorPricing() {
+            localStorage.setItem('vendorPricing', JSON.stringify(vendorPricing));
+            localStorage.setItem('currentVendor', currentVendor.toString());
+        }
+        
+        function toggleVendorActive(vendorNum) {
+            const toggleDiv = document.querySelector('#vendor' + vendorNum + 'Details .vendor-active-toggle');
+            const span = toggleDiv.querySelector('span');
+            
+            // Toggle the active state
+            const isCurrentlyActive = toggleDiv.classList.contains('active');
+            
+            // Update the visual appearance
+            if (isCurrentlyActive) {
+                toggleDiv.className = 'vendor-active-toggle inactive';
+                span.textContent = 'INACTIVE';
+            } else {
+                toggleDiv.className = 'vendor-active-toggle active';
+                span.textContent = 'ACTIVE';
+            }
+            
+            // Update vendor pricing and recalculate
+            updateVendorPricing();
+        }
+        
+        // Update vendor pricing when user manually changes values
+        function updateVendorPricing() {
+            const name = document.getElementById('vendor' + currentVendor + 'Name').value;
+            const toggleDiv = document.querySelector('#vendor' + currentVendor + 'Details .vendor-active-toggle');
+            const active = toggleDiv.classList.contains('active');
+            
+            // Get all vendor items
+            const items = [];
+            document.querySelectorAll('#vendor' + currentVendor + 'Items .line-item').forEach(item => {
+                const desc = item.querySelector('.vendor-item-desc').value;
+                const qty = parseFloat(item.querySelector('.vendor-item-qty').value) || 1;
+                const cost = parseFloat(item.querySelector('.vendor-item-cost').value) || 0;
+                if (desc || cost > 0) {
+                    items.push({ desc, qty, cost });
+                }
+            });
+            
+            vendorPricing[currentVendor] = {
+                name: name,
+                items: items,
+                active: active
+            };
+            
+            saveVendorPricing();
+            calculate();
+        }
+        
+        function setVendor(vendor) {
+            currentVendor = vendor;
+            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Hide all vendor details
+            document.querySelectorAll('.vendor-details').forEach(detail => detail.style.display = 'none');
+            
+            // Show selected vendor details
+            document.getElementById('vendor' + vendor + 'Details').style.display = 'block';
+            
+            // Update the displayed values
+            document.getElementById('vendor' + vendor + 'Name').value = vendorPricing[vendor].name;
+            
+            // Update the visual state of the active toggle
+            const toggleDiv = document.querySelector('#vendor' + vendor + 'Details .vendor-active-toggle');
+            const span = toggleDiv.querySelector('span');
+            if (vendorPricing[vendor].active) {
+                toggleDiv.className = 'vendor-active-toggle active';
+                span.textContent = 'ACTIVE';
+            } else {
+                toggleDiv.className = 'vendor-active-toggle inactive';
+                span.textContent = 'INACTIVE';
+            }
+            
+            // Load vendor items
+            loadVendorItems(vendor);
+            
+            saveVendorPricing();
+            calculate();
+        }
+        
+        function setLaborMode(mode) {
+            currentLaborMode = mode;
+            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'single') {
+                document.getElementById('singleLabor').style.display = 'block';
+                document.getElementById('splitLabor').style.display = 'none';
+            } else {
+                document.getElementById('singleLabor').style.display = 'none';
+                document.getElementById('splitLabor').style.display = 'block';
+            }
+            calculate();
+        }
+        
+        function applyLaborPreset() {
+            const preset = document.getElementById('laborPreset').value;
+            
+            switch(preset) {
+                case 'zeroed':
+                    document.getElementById('hourlyRate').value = 0;
+                    document.getElementById('leadRate').value = 0;
+                    document.getElementById('techRate').value = 0;
+                    break;
+                case 'rateA':
+                    document.getElementById('hourlyRate').value = 25;
+                    document.getElementById('leadRate').value = 45;
+                    document.getElementById('techRate').value = 15;
+                    break;
+                case 'rateB':
+                    document.getElementById('hourlyRate').value = 55;
+                    document.getElementById('leadRate').value = 75;
+                    document.getElementById('techRate').value = 45;
+                    break;
+                case 'rateC':
+                    document.getElementById('hourlyRate').value = 75;
+                    document.getElementById('leadRate').value = 95;
+                    document.getElementById('techRate').value = 65;
+                    break;
+                case 'rateD':
+                    document.getElementById('hourlyRate').value = 125;
+                    document.getElementById('leadRate').value = 155;
+                    document.getElementById('techRate').value = 105;
+                    break;
+            }
+            calculate();
+        }
+        
+        // Project save/load functions
+        function saveProject() {
+            const projectName = document.getElementById('projectName').value || 'Unnamed Project';
+            const fileName = prompt('Enter file name for project:', projectName + '.json');
+            
+            if (fileName) {
+                const projectData = {
+                    header: {
+                        name: document.getElementById('projectName').value,
+                        description: document.getElementById('projectDescription').value,
+                        revision: document.getElementById('projectRevision').value,
+                        date: document.getElementById('projectDate').value
+                    },
+                    inputs: getAllInputValues(),
+                    vendorQuotes: getVendorQuotes(),
+                    otherMaterials: getOtherMaterials(),
+                    staffLineItems: getStaffLineItems(),
+                    cableLengths: getCableLengths(),
+                    cableLengthMode: cableLengthMode,
+                    vendorPricing: vendorPricing,
+                    currentVendor: currentVendor,
+                    currentLaborMode: currentLaborMode
+                };
+                
+                const dataStr = JSON.stringify(projectData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName.endsWith('.json') ? fileName : fileName + '.json';
+                link.click();
+                
+                URL.revokeObjectURL(url);
+            }
+        }
+        
+        function loadProject() {
+            document.getElementById('projectFile').click();
+        }
+        
+        function resetToDefaults() {
+            if (confirm('Are you sure you want to reset all values to defaults? This will clear all current data.')) {
+                // Reset header
+                document.getElementById('projectName').value = '';
+                document.getElementById('projectDescription').value = '';
+                document.getElementById('projectRevision').value = '1.0';
+                document.getElementById('projectDate').value = new Date().toISOString().split('T')[0];
+                
+                            // Reset cable configuration
+            const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+            if (avgCableType) {
+                avgCableType.value = '1855';
+            }
+                document.getElementById('numCables').value = '1';
+                document.getElementById('avgCableLength').value = '25';
+                cableLengthMode = 'average';
+                setCableLengthMode('average');
+                
+                // Clear all line items
+                document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="1" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                
+                document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name"><input type="text" placeholder="Item Description/Part #" class="vendor-desc"><input type="text" placeholder="Quote #" class="vendor-quote"><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                
+                document.getElementById('staffLineItems').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc"><input type="text" placeholder="Note" class="staff-note"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                
+                document.getElementById('cableLengths').innerHTML = '<div class="line-item"><select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="1" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                
+                // Reset vendor pricing
+                vendorPricing = {
+                    1: { name: '', items: [], active: true },
+                    2: { name: '', items: [], active: false },
+                    3: { name: '', items: [], active: false }
+                };
+                currentVendor = 1;
+                setVendor(1);
+                
+                // Reset labor configuration
+                currentLaborMode = 'single';
+                setLaborMode('single');
+                document.getElementById('laborPreset').value = 'custom';
+                document.getElementById('numTechnicians').value = '1';
+                document.getElementById('hourlyRate').value = '60';
+                document.getElementById('workHoursPerDay').value = '8';
+                document.getElementById('overtimeToggle').checked = false;
+                
+                // Reset installation tasks
+                document.getElementById('cableRunTime').value = '1';
+                document.getElementById('testingTime').value = '1';
+                document.getElementById('rackSetupTime').value = '1';
+                document.getElementById('labelingTime').value = '0.5';
+                document.getElementById('cleanupTime').value = '0.5';
+                document.getElementById('cutoverTime').value = '1.5';
+                document.getElementById('decommissioningTime').value = '0.5';
+                
+                // Reset setup configuration
+                document.getElementById('terminationsPerCable').value = '2';
+                document.getElementById('timePerTermination').value = '1.5';
+                document.getElementById('wasteFactor').value = '7.5';
+                document.getElementById('connectorWasteFactor').value = '3.0';
+                document.getElementById('spoolLength').value = '1000';
+                
+                // Clear localStorage
+                localStorage.removeItem('vendorPricing');
+                localStorage.removeItem('currentVendor');
+                localStorage.removeItem('lineItems');
+                
+                // Recalculate
+                calculate();
+                
+                alert('Project has been reset to defaults!');
+            }
+        }
+        
+        function importProject(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const projectData = JSON.parse(e.target.result);
+                        loadProjectData(projectData);
+                    } catch (error) {
+                        alert('Error loading project file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+        
+        function loadProjectData(data) {
+            try {
+                // Load header
+                if (data.header) {
+                    document.getElementById('projectName').value = data.header.name || '';
+                    document.getElementById('projectDescription').value = data.header.description || '';
+                    document.getElementById('projectRevision').value = data.header.revision || '1.0';
+                    document.getElementById('projectDate').value = data.header.date || '';
+                }
+                
+                // Load inputs
+                if (data.inputs) {
+                    setAllInputValues(data.inputs);
+                }
+                
+                // Load vendor quotes
+                if (data.vendorQuotes) {
+                    loadVendorQuotes(data.vendorQuotes);
+                }
+                
+                // Load other materials
+                if (data.otherMaterials) {
+                    loadOtherMaterials(data.otherMaterials);
+                }
+                
+                // Load staff line items
+                if (data.staffLineItems) {
+                    loadStaffLineItems(data.staffLineItems);
+                }
+                
+                if (data.cableLengths) {
+                    loadCableLengths(data.cableLengths);
+                }
+                
+                if (data.cableLengthMode) {
+                    cableLengthMode = data.cableLengthMode;
+                    setCableLengthMode(cableLengthMode);
+                }
+                
+                // Load vendor pricing with error handling
+                if (data.vendorPricing) {
+                    // Ensure vendorPricing has the correct structure
+                    for (let i = 1; i <= 3; i++) {
+                        if (!data.vendorPricing[i]) {
+                            data.vendorPricing[i] = { name: '', items: [], active: i === 1 };
+                        }
+                        if (!data.vendorPricing[i].items) {
+                            data.vendorPricing[i].items = [];
+                        }
+                    }
+                    Object.assign(vendorPricing, data.vendorPricing);
+                }
+                
+                if (data.currentVendor) {
+                    currentVendor = data.currentVendor;
+                    setVendor(currentVendor);
+                }
+                
+                if (data.currentLaborMode) {
+                    currentLaborMode = data.currentLaborMode;
+                    setLaborMode(currentLaborMode);
+                }
+                
+                calculate();
+            } catch (error) {
+                console.error('Error in loadProjectData:', error);
+                alert('Error loading project data: ' + error.message);
+            }
+        }
+        
+        function getAllInputValues() {
+            const inputs = {};
+            const inputElements = document.querySelectorAll('input[type="number"], input[type="text"], input[type="date"], select');
+            inputElements.forEach(input => {
+                if (input.id) {
+                    inputs[input.id] = input.value;
+                }
+            });
+            return inputs;
+        }
+        
+        function setAllInputValues(values) {
+            Object.keys(values).forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.value = values[id];
+                }
+            });
+        }
+        
+        function getVendorQuotes() {
+            const quotes = [];
+            document.querySelectorAll('#vendorQuotes .line-item').forEach(item => {
+                const name = item.querySelector('.vendor-name').value;
+                const desc = item.querySelector('.vendor-desc').value;
+                const quote = item.querySelector('.vendor-quote').value;
+                const amount = item.querySelector('.vendor-amount').value;
+                if (name || desc || quote || amount) {
+                    quotes.push({ name, desc, quote, amount });
+                }
+            });
+            return quotes;
+        }
+        
+        function loadVendorQuotes(quotes) {
+            const container = document.getElementById('vendorQuotes');
+            if (container) {
+                container.innerHTML = '';
+                quotes.forEach(quote => {
+                    addVendorQuote(quote.name, quote.desc, quote.quote, quote.amount);
+                });
+                addEventListenersToLineItems();
+            }
+        }
+        
+        function getOtherMaterials() {
+            const materials = [];
+            document.querySelectorAll('#otherMaterials .line-item').forEach(item => {
+                const desc = item.querySelector('.other-material-desc').value;
+                const qty = parseFloat(item.querySelector('.other-material-qty').value) || 1;
+                const amount = parseFloat(item.querySelector('.other-material-amount').value) || 0;
+                if (desc || amount > 0) {
+                    materials.push({ desc, qty, amount });
+                }
+            });
+            return materials;
+        }
+        
+        function loadOtherMaterials(materials) {
+            const container = document.getElementById('otherMaterials');
+            if (container) {
+                container.innerHTML = '';
+                materials.forEach(material => {
+                    addOtherMaterial(material.desc, material.qty, material.amount);
+                });
+                addEventListenersToLineItems();
+            }
+        }
+        
+        function getStaffLineItems() {
+            const items = [];
+            document.querySelectorAll('#staffLineItems .line-item').forEach(item => {
+                const desc = item.querySelector('.staff-desc').value;
+                const note = item.querySelector('.staff-note').value;
+                const hours = parseFloat(item.querySelector('.staff-hours').value) || 0;
+                if (desc || note || hours > 0) {
+                    items.push({ desc, note, hours });
+                }
+            });
+            return items;
+        }
+        
+        function getCableLengths() {
+            const lengths = [];
+            document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                const length = parseFloat(item.querySelector('.cable-length').value) || 0;
+                const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                const cableType = item.querySelector('.cable-type').value || '1855';
+                if (length > 0) {
+                    lengths.push({ length, qty, cableType });
+                }
+            });
+            return lengths;
+        }
+        
+        function loadStaffLineItems(items) {
+            const container = document.getElementById('staffLineItems');
+            if (container) {
+                container.innerHTML = '';
+                items.forEach(item => {
+                    addStaffLineItem(item.desc, item.note, item.hours);
+                });
+                addEventListenersToLineItems();
+            }
+        }
+        
+        function loadCableLengths(lengths) {
+            const container = document.getElementById('cableLengths');
+            if (container) {
+                container.innerHTML = '';
+                lengths.forEach(item => {
+                    addCableLength(item.qty || 1, item.length, item.cableType || '1855');
+                });
+                addEventListenersToLineItems();
+            }
+        }
+        
+        function loadVendorItems(vendorNum) {
+            const container = document.getElementById('vendor' + vendorNum + 'Items');
+            if (container && vendorPricing[vendorNum] && vendorPricing[vendorNum].items) {
+                container.innerHTML = '';
+                vendorPricing[vendorNum].items.forEach(item => {
+                    addVendorItem(vendorNum, item.desc, item.qty || 1, item.cost);
+                });
+            }
+        }
+        
+        // Line item management functions
+        function addVendorQuote(name = '', desc = '', quote = '', amount = '') {
+            const container = document.getElementById('vendorQuotes');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = 'line-item';
+                div.innerHTML = `
+                    <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}">
+                    <input type="text" placeholder="Description" class="vendor-desc" value="${desc}">
+                    <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}">
+                    <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()">
+                    <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                `;
+                container.appendChild(div);
+                
+                // Add event listeners to the new inputs
+                const newInputs = div.querySelectorAll('input');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                    input.addEventListener('change', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                });
+                
+                saveLineItems(); // Save after adding new item
+            }
+        }
+        
+        function addOtherMaterial(desc = '', qty = '1', amount = '') {
+            const container = document.getElementById('otherMaterials');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = 'line-item';
+                div.innerHTML = `
+                    <input type="text" placeholder="Description" class="other-material-desc" value="${desc}">
+                    <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="${qty}" oninput="calculate()" onchange="calculate()">
+                    <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()">
+                    <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                `;
+                container.appendChild(div);
+                
+                // Add event listeners to the new inputs
+                const newInputs = div.querySelectorAll('input');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                    input.addEventListener('change', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                });
+                
+                saveLineItems(); // Save after adding new item
+            }
+        }
+        
+        function addStaffLineItem(desc = '', note = '', hours = '') {
+            const container = document.getElementById('staffLineItems');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = 'line-item';
+                div.innerHTML = `
+                    <input type="text" placeholder="Description" class="staff-desc" value="${desc}">
+                    <input type="text" placeholder="Note" class="staff-note" value="${note}">
+                    <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="${hours}" oninput="calculate()" onchange="calculate()">
+                    <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                `;
+                container.appendChild(div);
+                
+                // Add event listeners to the new inputs
+                const newInputs = div.querySelectorAll('input');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                    input.addEventListener('change', function() {
+                        calculate();
+                        saveLineItems();
+                    });
+                });
+                
+                saveLineItems(); // Save after adding new item
+            }
+        }
+        
+        function addCableLength(qty = '1', length = '', cableType = '1855') {
+            const container = document.getElementById('cableLengths');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = 'line-item';
+                div.innerHTML = `
+                    <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
+                        <option value="1855" ${cableType === '1855' ? 'selected' : ''}>1855</option>
+                        <option value="1505" ${cableType === '1505' ? 'selected' : ''}>1505</option>
+                        <option value="1694" ${cableType === '1694' ? 'selected' : ''}>1694</option>
+                        <option value="cat6" ${cableType === 'cat6' ? 'selected' : ''}>Cat6</option>
+                        <option value="other" ${cableType === 'other' ? 'selected' : ''}>Other</option>
+                    </select>
+                    <input type="number" placeholder="Qty" class="cable-qty" min="1" value="${qty}" style="width: 60px;" oninput="calculate()" onchange="calculate()">
+                    <input type="number" placeholder="Length" class="cable-length" min="1" value="${length}" style="width: 80px;" oninput="calculate()" onchange="calculate()">
+                    <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                `;
+                container.appendChild(div);
+                
+                // Add event listeners to the new inputs
+                const newInputs = div.querySelectorAll('input');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        console.log('New cable input changed:', input.className, input.value);
+                        calculate();
+                        saveLineItems();
+                    });
+                    input.addEventListener('change', function() {
+                        console.log('New cable change event:', input.className, input.value);
+                        calculate();
+                        saveLineItems();
+                    });
+                });
+                
+                saveLineItems(); // Save after adding new item
+            }
+        }
+        
+        function addVendorItem(vendorNum, desc = '', qty = '1', cost = '') {
+            const container = document.getElementById('vendor' + vendorNum + 'Items');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = 'line-item';
+                div.innerHTML = `
+                    <input type="text" placeholder="Description/Part #" class="vendor-item-desc" value="${desc}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                    <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="${qty}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                    <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="${cost}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                    <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                `;
+                container.appendChild(div);
+                
+                // Add event listeners to the new inputs
+                const newInputs = div.querySelectorAll('input');
+                newInputs.forEach(input => {
+                    input.addEventListener('input', updateVendorPricing);
+                    input.addEventListener('change', updateVendorPricing);
+                });
+            }
+        }
+        
+        function removeLineItem(button) {
+            button.parentElement.remove();
+            saveLineItems(); // Save after removing item
+        }
+        
+        function saveLineItems() {
+            const lineItemsData = {
+                otherMaterials: getOtherMaterials(),
+                vendorQuotes: getVendorQuotes(),
+                staffLineItems: getStaffLineItems(),
+                cableLengths: getCableLengths(),
+                cableLengthMode: cableLengthMode,
+                cableType: document.querySelector('#averageLengthMode .cable-type') ? document.querySelector('#averageLengthMode .cable-type').value : '1855'
+            };
+            localStorage.setItem('lineItems', JSON.stringify(lineItemsData));
+        }
+        
+        function loadLineItems() {
+            const savedLineItems = localStorage.getItem('lineItems');
+            if (savedLineItems) {
+                try {
+                    const lineItemsData = JSON.parse(savedLineItems);
+                    
+                    if (lineItemsData.otherMaterials && lineItemsData.otherMaterials.length > 0) {
+                        loadOtherMaterials(lineItemsData.otherMaterials);
+                    }
+                    
+                    if (lineItemsData.vendorQuotes && lineItemsData.vendorQuotes.length > 0) {
+                        loadVendorQuotes(lineItemsData.vendorQuotes);
+                    }
+                    
+                    if (lineItemsData.staffLineItems && lineItemsData.staffLineItems.length > 0) {
+                        loadStaffLineItems(lineItemsData.staffLineItems);
+                    }
+                    
+                    if (lineItemsData.cableLengths && lineItemsData.cableLengths.length > 0) {
+                        loadCableLengths(lineItemsData.cableLengths);
+                    }
+                    
+                    if (lineItemsData.cableLengthMode) {
+                        cableLengthMode = lineItemsData.cableLengthMode;
+                        setCableLengthMode(cableLengthMode);
+                    }
+                    
+                    if (lineItemsData.cableType) {
+                        const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+                        if (avgCableType) {
+                            avgCableType.value = lineItemsData.cableType;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error loading line items:', error);
+                }
+            }
+        }
+        
+        function setCableLengthMode(mode) {
+            cableLengthMode = mode;
+            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'average') {
+                document.getElementById('averageLengthMode').style.display = 'block';
+                document.getElementById('calculatedLengthMode').style.display = 'none';
+            } else {
+                document.getElementById('averageLengthMode').style.display = 'none';
+                document.getElementById('calculatedLengthMode').style.display = 'block';
+            }
+            calculate();
+        }
+        
+
+        
+        function calculate() {
+            var cables = 0;
+            if (cableLengthMode === 'average') {
+                cables = parseInt(document.getElementById('numCables').value) || 0;
+            }
+            var termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 0;
+            var timePerTerm = parseFloat(document.getElementById('timePerTermination').value) || 0;
+            var runTime = parseFloat(document.getElementById('cableRunTime').value) || 0;
+            var testTime = parseFloat(document.getElementById('testingTime').value) || 0;
+            var rackTime = parseFloat(document.getElementById('rackSetupTime').value) || 0;
+            var labelingTime = parseFloat(document.getElementById('labelingTime').value) || 0;
+            var cleanupTime = parseFloat(document.getElementById('cleanupTime').value) || 0;
+            var cutoverTime = parseFloat(document.getElementById('cutoverTime').value) || 0;
+            var decommissioningTime = parseFloat(document.getElementById('decommissioningTime').value) || 0;
+            var hoursPerDay = parseInt(document.getElementById('workHoursPerDay').value) || 8;
+            // Get connector and cable costs from vendor items (first two items)
+            var termCost = 0;
+            var cableCost = 0;
+            if (vendorPricing[currentVendor] && vendorPricing[currentVendor].items && vendorPricing[currentVendor].items.length >= 2) {
+                termCost = vendorPricing[currentVendor].items[0].cost || 0;
+                cableCost = vendorPricing[currentVendor].items[1].cost || 0;
+            }
+            var length = 0;
+            var totalCableQuantity = 0;
+            
+            if (cableLengthMode === 'average') {
+                length = parseInt(document.getElementById('avgCableLength').value) || 0;
+                totalCableQuantity = cables;
+            } else {
+                // Calculate total length and quantity from cable lengths and quantities
+                document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                    const cableLength = parseFloat(item.querySelector('.cable-length').value) || 0;
+                    const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                    length += (cableLength * qty);
+                    totalCableQuantity += qty;
+                });
+                
+                // Update the calculated totals display
+                document.getElementById('calculatedTotalCables').textContent = totalCableQuantity;
+                document.getElementById('calculatedTotalLength').textContent = length + ' ft';
+            }
+            var spoolLength = parseInt(document.getElementById('spoolLength').value) || 1000;
+            var wasteFactor = parseFloat(document.getElementById('wasteFactor').value) || 7.5;
+            var connectorWasteFactor = parseFloat(document.getElementById('connectorWasteFactor').value) || 3.0;
+            var useOvertime = document.getElementById('overtimeToggle').checked;
+            
+
+            
+            var totalTerms = totalCableQuantity * termsPerCable;
+            var termHours = (totalTerms * timePerTerm) / 60; // Convert minutes to hours
+            var runHours = (totalCableQuantity * runTime) / 60;
+            var testHours = (totalCableQuantity * testTime) / 60;
+            var labelingHours = (totalCableQuantity * labelingTime) / 60;
+            var totalHours = termHours + runHours + testHours + rackTime + labelingHours + cleanupTime + cutoverTime + decommissioningTime;
+            
+            // Labor calculation based on mode
+            var laborCost = 0;
+            var laborDetails = '';
+            
+            if (currentLaborMode === 'single') {
+                var techs = parseInt(document.getElementById('numTechnicians').value) || 1;
+                var rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+                var workHours = totalHours / techs;
+                var days = workHours / hoursPerDay;
+                
+                if (useOvertime && workHours > 8) {
+                    var regularHours = Math.min(workHours, 8);
+                    var overtimeHours = Math.min(workHours - 8, 4);
+                    var doubleTimeHours = Math.max(workHours - 12, 0);
+                    
+                    var regularPay = regularHours * rate;
+                    var overtimePay = overtimeHours * rate * 1.5;
+                    var doubleTimePay = doubleTimeHours * rate * 2;
+                    
+                    laborCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techs);
+                    
+                    if (doubleTimeHours > 0) {
+                        laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
+                                      overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0) + ', ' +
+                                      doubleTimeHours.toFixed(1) + 'hrs@$' + (rate * 2).toFixed(0);
+                    } else if (overtimeHours > 0) {
+                        laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
+                                      overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0);
+                    }
+                } else {
+                    laborCost = Math.ceil(workHours * techs * rate);
+                    laborDetails = techs + ' techs × ' + workHours.toFixed(1) + ' hrs × $' + rate + '/hr';
+                }
+            } else {
+                var leads = parseInt(document.getElementById('numLeads').value) || 0;
+                var techs = parseInt(document.getElementById('numTechs').value) || 0;
+                var leadRate = parseFloat(document.getElementById('leadRate').value) || 0;
+                var techRate = parseFloat(document.getElementById('techRate').value) || 0;
+                
+                var leadHours = totalHours * 0.3; // 30% of time for lead
+                var techHours = totalHours * 0.7; // 70% of time for techs
+                
+                var leadCost = Math.ceil(leadHours * leads * leadRate);
+                var techCost = Math.ceil(techHours * techs * techRate);
+                laborCost = leadCost + techCost;
+                
+                laborDetails = leads + ' leads × ' + leadHours.toFixed(1) + ' hrs × $' + leadRate + '/hr + ' +
+                              techs + ' techs × ' + techHours.toFixed(1) + ' hrs × $' + techRate + '/hr';
+            }
+            
+            var cableMat = 0;
+            if (cableLengthMode === 'average') {
+                cableMat = Math.ceil(totalCableQuantity * length * cableCost);
+            } else {
+                // Calculate cable cost based on individual lengths and quantities
+                document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                    const cableLength = parseFloat(item.querySelector('.cable-length').value) || 0;
+                    const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                    cableMat += Math.ceil(cableLength * qty * cableCost);
+                });
+            }
+            var termMat = Math.ceil(totalTerms * termCost * (1 + connectorWasteFactor / 100)); // Apply connector waste factor
+            var totalMat = cableMat + termMat;
+            
+            // Calculate vendor quotes total
+            var vendorQuotesTotal = 0;
+            document.querySelectorAll('#vendorQuotes .line-item').forEach(item => {
+                const amount = parseFloat(item.querySelector('.vendor-amount').value) || 0;
+                vendorQuotesTotal += amount;
+            });
+            
+            // Calculate active vendor items total
+            var activeVendorTotal = 0;
+            var totalCableOrdered = 0;
+            var cableTypeOrdered = {}; // Track cable types ordered
+            
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active) {
+                    vendorPricing[i].items.forEach(item => {
+                        const itemTotal = (item.qty || 1) * (item.cost || 0);
+                        activeVendorTotal += itemTotal;
+                        
+                        // Check if this is a cable item (look for cable-related keywords)
+                        const desc = item.desc.toLowerCase();
+                        if (desc.includes('cable') || desc.includes('ft') || desc.includes('foot') || desc.includes('cat6') || desc.includes('cat5') || desc.includes('1855') || desc.includes('1505') || desc.includes('1694')) {
+                            const qty = parseFloat(item.qty) || 1;
+                            
+                            // Try to extract length from description or use quantity as feet
+                            let cableLength = qty;
+                            
+                            // Look for common patterns in descriptions
+                            const lengthMatch = desc.match(/(\d+)\s*(?:ft|foot|feet|')/i);
+                            if (lengthMatch) {
+                                cableLength = parseInt(lengthMatch[1]) * qty;
+                            } else if (desc.includes('spool') || desc.includes('roll') || desc.includes('1000')) {
+                                cableLength = qty * 1000; // Standard spool
+                            } else if (desc.includes('500')) {
+                                cableLength = qty * 500; // 500ft spool
+                            }
+                            
+                            totalCableOrdered += cableLength;
+                            
+                            // Determine cable type from description
+                            let cableType = 'unknown';
+                            if (desc.includes('1855')) cableType = '1855';
+                            else if (desc.includes('1505')) cableType = '1505';
+                            else if (desc.includes('1694')) cableType = '1694';
+                            else if (desc.includes('cat6')) cableType = 'cat6';
+                            else if (desc.includes('cat5')) cableType = 'cat5';
+                            
+                            if (!cableTypeOrdered[cableType]) {
+                                cableTypeOrdered[cableType] = 0;
+                            }
+                            cableTypeOrdered[cableType] += cableLength;
+                        }
+                    });
+                }
+            }
+            
+            // Calculate other materials total (this is the equipment cost)
+            var otherMaterialsTotal = 0;
+            document.querySelectorAll('#otherMaterials .line-item').forEach(item => {
+                const qty = parseFloat(item.querySelector('.other-material-qty').value) || 1;
+                const amount = parseFloat(item.querySelector('.other-material-amount').value) || 0;
+                const itemTotal = qty * amount;
+                otherMaterialsTotal += itemTotal;
+            });
+            
+            // Equipment costs (per project) - calculated from other materials
+            var equipmentCost = otherMaterialsTotal;
+            
+            // Calculate staff hours total
+            var staffHoursTotal = 0;
+            document.querySelectorAll('#staffLineItems .line-item').forEach(item => {
+                const hours = parseFloat(item.querySelector('.staff-hours').value) || 0;
+                staffHoursTotal += hours;
+            });
+            
+            var totalCost = laborCost + totalMat + equipmentCost + vendorQuotesTotal + activeVendorTotal;
+            
+            var totalCableNeeded = length;
+            var totalWithWaste = totalCableNeeded * (1 + wasteFactor / 100);
+            var spoolsRequired = Math.ceil(totalWithWaste / spoolLength);
+            
+            // Check for spool mismatch with active vendor cable orders
+            var spoolMismatch = false;
+            var mismatchMessage = '';
+            if (totalCableOrdered > 0 && spoolsRequired > 0) {
+                var cablePerSpool = spoolLength;
+                var calculatedCableNeeded = spoolsRequired * cablePerSpool;
+                if (Math.abs(totalCableOrdered - calculatedCableNeeded) > 10) { // Allow 10ft tolerance
+                    spoolMismatch = true;
+                    mismatchMessage = `Cable ordered: ${totalCableOrdered}ft, Calculated need: ${calculatedCableNeeded}ft`;
+                }
+                
+                // Check for cable type mismatches
+                var configuredCableTypes = {};
+                if (cableLengthMode === 'average') {
+                    const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+                    if (avgCableType) {
+                        const type = avgCableType.value;
+                        if (!configuredCableTypes[type]) configuredCableTypes[type] = 0;
+                        configuredCableTypes[type] = totalCableQuantity;
+                    }
+                } else {
+                    // Calculated mode - check each line item
+                    document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                        const cableType = item.querySelector('.cable-type').value;
+                        const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                        const length = parseFloat(item.querySelector('.cable-length').value) || 0;
+                        const totalLength = qty * length;
+                        
+                        if (!configuredCableTypes[cableType]) configuredCableTypes[cableType] = 0;
+                        configuredCableTypes[cableType] += totalLength;
+                    });
+                }
+                
+                // Add cable type mismatch details to message
+                var typeMismatches = [];
+                for (const [type, configured] of Object.entries(configuredCableTypes)) {
+                    const ordered = cableTypeOrdered[type] || 0;
+                    if (Math.abs(configured - ordered) > 10) {
+                        typeMismatches.push(`${type}: ${configured}ft configured, ${ordered}ft ordered`);
+                    }
+                }
+                
+                if (typeMismatches.length > 0) {
+                    mismatchMessage += '\n\nCable Type Mismatches:\n' + typeMismatches.join('\n');
+                }
+            }
+            
+            var workHours = totalHours / Math.max(1, (currentLaborMode === 'single' ? parseInt(document.getElementById('numTechnicians').value) || 1 : 
+                                                     (parseInt(document.getElementById('numLeads').value) || 0) + (parseInt(document.getElementById('numTechs').value) || 0)));
+            var days = workHours / hoursPerDay;
+            
+            document.getElementById('totalTerminations').textContent = totalTerms;
+            document.getElementById('totalCables').textContent = totalCableQuantity;
+            document.getElementById('terminationHours').textContent = termHours.toFixed(1) + ' hrs';
+            document.getElementById('terminationDetails').textContent = (totalTerms * timePerTerm).toFixed(1) + ' minutes';
+            document.getElementById('projectDays').textContent = days.toFixed(1) + ' days';
+            document.getElementById('totalHours').textContent = totalHours.toFixed(1) + ' total hours';
+            document.getElementById('laborCost').textContent = '$' + laborCost;
+            document.getElementById('laborDetails').textContent = laborDetails;
+            document.getElementById('materialCost').textContent = '$' + totalMat;
+            document.getElementById('equipmentCost').textContent = '$' + equipmentCost;
+            document.getElementById('vendorQuotesTotal').textContent = '$' + vendorQuotesTotal;
+            document.getElementById('activeVendorTotal').textContent = '$' + activeVendorTotal;
+            document.getElementById('otherMaterialsTotal').textContent = '$' + otherMaterialsTotal;
+            document.getElementById('staffHoursTotal').textContent = staffHoursTotal.toFixed(1);
+            document.getElementById('spoolsRequired').textContent = spoolsRequired;
+            document.getElementById('spoolDetails').textContent = totalCableNeeded + 'ft needed + ' + wasteFactor + '% waste';
+            document.getElementById('totalCost').textContent = '$' + totalCost;
+            
+            // Show/hide spool mismatch notification
+            const notification = document.getElementById('spoolMismatchNotification');
+            const messageDiv = document.getElementById('mismatchMessage');
+            if (spoolMismatch) {
+                messageDiv.textContent = mismatchMessage;
+                notification.style.display = 'block';
+            } else {
+                notification.style.display = 'none';
+            }
+            
+            document.getElementById('breakdownTermination').textContent = termHours.toFixed(1) + ' hours';
+            document.getElementById('breakdownRunning').textContent = runHours.toFixed(1) + ' hours';
+            document.getElementById('breakdownTesting').textContent = testHours.toFixed(1) + ' hours';
+            document.getElementById('breakdownLabeling').textContent = labelingHours.toFixed(1) + ' hours';
+            document.getElementById('breakdownCleanup').textContent = cleanupTime.toFixed(1) + ' hours';
+            document.getElementById('breakdownCutover').textContent = cutoverTime.toFixed(1) + ' hours';
+            document.getElementById('breakdownDecommissioning').textContent = decommissioningTime.toFixed(1) + ' hours';
+            document.getElementById('breakdownRack').textContent = rackTime.toFixed(1) + ' hours';
+            document.getElementById('breakdownTotal').textContent = totalHours.toFixed(1) + ' hours';
+        }
+        
+        function showChart() {
+            var canvas = document.getElementById('projectChart');
+            var ctx = canvas.getContext('2d');
+            
+            var termHours = parseFloat(document.getElementById('breakdownTermination').textContent) || 0;
+            var runHours = parseFloat(document.getElementById('breakdownRunning').textContent) || 0;
+            var testHours = parseFloat(document.getElementById('breakdownTesting').textContent) || 0;
+            var labelingHours = parseFloat(document.getElementById('breakdownLabeling').textContent) || 0;
+            var cleanupHours = parseFloat(document.getElementById('breakdownCleanup').textContent) || 0;
+            var cutoverHours = parseFloat(document.getElementById('breakdownCutover').textContent) || 0;
+            var decommissioningHours = parseFloat(document.getElementById('breakdownDecommissioning').textContent) || 0;
+            var rackHours = parseFloat(document.getElementById('breakdownRack').textContent) || 0;
+            
+            var data = [termHours, runHours, testHours, labelingHours, cleanupHours, cutoverHours, decommissioningHours, rackHours];
+            var labels = ['Termination', 'Cable Running', 'Testing', 'Labeling', 'Cleanup', 'Cutover', 'Decommissioning', 'Rack Setup'];
+            var colors = ['#3498db', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22', '#27ae60'];
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw title
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Project Time Breakdown', canvas.width / 2, 30);
+            
+            var total = data.reduce(function(a, b) { return a + b; }, 0);
+            var centerX = canvas.width / 2;
+            var centerY = canvas.height / 2;
+            var radius = Math.min(centerX, centerY) - 120; // Smaller radius for better spacing
+            
+            var currentAngle = -Math.PI / 2;
+            
+            // Draw pie chart
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] > 0) {
+                    var sliceAngle = (data[i] / total) * 2 * Math.PI;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                    ctx.closePath();
+                    ctx.fillStyle = colors[i];
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    currentAngle += sliceAngle;
+                }
+            }
+            
+            // Draw legend
+            var legendX = 20;
+            var legendY = 60;
+            var legendSpacing = 25;
+            
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] > 0) {
+                    // Draw color box
+                    ctx.fillStyle = colors[i];
+                    ctx.fillRect(legendX, legendY, 15, 15);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(legendX, legendY, 15, 15);
+                    
+                    // Draw label
+                    ctx.fillStyle = '#333';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(labels[i] + ': ' + data[i].toFixed(1) + 'h', legendX + 20, legendY + 12);
+                    
+                    legendY += legendSpacing;
+                }
+            }
+            
+            document.getElementById('chartContainer').style.display = 'block';
+        }
+        
+        function showCostChart() {
+            var canvas = document.getElementById('projectChart');
+            var ctx = canvas.getContext('2d');
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw title
+            ctx.fillStyle = '#333';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Project Cost Breakdown', canvas.width / 2, 30);
+            
+            // Collect cost data from various sources
+            var data = [];
+            var labels = [];
+            var colors = ['#3498db', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22', '#27ae60', '#8e44ad', '#16a085'];
+            
+            // Get vendor pricing data (active vendors only)
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].name) {
+                    let vendorTotal = 0;
+                    if (vendorPricing[i].items) {
+                        vendorPricing[i].items.forEach(item => {
+                            vendorTotal += (parseFloat(item.quantity) || 0) * (parseFloat(item.cost) || 0);
+                        });
+                    }
+                    if (vendorTotal > 0) {
+                        data.push(vendorTotal);
+                        labels.push(vendorPricing[i].name || `Vendor ${i}`);
+                    }
+                }
+            }
+            
+            // Get vendor quotes data
+            document.querySelectorAll('#vendorQuotes .line-item').forEach(item => {
+                const amount = parseFloat(item.querySelector('.vendor-amount').value) || 0;
+                const name = item.querySelector('.vendor-name').value || 'Vendor Quote';
+                if (amount > 0) {
+                    data.push(amount);
+                    labels.push(name);
+                }
+            });
+            
+            // Get other materials data
+            document.querySelectorAll('#otherMaterials .line-item').forEach(item => {
+                const qty = parseFloat(item.querySelector('.other-material-qty').value) || 0;
+                const amount = parseFloat(item.querySelector('.other-material-amount').value) || 0;
+                const desc = item.querySelector('.other-material-desc').value || 'Material';
+                const total = qty * amount;
+                if (total > 0) {
+                    data.push(total);
+                    labels.push(desc);
+                }
+            });
+            
+            // If no specific data, show summary totals
+            if (data.length === 0) {
+                var materialCost = parseFloat(document.getElementById('materialCost').textContent.replace('$', '').replace(',', '')) || 0;
+                var equipmentCost = parseFloat(document.getElementById('equipmentCost').textContent.replace('$', '').replace(',', '')) || 0;
+                var vendorQuotesTotal = parseFloat(document.getElementById('vendorQuotesTotal').textContent.replace('$', '').replace(',', '')) || 0;
+                var activeVendorTotal = parseFloat(document.getElementById('activeVendorTotal').textContent.replace('$', '').replace(',', '')) || 0;
+                var otherMaterialsTotal = parseFloat(document.getElementById('otherMaterialsTotal').textContent.replace('$', '').replace(',', '')) || 0;
+                
+                data = [materialCost, equipmentCost, vendorQuotesTotal, activeVendorTotal, otherMaterialsTotal];
+                labels = ['Materials', 'Equipment', 'Vendor Quotes', 'Active Vendor', 'Other Materials'];
+            }
+            
+            var total = data.reduce(function(a, b) { return a + b; }, 0);
+            var centerX = canvas.width / 2;
+            var centerY = canvas.height / 2;
+            var radius = Math.min(centerX, centerY) - 120; // Smaller radius for better spacing
+            
+            var currentAngle = -Math.PI / 2;
+            
+            // Draw pie chart
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] > 0) {
+                    var sliceAngle = (data[i] / total) * 2 * Math.PI;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                    ctx.closePath();
+                    ctx.fillStyle = colors[i % colors.length];
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    currentAngle += sliceAngle;
+                }
+            }
+            
+            // Draw legend
+            var legendX = 20;
+            var legendY = 60;
+            var legendSpacing = 25;
+            
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] > 0) {
+                    // Draw color box
+                    ctx.fillStyle = colors[i % colors.length];
+                    ctx.fillRect(legendX, legendY, 15, 15);
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(legendX, legendY, 15, 15);
+                    
+                    // Draw label
+                    ctx.fillStyle = '#333';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(labels[i] + ': $' + data[i].toLocaleString(), legendX + 20, legendY + 12);
+                    
+                    legendY += legendSpacing;
+                }
+            }
+            
+            document.getElementById('chartContainer').style.display = 'block';
+        }
+        
+        function hideChart() {
+            document.getElementById('chartContainer').style.display = 'none';
+        }
+        
+        function exportCSV() {
+            var csvData = [];
+            csvData.push('Server Rack Wiring Project Estimate');
+            csvData.push('Generated on: ' + new Date().toLocaleDateString());
+            csvData.push('Vendor: ' + currentVendor);
+            csvData.push('Labor Mode: ' + currentLaborMode);
+            csvData.push('');
+            csvData.push('INPUTS');
+            csvData.push('Number of Cables,' + document.getElementById('numCables').value);
+            csvData.push('Total Cable Quantity,' + document.getElementById('totalCables').textContent);
+            csvData.push('Terminations per Cable,' + document.getElementById('terminationsPerCable').value);
+            csvData.push('Time per Termination (minutes),' + document.getElementById('timePerTermination').value);
+            csvData.push('Cable Running Time (min/cable),' + document.getElementById('cableRunTime').value);
+            csvData.push('Testing Time (min/cable),' + document.getElementById('testingTime').value);
+            csvData.push('Rack Setup Time (hours),' + document.getElementById('rackSetupTime').value);
+            csvData.push('Labeling Time (min/cable),' + document.getElementById('labelingTime').value);
+            csvData.push('Cleanup Time (hours),' + document.getElementById('cleanupTime').value);
+            csvData.push('Cutover Time (hours),' + document.getElementById('cutoverTime').value);
+            csvData.push('Decommissioning Time (hours),' + document.getElementById('decommissioningTime').value);
+            
+            if (currentLaborMode === 'single') {
+                csvData.push('Number of Technicians,' + document.getElementById('numTechnicians').value);
+                csvData.push('Hourly Rate ($),' + document.getElementById('hourlyRate').value);
+            } else {
+                csvData.push('Number of Leads,' + document.getElementById('numLeads').value);
+                csvData.push('Lead Rate ($/hr),' + document.getElementById('leadRate').value);
+                csvData.push('Number of Techs,' + document.getElementById('numTechs').value);
+                csvData.push('Tech Rate ($/hr),' + document.getElementById('techRate').value);
+            }
+            
+            csvData.push('Work Hours per Day,' + document.getElementById('workHoursPerDay').value);
+            csvData.push('Cost per Termination ($),' + document.getElementById('terminationCost').value);
+            csvData.push('Cable Cost ($/foot),' + document.getElementById('cableCost').value);
+            csvData.push('Average Cable Length (feet),' + document.getElementById('avgCableLength').value);
+            csvData.push('Cable Spool Length (feet),' + document.getElementById('spoolLength').value);
+            csvData.push('Cable Waste Factor (%),' + document.getElementById('wasteFactor').value);
+            csvData.push('Connector Waste Factor (%),' + document.getElementById('connectorWasteFactor').value);
+            csvData.push('Apply Overtime,' + (document.getElementById('overtimeToggle').checked ? 'Yes' : 'No'));
+            csvData.push('');
+            csvData.push('RESULTS');
+            csvData.push('Total Terminations,' + document.getElementById('totalTerminations').textContent);
+            csvData.push('Termination Time,' + document.getElementById('terminationHours').textContent);
+            csvData.push('Project Duration,' + document.getElementById('projectDays').textContent);
+            csvData.push('Labor Cost,' + document.getElementById('laborCost').textContent);
+            csvData.push('Material Cost,' + document.getElementById('materialCost').textContent);
+            csvData.push('Equipment Cost,' + document.getElementById('equipmentCost').textContent);
+            csvData.push('Vendor Quotes Total,' + document.getElementById('vendorQuotesTotal').textContent);
+            csvData.push('Active Vendor Items Total,' + document.getElementById('activeVendorTotal').textContent);
+            csvData.push('Other Materials Total,' + document.getElementById('otherMaterialsTotal').textContent);
+            csvData.push('Staff Hours Total,' + document.getElementById('staffHoursTotal').textContent);
+            csvData.push('Cable Spools Required,' + document.getElementById('spoolsRequired').textContent);
+            csvData.push('Total Project Cost,' + document.getElementById('totalCost').textContent);
+            csvData.push('');
+            csvData.push('TIME BREAKDOWN');
+            csvData.push('Termination Work,' + document.getElementById('breakdownTermination').textContent);
+            csvData.push('Cable Running,' + document.getElementById('breakdownRunning').textContent);
+            csvData.push('Testing & Verification,' + document.getElementById('breakdownTesting').textContent);
+            csvData.push('Labeling,' + document.getElementById('breakdownLabeling').textContent);
+            csvData.push('Cleanup,' + document.getElementById('breakdownCleanup').textContent);
+            csvData.push('Cutover,' + document.getElementById('breakdownCutover').textContent);
+            csvData.push('Decommissioning,' + document.getElementById('breakdownDecommissioning').textContent);
+            csvData.push('Rack Setup,' + document.getElementById('breakdownRack').textContent);
+            csvData.push('Total Project Time,' + document.getElementById('breakdownTotal').textContent);
+
+            var csvContent = csvData.join('\n');
+            var blob = new Blob([csvContent], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = 'wiring_project_estimate.csv';
+            a.click();
+            
+            window.URL.revokeObjectURL(url);
+        }
+        
+        window.addEventListener('load', function() {
+            loadVendorPricing(); // Load saved vendor pricing
+            loadLineItems(); // Load saved line items
+            
+            // Set current date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('projectDate').value = today;
+            
+            var inputs = document.querySelectorAll('input');
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener('input', calculate);
+                inputs[i].addEventListener('change', calculate);
+            }
+            
+            // Ensure cable configuration inputs have event listeners
+            const cableInputs = document.querySelectorAll('#numCables, #avgCableLength');
+            cableInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    console.log('Page load cable input changed:', input.id, input.value);
+                    calculate();
+                });
+                input.addEventListener('change', function() {
+                    console.log('Page load cable change event:', input.id, input.value);
+                    calculate();
+                });
+            });
+            
+            // Ensure calculated mode cable inputs have event listeners
+            const calculatedCableInputs = document.querySelectorAll('.cable-length, .cable-qty');
+            calculatedCableInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    console.log('Page load calculated input changed:', input.className, input.value);
+                    calculate();
+                });
+                input.addEventListener('change', function() {
+                    console.log('Page load calculated change event:', input.className, input.value);
+                    calculate();
+                });
+            });
+            
+            // Add specific event listeners for vendor pricing inputs
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('vendor' + i + 'Name').addEventListener('change', updateVendorPricing);
+                document.getElementById('vendor' + i + 'Active').addEventListener('change', updateVendorPricing);
+            }
+            
+            // Add event listeners to initial line items
+            addEventListenersToLineItems();
+            
+            calculate();
+        });
+        
+        function addEventListenersToLineItems() {
+            // Add event listeners to all existing line item inputs
+            const lineItemInputs = document.querySelectorAll('.line-item input');
+            lineItemInputs.forEach(input => {
+                input.addEventListener('input', calculate);
+                input.addEventListener('change', calculate);
+            });
+            
+            // Add event listeners to cable configuration inputs (which may have labels)
+            const cableConfigInputs = document.querySelectorAll('#numCables, #avgCableLength');
+            cableConfigInputs.forEach(input => {
+                // Remove any existing listeners first
+                input.removeEventListener('input', calculate);
+                input.removeEventListener('change', calculate);
+                
+                input.addEventListener('input', function() {
+                    console.log('Cable config input changed:', input.id, input.value);
+                    calculate();
+                });
+                input.addEventListener('change', function() {
+                    console.log('Cable config change event:', input.id, input.value);
+                    calculate();
+                });
+            });
+            
+            // Add event listeners to calculated mode cable inputs
+            const calculatedCableInputs = document.querySelectorAll('.cable-length, .cable-qty');
+            calculatedCableInputs.forEach(input => {
+                // Remove any existing listeners first
+                input.removeEventListener('input', calculate);
+                input.removeEventListener('change', calculate);
+                
+                input.addEventListener('input', function() {
+                    console.log('Calculated cable input changed:', input.className, input.value);
+                    calculate();
+                });
+                input.addEventListener('change', function() {
+                    console.log('Calculated cable change event:', input.className, input.value);
+                    calculate();
+                });
+            });
+        }
+    </script>
+</body>
+</html>
