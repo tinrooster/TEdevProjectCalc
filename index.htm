@@ -35,6 +35,14 @@
             height: calc(100vh - 200px);
         }
         
+        /* Adjust layout when header is hidden in landscape */
+        @media (orientation: landscape) and (max-width: 1000px) {
+            .main-layout {
+                height: calc(100vh - 100px) !important;
+                margin-top: 0px !important;
+            }
+        }
+        
         /* Mobile responsive design */
         @media (max-width: 768px) {
             .main-layout {
@@ -268,23 +276,7 @@
             /* Mobile landscape optimizations */
             @media (max-width: 900px) and (orientation: landscape) {
                 .project-header {
-                    padding: 4px 6px !important;
-                    margin-bottom: 6px !important;
-                }
-                
-                .header-grid {
-                    grid-template-columns: repeat(2, 1fr) !important;
-                    gap: 6px !important;
-                }
-                
-                .header-item label {
-                    font-size: 9px !important;
-                    margin-bottom: 1px !important;
-                }
-                
-                .header-item input {
-                    padding: 2px 3px !important;
-                    font-size: 10px !important;
+                    display: none !important;
                 }
                 
                 .container {
@@ -292,8 +284,16 @@
                 }
                 
                 .main-layout {
-                    margin-top: 6px !important;
+                    margin-top: 0px !important;
                     gap: 8px !important;
+                    height: calc(100vh - 80px) !important;
+                    min-height: 250px !important;
+                }
+                
+                /* Make panels use full available height */
+                .left-panel, .right-panel {
+                    height: 100% !important;
+                    overflow-y: auto !important;
                 }
                 
                 .input-group {
@@ -343,23 +343,7 @@
             /* Additional landscape optimizations for smaller screens */
             @media (max-width: 800px) and (orientation: landscape) {
                 .project-header {
-                    padding: 3px 4px !important;
-                    margin-bottom: 4px !important;
-                }
-                
-                .header-grid {
-                    grid-template-columns: repeat(2, 1fr) !important;
-                    gap: 4px !important;
-                }
-                
-                .header-item label {
-                    font-size: 8px !important;
-                    margin-bottom: 0px !important;
-                }
-                
-                .header-item input {
-                    padding: 1px 2px !important;
-                    font-size: 9px !important;
+                    display: none !important;
                 }
                 
                 .container {
@@ -367,8 +351,16 @@
                 }
                 
                 .main-layout {
-                    margin-top: 4px !important;
+                    margin-top: 0px !important;
                     gap: 6px !important;
+                    height: calc(100vh - 60px) !important;
+                    min-height: 200px !important;
+                }
+                
+                /* Make panels use full available height */
+                .left-panel, .right-panel {
+                    height: 100% !important;
+                    overflow-y: auto !important;
                 }
                 
                 .input-group {
@@ -597,23 +589,30 @@
         
         /* Landscape-specific header optimization */
         .project-header.landscape-compact {
-            padding: 4px 6px !important;
-            margin-bottom: 6px !important;
+            display: none !important;
         }
         
-        .project-header.landscape-compact .header-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 6px !important;
-        }
-        
-        .project-header.landscape-compact .header-item label {
-            font-size: 9px !important;
-            margin-bottom: 1px !important;
-        }
-        
-        .project-header.landscape-compact .header-item input {
-            padding: 2px 3px !important;
-            font-size: 10px !important;
+        /* Force hide header in landscape mode */
+        @media (orientation: landscape) and (max-width: 1000px) {
+            .project-header {
+                display: none !important;
+            }
+            
+            .container {
+                padding: 10px !important;
+            }
+            
+            .main-layout {
+                margin-top: 0px !important;
+                height: calc(100vh - 100px) !important;
+                min-height: 300px !important;
+            }
+            
+            /* Make panels use full available height */
+            .left-panel, .right-panel {
+                height: 100% !important;
+                overflow-y: auto !important;
+            }
         }
         
         .header-grid {
@@ -866,11 +865,11 @@
                 <div class="header-item">
                     <label for="projectName">Project Name:</label>
                     <input type="text" id="projectName" placeholder="Enter project name">
-                </div>
+            </div>
                 <div class="header-item">
                     <label for="projectDescription">Description:</label>
                     <input type="text" id="projectDescription" placeholder="Brief project description">
-                </div>
+        </div>
                 <div class="header-item">
                     <label for="projectRevision">Revision:</label>
                     <input type="text" id="projectRevision" value="1.0" placeholder="1.0">
@@ -887,44 +886,44 @@
             <!-- Left Panel: Results and Controls -->
             <div class="left-panel">
                 <!-- Project Summary -->
-                <div class="results" id="results">
-                    <h2>📊 Project Summary</h2>
-                    <div class="results-grid">
+        <div class="results" id="results">
+            <h2>📊 Project Summary</h2>
+            <div class="results-grid">
                         <div class="result-card">
                             <h4>🔌 Total Cables</h4>
                             <div class="result-value" id="totalCables">1</div>
                             <div class="result-detail">cables to install</div>
                         </div>
                         
-                        <div class="result-card">
-                            <h4>🔌 Total Terminations</h4>
-                            <div class="result-value" id="totalTerminations">2</div>
-                            <div class="result-detail">connections to complete</div>
-                        </div>
-                        
-                        <div class="result-card">
-                            <h4>⏱️ Termination Time</h4>
-                            <div class="result-value" id="terminationHours">0.05 hrs</div>
-                            <div class="result-detail" id="terminationDetails">3.0 minutes</div>
-                        </div>
-                        
-                        <div class="result-card">
-                            <h4>📅 Project Duration</h4>
-                            <div class="result-value" id="projectDays">0.6 days</div>
-                            <div class="result-detail" id="totalHours">5 total hours</div>
-                        </div>
-                        
-                        <div class="result-card">
-                            <h4>💰 Labor Cost</h4>
-                            <div class="result-value" id="laborCost">$375</div>
-                            <div class="result-detail" id="laborDetails">2 techs × 2.5 hrs × $75/hr</div>
-                        </div>
-                        
-                        <div class="result-card">
-                            <h4>🧰 Material Cost</h4>
-                            <div class="result-value" id="materialCost">$130</div>
-                            <div class="result-detail">cables + terminations</div>
-                        </div>
+                <div class="result-card">
+                    <h4>🔌 Total Terminations</h4>
+                    <div class="result-value" id="totalTerminations">2</div>
+                    <div class="result-detail">connections to complete</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>⏱️ Termination Time</h4>
+                    <div class="result-value" id="terminationHours">0.05 hrs</div>
+                    <div class="result-detail" id="terminationDetails">3.0 minutes</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>📅 Project Duration</h4>
+                    <div class="result-value" id="projectDays">0.6 days</div>
+                    <div class="result-detail" id="totalHours">5 total hours</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>💰 Labor Cost</h4>
+                    <div class="result-value" id="laborCost">$375</div>
+                    <div class="result-detail" id="laborDetails">2 techs × 2.5 hrs × $75/hr</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>🧰 Material Cost</h4>
+                    <div class="result-value" id="materialCost">$130</div>
+                    <div class="result-detail">cables + terminations</div>
+                </div>
                         
                         <div class="result-card">
                             <h4>🔧 Equipment Cost</h4>
@@ -955,20 +954,20 @@
                             <div class="result-value" id="staffHoursTotal">0.0</div>
                             <div class="result-detail">total staff hours</div>
                         </div>
-                        
-                        <div class="result-card">
-                            <h4>📦 Cable Spools</h4>
-                            <div class="result-value" id="spoolsRequired">1</div>
-                            <div class="result-detail" id="spoolDetails">50ft needed + 7.5% waste</div>
-                        </div>
-                        
-                        <div class="result-card">
-                            <h4>💵 Total Project Cost</h4>
+                
+                <div class="result-card">
+                    <h4>📦 Cable Spools</h4>
+                    <div class="result-value" id="spoolsRequired">1</div>
+                    <div class="result-detail" id="spoolDetails">50ft needed + 7.5% waste</div>
+                </div>
+                
+                <div class="result-card">
+                    <h4>💵 Total Project Cost</h4>
                             <div class="result-value" id="totalCost">$550</div>
                             <div class="result-detail">labor + materials + equipment + quotes + other + active vendor</div>
-                        </div>
-                    </div>
-                    
+                </div>
+            </div>
+            
                     <!-- Spool Mismatch Notification -->
                     <div id="spoolMismatchNotification" style="display: none; margin-top: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; color: #856404;">
                         <div style="display: flex; align-items: center;">
@@ -982,20 +981,20 @@
                 </div>
                 
                 <!-- Time Breakdown -->
-                <div class="breakdown">
-                    <h3>🔍 Time Breakdown</h3>
-                    <div class="breakdown-item">
-                        <span>Termination Work:</span>
-                        <span id="breakdownTermination">0.05 hours</span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span>Cable Running:</span>
-                        <span id="breakdownRunning">0.05 hours</span>
-                    </div>
-                    <div class="breakdown-item">
-                        <span>Testing & Verification:</span>
-                        <span id="breakdownTesting">0.03 hours</span>
-                    </div>
+            <div class="breakdown">
+                <h3>🔍 Time Breakdown</h3>
+                <div class="breakdown-item">
+                    <span>Termination Work:</span>
+                    <span id="breakdownTermination">0.05 hours</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>Cable Running:</span>
+                    <span id="breakdownRunning">0.05 hours</span>
+                </div>
+                <div class="breakdown-item">
+                    <span>Testing & Verification:</span>
+                    <span id="breakdownTesting">0.03 hours</span>
+                </div>
                     <div class="breakdown-item">
                         <span>Labeling:</span>
                         <span id="breakdownLabeling">0.01 hours</span>
@@ -1012,24 +1011,24 @@
                         <span>Decommissioning:</span>
                         <span id="breakdownDecommissioning">0.5 hours</span>
                     </div>
-                    <div class="breakdown-item">
-                        <span>Rack Setup:</span>
+                <div class="breakdown-item">
+                    <span>Rack Setup:</span>
                         <span id="breakdownRack">1.0 hours</span>
-                    </div>
-                    <div class="breakdown-item" style="border-top: 2px solid #2c3e50; margin-top: 10px; padding-top: 10px; color: #2c3e50;">
-                        <strong>Total Project Time:</strong>
-                        <strong id="breakdownTotal">3.6 hours</strong>
-                    </div>
                 </div>
-                
+                <div class="breakdown-item" style="border-top: 2px solid #2c3e50; margin-top: 10px; padding-top: 10px; color: #2c3e50;">
+                    <strong>Total Project Time:</strong>
+                        <strong id="breakdownTotal">3.6 hours</strong>
+                </div>
+            </div>
+            
                 <!-- Chart Container -->
                 <div id="chartContainer" style="display: none; background: white; padding: 20px; border-radius: 10px; border: 2px solid #3498db;">
     
-                    <div style="text-align: center;">
-                        <canvas id="projectChart" width="600" height="400" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
-                    </div>
-                    <button onclick="hideChart()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; margin-top: 15px; cursor: pointer;">Hide Chart</button>
+                <div style="text-align: center;">
+                    <canvas id="projectChart" width="600" height="400" style="max-width: 100%; border: 1px solid #ddd;"></canvas>
                 </div>
+                <button onclick="hideChart()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; margin-top: 15px; cursor: pointer;">Hide Chart</button>
+            </div>
                 
                 <!-- Control Buttons -->
                 <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
@@ -1415,13 +1414,35 @@
         function loadVendorPricing() {
             const savedPricing = localStorage.getItem('vendorPricing');
             if (savedPricing) {
-                const parsed = JSON.parse(savedPricing);
-                Object.assign(vendorPricing, parsed);
+                try {
+                    const parsed = JSON.parse(savedPricing);
+                    // Ensure all vendors exist with proper structure
+                    for (let i = 1; i <= 3; i++) {
+                        if (!parsed[i]) {
+                            parsed[i] = { name: '', items: [], active: i === 1 };
+                        } else {
+                            // Ensure vendor has all required properties
+                            if (!parsed[i].name) parsed[i].name = '';
+                            if (!parsed[i].items) parsed[i].items = [];
+                            if (typeof parsed[i].active !== 'boolean') parsed[i].active = i === 1;
+                        }
+                    }
+                    Object.assign(vendorPricing, parsed);
+                } catch (error) {
+                    console.error('Error loading vendor pricing:', error);
+                    // Reset to defaults if loading fails
+                    for (let i = 1; i <= 3; i++) {
+                        vendorPricing[i] = { name: '', items: [], active: i === 1 };
+                    }
+                }
             }
             
             const savedVendor = localStorage.getItem('currentVendor');
             if (savedVendor) {
                 currentVendor = parseInt(savedVendor);
+                if (isNaN(currentVendor) || currentVendor < 1 || currentVendor > 3) {
+                    currentVendor = 1;
+                }
             }
             
             // Update UI to reflect saved vendor
@@ -1436,17 +1457,21 @@
             // Load all vendor data and show current vendor
             for (let i = 1; i <= 3; i++) {
                 const vendor = vendorPricing[i];
-                document.getElementById('vendor' + i + 'Name').value = vendor.name;
-                
-                // Update the visual state of the active toggle
-                const toggleDiv = document.querySelector('#vendor' + i + 'Details .vendor-active-toggle');
-                const span = toggleDiv.querySelector('span');
-                if (vendor.active) {
-                    toggleDiv.className = 'vendor-active-toggle active';
-                    span.textContent = 'ACTIVE';
-                } else {
-                    toggleDiv.className = 'vendor-active-toggle inactive';
-                    span.textContent = 'INACTIVE';
+                if (vendor && document.getElementById('vendor' + i + 'Name')) {
+                    document.getElementById('vendor' + i + 'Name').value = vendor.name || '';
+                    
+                    // Update the visual state of the active toggle
+                    const toggleDiv = document.querySelector('#vendor' + i + 'Details .vendor-active-toggle');
+                    if (toggleDiv) {
+                        const span = toggleDiv.querySelector('span');
+                        if (vendor.active) {
+                            toggleDiv.className = 'vendor-active-toggle active';
+                            if (span) span.textContent = 'ACTIVE';
+                        } else {
+                            toggleDiv.className = 'vendor-active-toggle inactive';
+                            if (span) span.textContent = 'INACTIVE';
+                        }
+                    }
                 }
             }
             
@@ -1510,26 +1535,41 @@
         function setVendor(vendor) {
             currentVendor = vendor;
             document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
             
             // Hide all vendor details
             document.querySelectorAll('.vendor-details').forEach(detail => detail.style.display = 'none');
             
             // Show selected vendor details
-            document.getElementById('vendor' + vendor + 'Details').style.display = 'block';
+            const vendorDetails = document.getElementById('vendor' + vendor + 'Details');
+            if (vendorDetails) {
+                vendorDetails.style.display = 'block';
+            }
+            
+            // Ensure vendor exists in vendorPricing
+            if (!vendorPricing[vendor]) {
+                vendorPricing[vendor] = { name: '', items: [], active: vendor === 1 };
+            }
             
             // Update the displayed values
-            document.getElementById('vendor' + vendor + 'Name').value = vendorPricing[vendor].name;
+            const vendorNameInput = document.getElementById('vendor' + vendor + 'Name');
+            if (vendorNameInput) {
+                vendorNameInput.value = vendorPricing[vendor].name || '';
+            }
             
             // Update the visual state of the active toggle
             const toggleDiv = document.querySelector('#vendor' + vendor + 'Details .vendor-active-toggle');
-            const span = toggleDiv.querySelector('span');
-            if (vendorPricing[vendor].active) {
-                toggleDiv.className = 'vendor-active-toggle active';
-                span.textContent = 'ACTIVE';
-            } else {
-                toggleDiv.className = 'vendor-active-toggle inactive';
-                span.textContent = 'INACTIVE';
+            if (toggleDiv) {
+                const span = toggleDiv.querySelector('span');
+                if (vendorPricing[vendor].active) {
+                    toggleDiv.className = 'vendor-active-toggle active';
+                    if (span) span.textContent = 'ACTIVE';
+                } else {
+                    toggleDiv.className = 'vendor-active-toggle inactive';
+                    if (span) span.textContent = 'INACTIVE';
+                }
             }
             
             // Load vendor items
@@ -2231,30 +2271,30 @@
                 var rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
                 var workHours = totalHours / techs;
                 var days = workHours / hoursPerDay;
+            
+            if (useOvertime && workHours > 8) {
+                var regularHours = Math.min(workHours, 8);
+                var overtimeHours = Math.min(workHours - 8, 4);
+                var doubleTimeHours = Math.max(workHours - 12, 0);
                 
-                if (useOvertime && workHours > 8) {
-                    var regularHours = Math.min(workHours, 8);
-                    var overtimeHours = Math.min(workHours - 8, 4);
-                    var doubleTimeHours = Math.max(workHours - 12, 0);
-                    
-                    var regularPay = regularHours * rate;
-                    var overtimePay = overtimeHours * rate * 1.5;
-                    var doubleTimePay = doubleTimeHours * rate * 2;
-                    
-                    laborCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techs);
-                    
-                    if (doubleTimeHours > 0) {
-                        laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
-                                      overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0) + ', ' +
-                                      doubleTimeHours.toFixed(1) + 'hrs@$' + (rate * 2).toFixed(0);
-                    } else if (overtimeHours > 0) {
-                        laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
-                                      overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0);
-                    }
-                } else {
-                    laborCost = Math.ceil(workHours * techs * rate);
-                    laborDetails = techs + ' techs × ' + workHours.toFixed(1) + ' hrs × $' + rate + '/hr';
+                var regularPay = regularHours * rate;
+                var overtimePay = overtimeHours * rate * 1.5;
+                var doubleTimePay = doubleTimeHours * rate * 2;
+                
+                laborCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techs);
+                
+                if (doubleTimeHours > 0) {
+                    laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
+                                  overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0) + ', ' +
+                                  doubleTimeHours.toFixed(1) + 'hrs@$' + (rate * 2).toFixed(0);
+                } else if (overtimeHours > 0) {
+                    laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
+                                  overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0);
                 }
+            } else {
+                laborCost = Math.ceil(workHours * techs * rate);
+                laborDetails = techs + ' techs × ' + workHours.toFixed(1) + ' hrs × $' + rate + '/hr';
+            }
             } else {
                 var leads = parseInt(document.getElementById('numLeads').value) || 0;
                 var techs = parseInt(document.getElementById('numTechs').value) || 0;
@@ -2543,7 +2583,7 @@
             // Draw title
             ctx.fillStyle = '#333';
             ctx.font = 'bold 16px Arial';
-            ctx.textAlign = 'center';
+                    ctx.textAlign = 'center';
             ctx.fillText('Project Cost Breakdown', canvas.width / 2, 30);
             
             // Collect cost data from various sources
@@ -2679,8 +2719,8 @@
             csvData.push('Decommissioning Time (hours),' + document.getElementById('decommissioningTime').value);
             
             if (currentLaborMode === 'single') {
-                csvData.push('Number of Technicians,' + document.getElementById('numTechnicians').value);
-                csvData.push('Hourly Rate ($),' + document.getElementById('hourlyRate').value);
+            csvData.push('Number of Technicians,' + document.getElementById('numTechnicians').value);
+            csvData.push('Hourly Rate ($),' + document.getElementById('hourlyRate').value);
             } else {
                 csvData.push('Number of Leads,' + document.getElementById('numLeads').value);
                 csvData.push('Lead Rate ($/hr),' + document.getElementById('leadRate').value);
@@ -2737,13 +2777,22 @@
         // Landscape detection and header optimization
         function checkLandscapeAndOptimize() {
             const isLandscape = window.innerWidth > window.innerHeight;
-            const isMobile = window.innerWidth <= 900;
+            const isMobile = window.innerWidth <= 1000;
             const projectHeader = document.querySelector('.project-header');
+            const mainLayout = document.querySelector('.main-layout');
             
             if (isLandscape && isMobile && projectHeader) {
                 projectHeader.classList.add('landscape-compact');
+                if (mainLayout) {
+                    mainLayout.style.height = 'calc(100vh - 100px)';
+                    mainLayout.style.marginTop = '0px';
+                }
             } else if (projectHeader) {
                 projectHeader.classList.remove('landscape-compact');
+                if (mainLayout) {
+                    mainLayout.style.height = 'calc(100vh - 200px)';
+                    mainLayout.style.marginTop = '15px';
+                }
             }
         }
         
@@ -2769,8 +2818,8 @@
             cableInputs.forEach(input => {
                 input.addEventListener('input', function() {
                     console.log('Page load cable input changed:', input.id, input.value);
-                    calculate();
-                });
+            calculate();
+        });
                 input.addEventListener('change', function() {
                     console.log('Page load cable change event:', input.id, input.value);
                     calculate();
