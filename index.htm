@@ -268,8 +268,8 @@
             /* Mobile landscape optimizations */
             @media (max-width: 768px) and (orientation: landscape) {
                 .project-header {
-                    padding: 8px 10px;
-                    margin-bottom: 10px;
+                    padding: 6px 8px;
+                    margin-bottom: 8px;
                 }
                 
                 .header-grid {
@@ -278,13 +278,13 @@
                 }
                 
                 .header-item label {
-                    font-size: 11px;
-                    margin-bottom: 2px;
+                    font-size: 10px;
+                    margin-bottom: 1px;
                 }
                 
                 .header-item input {
-                    padding: 4px 6px;
-                    font-size: 12px;
+                    padding: 3px 4px;
+                    font-size: 11px;
                 }
                 
                 .container {
@@ -1065,6 +1065,23 @@
             </div>
             
             <div class="input-group">
+                <h3 class="section-header" onclick="toggleSection('staffLineItems')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> 👥 Staff Line Items
+                </h3>
+                <div id="staffLineItems" class="section-content">
+                <div id="staffLineItemsContainer">
+                    <div class="line-item">
+                        <input type="text" placeholder="Description" class="staff-desc">
+                        <input type="text" placeholder="Note" class="staff-note">
+                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()">
+                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                    </div>
+                </div>
+                <button onclick="addStaffLineItem()" class="add-item-btn">➕ Add Staff Line Item</button>
+                </div>
+            </div>
+            
+            <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('cableSupplier')" style="cursor: pointer; user-select: none;">
                     <span class="toggle-icon">▶</span> 📋 Cable Supplier
                 </h3>
@@ -1079,23 +1096,6 @@
                     </div>
                 </div>
                 <button onclick="addVendorQuote()" class="add-item-btn">➕ Add Cable Supplier</button>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('staffLineItems')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 👥 Staff Line Items
-                </h3>
-                <div id="staffLineItems" class="section-content">
-                <div id="staffLineItemsContainer">
-                    <div class="line-item">
-                        <input type="text" placeholder="Description" class="staff-desc">
-                        <input type="text" placeholder="Note" class="staff-note">
-                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()">
-                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
-                    </div>
-                </div>
-                <button onclick="addStaffLineItem()" class="add-item-btn">➕ Add Staff Line Item</button>
                 </div>
             </div>
             
