@@ -266,77 +266,119 @@
             }
             
             /* Mobile landscape optimizations */
-            @media (max-width: 768px) and (orientation: landscape) {
+            @media (max-width: 900px) and (orientation: landscape) {
                 .project-header {
-                    padding: 6px 8px;
-                    margin-bottom: 8px;
+                    padding: 4px 6px !important;
+                    margin-bottom: 6px !important;
                 }
                 
                 .header-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 8px;
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 6px !important;
                 }
                 
                 .header-item label {
-                    font-size: 10px;
-                    margin-bottom: 1px;
+                    font-size: 9px !important;
+                    margin-bottom: 1px !important;
                 }
                 
                 .header-item input {
-                    padding: 3px 4px;
-                    font-size: 11px;
+                    padding: 2px 3px !important;
+                    font-size: 10px !important;
                 }
                 
                 .container {
-                    padding: 8px;
+                    padding: 6px !important;
                 }
                 
                 .main-layout {
-                    margin-top: 8px;
-                    gap: 10px;
+                    margin-top: 6px !important;
+                    gap: 8px !important;
                 }
                 
                 .input-group {
-                    padding: 8px;
-                    margin-bottom: 8px;
+                    padding: 6px !important;
+                    margin-bottom: 6px !important;
                 }
                 
                 .section-header {
-                    font-size: 14px;
-                    margin-bottom: 8px;
+                    font-size: 12px !important;
+                    margin-bottom: 6px !important;
                 }
                 
                 .results-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                    gap: 6px;
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 4px !important;
                 }
                 
                 .result-card {
-                    padding: 8px;
-                    margin-bottom: 4px;
+                    padding: 6px !important;
+                    margin-bottom: 3px !important;
                 }
                 
                 .result-card h4 {
-                    font-size: 12px;
-                    margin-bottom: 4px;
+                    font-size: 10px !important;
+                    margin-bottom: 3px !important;
                 }
                 
                 .result-value {
-                    font-size: 14px;
-                    margin-bottom: 2px;
+                    font-size: 12px !important;
+                    margin-bottom: 1px !important;
                 }
                 
                 .result-detail {
-                    font-size: 10px;
+                    font-size: 8px !important;
                 }
                 
                 h2 {
-                    font-size: 16px;
-                    margin-bottom: 10px;
+                    font-size: 14px !important;
+                    margin-bottom: 8px !important;
                 }
                 
                 h3 {
-                    font-size: 14px;
+                    font-size: 12px !important;
+                }
+            }
+            
+            /* Additional landscape optimizations for smaller screens */
+            @media (max-width: 800px) and (orientation: landscape) {
+                .project-header {
+                    padding: 3px 4px !important;
+                    margin-bottom: 4px !important;
+                }
+                
+                .header-grid {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                    gap: 4px !important;
+                }
+                
+                .header-item label {
+                    font-size: 8px !important;
+                    margin-bottom: 0px !important;
+                }
+                
+                .header-item input {
+                    padding: 1px 2px !important;
+                    font-size: 9px !important;
+                }
+                
+                .container {
+                    padding: 4px !important;
+                }
+                
+                .main-layout {
+                    margin-top: 4px !important;
+                    gap: 6px !important;
+                }
+                
+                .input-group {
+                    padding: 4px !important;
+                    margin-bottom: 4px !important;
+                }
+                
+                .section-header {
+                    font-size: 10px !important;
+                    margin-bottom: 4px !important;
                 }
             }
         }
@@ -551,6 +593,27 @@
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
+        }
+        
+        /* Landscape-specific header optimization */
+        .project-header.landscape-compact {
+            padding: 4px 6px !important;
+            margin-bottom: 6px !important;
+        }
+        
+        .project-header.landscape-compact .header-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 6px !important;
+        }
+        
+        .project-header.landscape-compact .header-item label {
+            font-size: 9px !important;
+            margin-bottom: 1px !important;
+        }
+        
+        .project-header.landscape-compact .header-item input {
+            padding: 2px 3px !important;
+            font-size: 10px !important;
         }
         
         .header-grid {
@@ -2671,6 +2734,22 @@
             window.URL.revokeObjectURL(url);
         }
         
+        // Landscape detection and header optimization
+        function checkLandscapeAndOptimize() {
+            const isLandscape = window.innerWidth > window.innerHeight;
+            const isMobile = window.innerWidth <= 900;
+            const projectHeader = document.querySelector('.project-header');
+            
+            if (isLandscape && isMobile && projectHeader) {
+                projectHeader.classList.add('landscape-compact');
+            } else if (projectHeader) {
+                projectHeader.classList.remove('landscape-compact');
+            }
+        }
+        
+        // Check on load and resize
+        window.addEventListener('resize', checkLandscapeAndOptimize);
+        
         window.addEventListener('load', function() {
             loadVendorPricing(); // Load saved vendor pricing
             loadLineItems(); // Load saved line items
@@ -2719,6 +2798,9 @@
             
             // Add event listeners to initial line items
             addEventListenersToLineItems();
+            
+            // Check landscape and optimize header
+            checkLandscapeAndOptimize();
             
             calculate();
         });
