@@ -694,19 +694,19 @@
         /* Mobile responsive layout for screens < 768x800 */
         @media (max-width: 768px), (max-height: 800px) {
             .container {
-                padding: 10px !important;
+                padding: 8px !important;
             }
             
             .main-layout {
                 display: flex !important;
                 flex-direction: column !important;
-                gap: 15px !important;
+                gap: 12px !important;
             }
             
             .left-panel {
                 order: 1 !important;
                 flex-direction: column !important;
-                gap: 10px !important;
+                gap: 8px !important;
             }
             
             .right-panel {
@@ -716,34 +716,76 @@
             /* Move header to bottom on mobile */
             .project-header {
                 order: 3 !important;
-                margin-top: 20px !important;
+                margin-top: 15px !important;
                 margin-bottom: 0 !important;
+                padding: 8px !important;
+                background: #f8f9fa !important;
+                border-radius: 8px !important;
+                border: 1px solid #dee2e6 !important;
             }
             
-            /* Make Summary and Time Breakdown collapsible */
+            /* Compact header layout for mobile */
+            .project-header > div {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            
+            .project-header .header-item {
+                min-width: auto !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .project-header .header-display {
+                min-width: auto !important;
+                margin-bottom: 5px !important;
+                font-size: 11px !important;
+            }
+            
+            .project-header .header-display strong {
+                font-size: 10px !important;
+            }
+            
+            .project-header .header-display span {
+                font-size: 11px !important;
+            }
+            
+            .project-header button {
+                width: 100% !important;
+                margin: 2px 0 !important;
+                padding: 6px 12px !important;
+                font-size: 12px !important;
+                min-height: 32px !important;
+            }
+            
+            /* Make Summary and Time Breakdown collapsible with better visual separation */
             .results, .breakdown {
-                border: 1px solid #ddd !important;
-                border-radius: 8px !important;
-                margin-bottom: 10px !important;
+                border: 2px solid #3498db !important;
+                border-radius: 10px !important;
+                margin-bottom: 15px !important;
+                background: white !important;
+                box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1) !important;
             }
             
             .results h2, .breakdown h3 {
                 cursor: pointer !important;
                 user-select: none !important;
-                padding: 10px !important;
+                padding: 12px 15px !important;
                 margin: 0 !important;
-                background: #f8f9fa !important;
-                border-bottom: 1px solid #ddd !important;
+                background: #2c3e50 !important;
+                color: white !important;
+                border-radius: 8px 8px 0 0 !important;
                 display: flex !important;
                 justify-content: space-between !important;
                 align-items: center !important;
-                color: #2c3e50 !important;
+                font-weight: 600 !important;
+                font-size: 16px !important;
             }
             
             .results h2::after, .breakdown h3::after {
                 content: "▼" !important;
-                font-size: 12px !important;
+                font-size: 14px !important;
                 transition: transform 0.3s ease !important;
+                font-weight: bold !important;
             }
             
             .results.collapsed h2::after, .breakdown.collapsed h3::after {
@@ -751,33 +793,52 @@
             }
             
             .results .results-grid, .breakdown .breakdown-item {
-                padding: 10px !important;
+                padding: 15px !important;
+                background: white !important;
             }
             
             .results.collapsed .results-grid, .breakdown.collapsed .breakdown-item {
                 display: none !important;
             }
             
-                         /* Adjust control buttons for mobile */
-             .left-panel > div:last-child {
-                 order: 4 !important;
-                 margin-top: 10px !important;
-             }
-             
-                          /* Hide chart buttons on mobile */
-             .left-panel > div:last-child button {
-                 display: none !important;
-             }
-             
-             /* Make header sticky to bottom on mobile when scrolled */
-             .project-header {
-                 position: sticky !important;
-                 bottom: 0 !important;
-                 z-index: 1000 !important;
-                 background: white !important;
-                 border-top: 1px solid #ddd !important;
-                 margin-top: 0 !important;
-             }
+            /* Add visual indicator for scrollable content */
+            .results::before, .breakdown::before {
+                content: "📱 Scroll to see more" !important;
+                display: block !important;
+                text-align: center !important;
+                padding: 8px !important;
+                background: #e8f4fd !important;
+                color: #2c3e50 !important;
+                font-size: 12px !important;
+                font-weight: 500 !important;
+                border-bottom: 1px solid #bdc3c7 !important;
+            }
+            
+            /* Adjust control buttons for mobile */
+            .left-panel > div:last-child {
+                order: 4 !important;
+                margin-top: 8px !important;
+                padding: 10px !important;
+                background: #f8f9fa !important;
+                border-radius: 8px !important;
+                border: 1px solid #dee2e6 !important;
+            }
+            
+            /* Hide chart buttons on mobile */
+            .left-panel > div:last-child button {
+                display: none !important;
+            }
+            
+            /* Make header sticky to bottom on mobile when scrolled */
+            .project-header {
+                position: sticky !important;
+                bottom: 0 !important;
+                z-index: 1000 !important;
+                background: white !important;
+                border-top: 2px solid #3498db !important;
+                margin-top: 0 !important;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1) !important;
+            }
             
             /* Optimize result cards for mobile */
             .results-grid {
@@ -787,6 +848,8 @@
             
             .result-card {
                 padding: 8px !important;
+                border: 1px solid #e9ecef !important;
+                border-radius: 6px !important;
             }
             
             .result-card h4 {
@@ -804,14 +867,19 @@
             
             /* Optimize breakdown items for mobile */
             .breakdown-item {
-                padding: 6px 10px !important;
+                padding: 8px 12px !important;
                 font-size: 12px !important;
+                border-bottom: 1px solid #f1f3f4 !important;
+            }
+            
+            .breakdown-item:last-child {
+                border-bottom: none !important;
             }
             
             /* Optimize input sections for mobile */
             .input-group {
-                padding: 15px !important;
-                margin-bottom: 15px !important;
+                padding: 12px !important;
+                margin-bottom: 12px !important;
             }
             
             .section-header {
@@ -831,7 +899,7 @@
                 }
                 
                 .main-layout {
-                    gap: 10px !important;
+                    gap: 8px !important;
                 }
                 
                 .results-grid {
@@ -854,25 +922,20 @@
                 .result-detail {
                     font-size: 9px !important;
                 }
+                
+                .project-header {
+                    padding: 6px !important;
+                }
+                
+                .project-header button {
+                    padding: 5px 10px !important;
+                    font-size: 11px !important;
+                    min-height: 28px !important;
+                }
             }
         }
         
-        /* Responsive header adjustments */
-        @media (max-width: 600px) {
-            .project-header > div {
-                flex-direction: column !important;
-                gap: 10px !important;
-            }
-            
-            .project-header .header-item {
-                min-width: auto !important;
-            }
-            
-            .project-header button {
-                width: 100% !important;
-                margin: 2px 0 !important;
-            }
-        }
+
         
         /* Landscape-specific header optimization */
         .project-header.landscape-compact {
@@ -928,6 +991,21 @@
         
         .header-item input::placeholder {
             color: #95a5a6;
+        }
+        
+        .header-display {
+            color: #2c3e50;
+            font-size: 13px;
+        }
+        
+        .header-display strong {
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        
+        .header-display span {
+            color: #2c3e50;
+            font-weight: 500;
         }
         
         .save-btn, .load-btn, .reset-btn {
@@ -1146,25 +1224,21 @@
 </head>
 <body>
             <div class="container">
-        <!-- Project Header Information -->
+        <!-- Project Header Display -->
         <div class="project-header">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                    <div class="header-item" style="min-width: 150px;">
-                        <label for="projectName">Project Name:</label>
-                        <input type="text" id="projectName" placeholder="Enter project name">
+                    <div class="header-display" style="min-width: 150px;">
+                        <strong>Project:</strong> <span id="projectNameDisplay">Enter project name</span>
                     </div>
-                    <div class="header-item" style="min-width: 150px;">
-                        <label for="projectDescription">Description:</label>
-                        <input type="text" id="projectDescription" placeholder="Brief project description">
+                    <div class="header-display" style="min-width: 150px;">
+                        <strong>Description:</strong> <span id="projectDescriptionDisplay">Brief project description</span>
                     </div>
-                    <div class="header-item" style="min-width: 100px;">
-                        <label for="projectRevision">Revision:</label>
-                        <input type="text" id="projectRevision" value="1.0" placeholder="1.0">
+                    <div class="header-display" style="min-width: 100px;">
+                        <strong>Revision:</strong> <span id="projectRevisionDisplay">1.0</span>
                     </div>
-                    <div class="header-item" style="min-width: 120px;">
-                        <label for="projectDate">Date:</label>
-                        <input type="date" id="projectDate" value="">
+                    <div class="header-display" style="min-width: 120px;">
+                        <strong>Date:</strong> <span id="projectDateDisplay">Select date</span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1684,11 +1758,37 @@
                     <span class="toggle-icon">▶</span> ⚙️ Setup
                 </h3>
                 <div id="setupConfig" class="section-content">
-                <div class="setup-grid">
-                    <div class="setup-item">
-                        <label for="terminationsPerCable">Terminations per Cable:</label>
-                        <input type="number" id="terminationsPerCable" value="2" min="1">
+                <!-- Project Information -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Information</h4>
+                    <div class="setup-grid">
+                        <div class="setup-item">
+                            <label for="projectName">Project Name:</label>
+                            <input type="text" id="projectName" placeholder="Enter project name" oninput="updateProjectHeader()">
+                        </div>
+                        <div class="setup-item">
+                            <label for="projectDescription">Description:</label>
+                            <input type="text" id="projectDescription" placeholder="Brief project description" oninput="updateProjectHeader()">
+                        </div>
+                        <div class="setup-item">
+                            <label for="projectRevision">Revision:</label>
+                            <input type="text" id="projectRevision" value="1.0" placeholder="1.0" oninput="updateProjectHeader()">
+                        </div>
+                        <div class="setup-item">
+                            <label for="projectDate">Date:</label>
+                            <input type="date" id="projectDate" value="" oninput="updateProjectHeader()">
+                        </div>
                     </div>
+                </div>
+                
+                <!-- Configuration Settings -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Configuration Settings</h4>
+                    <div class="setup-grid">
+                        <div class="setup-item">
+                            <label for="terminationsPerCable">Terminations per Cable:</label>
+                            <input type="number" id="terminationsPerCable" value="2" min="1">
+                        </div>
                     
                     <div class="setup-item">
                         <label for="timePerTermination">Time per Termination (minutes):</label>
@@ -2097,6 +2197,7 @@
                     document.getElementById('projectDescription').value = '';
                     document.getElementById('projectRevision').value = '1.0';
                     document.getElementById('projectDate').value = new Date().toISOString().split('T')[0];
+                    updateProjectHeader(); // Update the display header
                     
                     // Reset cable configuration to zero
                     const avgCableType = document.querySelector('#averageLengthMode .cable-type');
@@ -2267,6 +2368,7 @@
                     document.getElementById('projectDescription').value = data.header.description || '';
                     document.getElementById('projectRevision').value = data.header.revision || '1.0';
                     document.getElementById('projectDate').value = data.header.date || '';
+                    updateProjectHeader(); // Update the display header
                 }
                 
                 // Load inputs
@@ -2702,6 +2804,19 @@
                 document.getElementById('calculatedLengthMode').style.display = 'block';
             }
             calculate();
+        }
+        
+        // Function to update the project header display
+        function updateProjectHeader() {
+            const projectName = document.getElementById('projectName').value || 'Enter project name';
+            const projectDescription = document.getElementById('projectDescription').value || 'Brief project description';
+            const projectRevision = document.getElementById('projectRevision').value || '1.0';
+            const projectDate = document.getElementById('projectDate').value || 'Select date';
+            
+            document.getElementById('projectNameDisplay').textContent = projectName;
+            document.getElementById('projectDescriptionDisplay').textContent = projectDescription;
+            document.getElementById('projectRevisionDisplay').textContent = projectRevision;
+            document.getElementById('projectDateDisplay').textContent = projectDate;
         }
         
 
@@ -3432,6 +3547,9 @@
             // Set current date
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('projectDate').value = today;
+            
+            // Initialize project header display
+            updateProjectHeader();
             
             var inputs = document.querySelectorAll('input');
             for (var i = 0; i < inputs.length; i++) {
