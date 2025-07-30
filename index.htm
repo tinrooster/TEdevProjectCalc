@@ -1168,7 +1168,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Download CSV</button>
+                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Export CSV</button>
                     <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
                     <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
                 </div>
@@ -1222,7 +1222,7 @@
                         <div class="result-card">
                             <h4>🔧 Equipment Cost</h4>
                             <div class="result-value" id="equipmentCost">$0</div>
-                            <div class="result-detail">materials & equipment line items</div>
+                            <div class="result-detail">supplies and expendables line items</div>
                         </div>
                         
                         <div class="result-card">
@@ -1406,11 +1406,11 @@
             
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('materialsEquipment')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 🧰 Materials & Equipment
+                    <span class="toggle-icon">▶</span> 🧰 Supplies and Expendables
                 </h3>
                 <div id="materialsEquipment" class="section-content">
                 <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                    <strong>Note:</strong> Use this section for line items such as cable management, rack panels, labeling supplies, and other equipment or materials needed for the project.
+                    <strong>Note:</strong> Use this section for line items such as cable management, rack panels, labeling supplies, and other supplies or expendables needed for the project.
                 </div>
                 
                 <div id="otherMaterials">
@@ -1421,7 +1421,7 @@
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
-                <button onclick="addOtherMaterial()" class="add-item-btn">➕ Add Material/Equipment</button>
+                <button onclick="addOtherMaterial()" class="add-item-btn">➕ Add Supply/Expendable</button>
                 </div>
             </div>
             
@@ -1449,9 +1449,9 @@
                 <div id="cableSupplier" class="section-content">
                 <div id="vendorQuotes">
                     <div class="line-item">
-                        <input type="text" placeholder="Vendor Name" class="vendor-name">
-                        <input type="text" placeholder="Item Description/Part #" class="vendor-desc">
-                        <input type="text" placeholder="Quote #" class="vendor-quote">
+                        <input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;">
+                        <input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;">
+                        <input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;">
                         <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px;">
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
@@ -1484,7 +1484,11 @@
                 
                 <div id="vendor1Details" class="vendor-details">
                     <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
+                        <strong>Quick Guide - Keyword Matching:</strong><br>
+                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
+                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
+                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor1Name">Vendor 1 Name:</label>
@@ -1508,7 +1512,11 @@
                 
                 <div id="vendor2Details" class="vendor-details" style="display: none;">
                     <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
+                        <strong>Quick Guide - Keyword Matching:</strong><br>
+                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
+                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
+                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor2Name">Vendor 2 Name:</label>
@@ -1532,7 +1540,11 @@
                 
                 <div id="vendor3Details" class="vendor-details" style="display: none;">
                     <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
+                        <strong>Quick Guide - Keyword Matching:</strong><br>
+                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
+                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
+                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor3Name">Vendor 3 Name:</label>
@@ -1670,7 +1682,7 @@
             
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('setupConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> ⚙️ Setup Configuration
+                    <span class="toggle-icon">▶</span> ⚙️ Setup
                 </h3>
                 <div id="setupConfig" class="section-content">
                 <div class="setup-grid">
@@ -1722,6 +1734,7 @@
                         <button onclick="saveDefaults()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Defaults</button>
                         <button onclick="resetToDefaults()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Defaults</button>
                         <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
+                        <button onclick="reconcileConnectorsAndTerminations()" style="background: #9b59b6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔍 Reconcile Connectors</button>
                     </div>
                 </div>
                 </div>
@@ -2098,7 +2111,7 @@
                     // Clear all line items with zero values
                     document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="0" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
-                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name"><input type="text" placeholder="Item Description/Part #" class="vendor-desc"><input type="text" placeholder="Quote #" class="vendor-quote"><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;"><input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;"><input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;"><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px;"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     document.getElementById('staffLineItemsContainer').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc"><input type="text" placeholder="Note" class="staff-note"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="0"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
@@ -2451,9 +2464,9 @@
                 const div = document.createElement('div');
                 div.className = 'line-item';
                 div.innerHTML = `
-                    <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}">
-                    <input type="text" placeholder="Item Description/Part #" class="vendor-desc" value="${desc}">
-                    <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}">
+                    <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}" style="width: 120px;">
+                    <input type="text" placeholder="Item Description/Part #" class="vendor-desc" value="${desc}" style="flex: 2;">
+                    <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}" style="width: 100px;">
                     <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px;">
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
@@ -2739,23 +2752,36 @@
             var cutoverTime = parseFloat(document.getElementById('cutoverTime').value) || 0;
             var decommissioningTime = parseFloat(document.getElementById('decommissioningTime').value) || 0;
             var hoursPerDay = parseInt(document.getElementById('workHoursPerDay').value) || 8;
-            // Get connector and cable costs from configuration fields first, then fall back to vendor items
+            // Get connector and cable costs from configuration fields for inventory cost indication only
             var termCost = parseFloat(document.getElementById('terminationCost').value) || 0;
             var cableCost = parseFloat(document.getElementById('cableCostPerFoot').value) || 0;
             
-            // Only use vendor items for cost calculation if config fields are zero and items are specifically marked as pricing
-            if (termCost === 0 && cableCost === 0 && vendorPricing[currentVendor] && vendorPricing[currentVendor].items && vendorPricing[currentVendor].items.length >= 2) {
-                // Check if the first two items are pricing items (not actual orders)
-                const firstItem = vendorPricing[currentVendor].items[0];
-                const secondItem = vendorPricing[currentVendor].items[1];
-                
-                // Only use as pricing if the description suggests it's a pricing item, not an order
-                if (firstItem.desc && (firstItem.desc.toLowerCase().includes('connector') || firstItem.desc.toLowerCase().includes('termination'))) {
-                    termCost = firstItem.cost || 0;
+            // Check if there are vendor line items for cable/termination pricing
+            var hasVendorCablePricing = false;
+            var hasVendorTerminationPricing = false;
+            
+            // Check all active vendors for cable/termination pricing items
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].items) {
+                    vendorPricing[i].items.forEach(item => {
+                        const desc = item.desc.toLowerCase();
+                        if (desc.includes('cable') || desc.includes('per foot') || desc.includes('ft')) {
+                            hasVendorCablePricing = true;
+                        }
+                        if (desc.includes('connector') || desc.includes('termination') || desc.includes('bnc') || desc.includes('cat6') || desc.includes('rj45')) {
+                            hasVendorTerminationPricing = true;
+                        }
+                    });
                 }
-                if (secondItem.desc && (secondItem.desc.toLowerCase().includes('cable') || secondItem.desc.toLowerCase().includes('per foot'))) {
-                    cableCost = secondItem.cost || 0;
-                }
+            }
+            
+            // Only use Setup Configuration values if there are NO vendor line items for that cable type
+            // These values are for cost indication against standing inventory/reserves only
+            if (hasVendorCablePricing) {
+                cableCost = 0; // Don't use Setup value if vendor has cable pricing
+            }
+            if (hasVendorTerminationPricing) {
+                termCost = 0; // Don't use Setup value if vendor has termination pricing
             }
             var length = 0;
             var totalCableQuantity = 0;
@@ -2944,8 +2970,8 @@
                 staffHoursTotal += hours;
             });
             
-            // Calculate total cost - include material costs calculated from cable/termination pricing
-            var totalCost = laborCost + totalMat + equipmentCost + vendorQuotesTotal + activeVendorTotal;
+            // Calculate total cost - Setup Configuration values are for inventory cost indication only, not factored into total
+            var totalCost = laborCost + equipmentCost + vendorQuotesTotal + activeVendorTotal;
             
             var totalCableNeeded = length;
             var totalWithWaste = totalCableNeeded * (1 + (wasteFactor || 0) / 100);
@@ -3052,8 +3078,13 @@
             document.getElementById('totalHours').textContent = totalHours.toFixed(1) + ' total hours';
             document.getElementById('laborCost').textContent = '$' + laborCost;
             document.getElementById('laborDetails').textContent = laborDetails;
-            // Update material cost display
-            document.getElementById('materialCost').textContent = '$' + totalMat;
+            // Update material cost display - show inventory cost indication if Setup values are used
+            var materialCostDisplay = totalMat;
+            var materialCostNote = '';
+            if (totalMat > 0 && !hasVendorCablePricing && !hasVendorTerminationPricing) {
+                materialCostNote = ' (inventory cost indication)';
+            }
+            document.getElementById('materialCost').textContent = '$' + materialCostDisplay + materialCostNote;
             document.getElementById('equipmentCost').textContent = '$' + equipmentCost;
             document.getElementById('vendorQuotesTotal').textContent = '$' + vendorQuotesTotal;
             document.getElementById('activeVendorTotal').textContent = '$' + activeVendorTotal;
@@ -3318,7 +3349,7 @@
             
             csvData.push('Work Hours per Day,' + document.getElementById('workHoursPerDay').value);
             csvData.push('Cost per Termination ($),' + document.getElementById('terminationCost').value);
-            csvData.push('Cable Cost ($/foot),' + document.getElementById('cableCost').value);
+            csvData.push('Cable Cost ($/foot),' + document.getElementById('cableCostPerFoot').value);
             csvData.push('Average Cable Length (feet),' + document.getElementById('avgCableLength').value);
             csvData.push('Cable Spool Length (feet),' + document.getElementById('spoolLength').value);
             csvData.push('Cable Waste Factor (%),' + document.getElementById('wasteFactor').value);
@@ -3459,6 +3490,22 @@
                 }
             }
             
+            // Set default positions for collapsible sections
+            // Summary is open by default, Time Breakdown is collapsed by default
+            const resultsSection = document.getElementById('results');
+            const breakdownSection = document.getElementById('breakdown');
+            const cableConfigSection = document.getElementById('cableConfig');
+            
+            if (resultsSection) {
+                resultsSection.classList.remove('collapsed'); // Ensure summary is open
+            }
+            if (breakdownSection) {
+                breakdownSection.classList.add('collapsed'); // Ensure time breakdown is collapsed
+            }
+            if (cableConfigSection) {
+                cableConfigSection.classList.add('expanded'); // Ensure cable config is open
+            }
+            
             calculate();
         });
         
@@ -3503,6 +3550,126 @@
                     calculate();
                 });
             });
+        }
+        
+        // Reconciliation function to handle connectors and terminations
+        function reconcileConnectorsAndTerminations() {
+            var reconciliationReport = [];
+            var totalTerms = parseInt(document.getElementById('totalTerminations').textContent) || 0;
+            
+            // Check for BNC and Cat6 connectors in vendor orders
+            var bncConnectorsOrdered = 0;
+            var cat6ConnectorsOrdered = 0;
+            var bncTerminationsOrdered = 0;
+            var cat6TerminationsOrdered = 0;
+            
+            // Scan all active vendor orders for connector/termination items
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].items) {
+                    vendorPricing[i].items.forEach(item => {
+                        const desc = item.desc.toLowerCase();
+                        const qty = parseInt(item.qty) || 0;
+                        
+                        // Check for BNC connectors/terminations
+                        if (desc.includes('bnc')) {
+                            if (desc.includes('connector') || desc.includes('plug') || desc.includes('jack')) {
+                                bncConnectorsOrdered += qty;
+                            } else if (desc.includes('termination') || desc.includes('term')) {
+                                bncTerminationsOrdered += qty;
+                            } else {
+                                // Generic BNC item - assume connectors
+                                bncConnectorsOrdered += qty;
+                            }
+                        }
+                        
+                        // Check for Cat6 connectors/terminations
+                        if (desc.includes('cat6') || desc.includes('rj45') || desc.includes('network')) {
+                            if (desc.includes('connector') || desc.includes('plug') || desc.includes('jack')) {
+                                cat6ConnectorsOrdered += qty;
+                            } else if (desc.includes('termination') || desc.includes('term')) {
+                                cat6TerminationsOrdered += qty;
+                            } else {
+                                // Generic Cat6 item - assume connectors
+                                cat6ConnectorsOrdered += qty;
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Calculate required connectors based on cable configuration
+            var requiredConnectors = 0;
+            var cableTypes = {};
+            
+            if (cableLengthMode === 'average') {
+                const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+                if (avgCableType) {
+                    const type = avgCableType.value;
+                    const qty = parseInt(document.getElementById('numCables').value) || 0;
+                    const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+                    cableTypes[type] = qty * termsPerCable;
+                    requiredConnectors += qty * termsPerCable;
+                }
+            } else {
+                // Calculated mode - check each line item
+                document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                    const cableType = item.querySelector('.cable-type').value;
+                    const qty = parseInt(item.querySelector('.cable-qty').value) || 1;
+                    const length = parseInt(item.querySelector('.cable-length').value) || 0;
+                    const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+                    const totalTerms = qty * termsPerCable;
+                    
+                    if (!cableTypes[cableType]) cableTypes[cableType] = 0;
+                    cableTypes[cableType] += totalTerms;
+                    requiredConnectors += totalTerms;
+                });
+            }
+            
+            // Generate reconciliation report
+            reconciliationReport.push('=== CONNECTOR/TERMINATION RECONCILIATION ===');
+            reconciliationReport.push(`Total terminations required: ${requiredConnectors}`);
+            reconciliationReport.push('');
+            
+            // Check BNC requirements
+            var bncRequired = 0;
+            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
+            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
+            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+            
+            if (bncRequired > 0) {
+                reconciliationReport.push(`BNC Connectors/Terminations:`);
+                reconciliationReport.push(`  Required: ${bncRequired}`);
+                reconciliationReport.push(`  Ordered: ${bncConnectorsOrdered + bncTerminationsOrdered}`);
+                if (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) {
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${bncRequired - (bncConnectorsOrdered + bncTerminationsOrdered)} more`);
+                } else if (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) {
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(bncConnectorsOrdered + bncTerminationsOrdered) - bncRequired} extra`);
+                } else {
+                    reconciliationReport.push(`  ✅ Perfect match`);
+                }
+                reconciliationReport.push('');
+            }
+            
+            // Check Cat6 requirements
+            var cat6Required = 0;
+            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
+            
+            if (cat6Required > 0) {
+                reconciliationReport.push(`Cat6 Connectors/Terminations:`);
+                reconciliationReport.push(`  Required: ${cat6Required}`);
+                reconciliationReport.push(`  Ordered: ${cat6ConnectorsOrdered + cat6TerminationsOrdered}`);
+                if (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) {
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${cat6Required - (cat6ConnectorsOrdered + cat6TerminationsOrdered)} more`);
+                } else if (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) {
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(cat6ConnectorsOrdered + cat6TerminationsOrdered) - cat6Required} extra`);
+                } else {
+                    reconciliationReport.push(`  ✅ Perfect match`);
+                }
+                reconciliationReport.push('');
+            }
+            
+            // Show reconciliation report
+            alert(reconciliationReport.join('\n'));
         }
     </script>
 </body>
