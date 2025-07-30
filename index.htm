@@ -625,6 +625,28 @@
         .breakdown h3 {
             color: #2c3e50;
             margin-bottom: 15px;
+            cursor: pointer;
+            user-select: none;
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .breakdown h3::after {
+            content: "▼";
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+        
+        .breakdown.collapsed h3::after {
+            transform: rotate(-90deg);
+        }
+        
+        .breakdown.collapsed .breakdown-item {
+            display: none;
         }
         
         .breakdown-item {
@@ -667,6 +689,189 @@
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
+        }
+        
+        /* Mobile responsive layout for screens < 1100x1000 */
+        @media (max-width: 1100px), (max-height: 1000px) {
+            .container {
+                padding: 10px !important;
+            }
+            
+            .main-layout {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 15px !important;
+            }
+            
+            .left-panel {
+                order: 1 !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            
+            .right-panel {
+                order: 2 !important;
+            }
+            
+            /* Move header to bottom on mobile */
+            .project-header {
+                order: 3 !important;
+                margin-top: 20px !important;
+                margin-bottom: 0 !important;
+            }
+            
+            /* Make Summary and Time Breakdown collapsible */
+            .results, .breakdown {
+                border: 1px solid #ddd !important;
+                border-radius: 8px !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .results h2, .breakdown h3 {
+                cursor: pointer !important;
+                user-select: none !important;
+                padding: 10px !important;
+                margin: 0 !important;
+                background: #f8f9fa !important;
+                border-bottom: 1px solid #ddd !important;
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                color: #2c3e50 !important;
+            }
+            
+            .results h2::after, .breakdown h3::after {
+                content: "▼" !important;
+                font-size: 12px !important;
+                transition: transform 0.3s ease !important;
+            }
+            
+            .results.collapsed h2::after, .breakdown.collapsed h3::after {
+                transform: rotate(-90deg) !important;
+            }
+            
+            .results .results-grid, .breakdown .breakdown-item {
+                padding: 10px !important;
+            }
+            
+            .results.collapsed .results-grid, .breakdown.collapsed .breakdown-item {
+                display: none !important;
+            }
+            
+                         /* Adjust control buttons for mobile */
+             .left-panel > div:last-child {
+                 order: 4 !important;
+                 margin-top: 10px !important;
+             }
+             
+                          /* Hide chart buttons on mobile */
+             .left-panel > div:last-child button {
+                 display: none !important;
+             }
+             
+             /* Make header sticky to bottom on mobile when scrolled */
+             .project-header {
+                 position: sticky !important;
+                 bottom: 0 !important;
+                 z-index: 1000 !important;
+                 background: white !important;
+                 border-top: 1px solid #ddd !important;
+                 margin-top: 0 !important;
+             }
+            
+            /* Optimize result cards for mobile */
+            .results-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
+                gap: 8px !important;
+            }
+            
+            .result-card {
+                padding: 8px !important;
+            }
+            
+            .result-card h4 {
+                font-size: 11px !important;
+                margin-bottom: 4px !important;
+            }
+            
+            .result-value {
+                font-size: 14px !important;
+            }
+            
+            .result-detail {
+                font-size: 10px !important;
+            }
+            
+            /* Optimize breakdown items for mobile */
+            .breakdown-item {
+                padding: 6px 10px !important;
+                font-size: 12px !important;
+            }
+            
+            /* Optimize input sections for mobile */
+            .input-group {
+                padding: 15px !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .section-header {
+                font-size: 14px !important;
+                margin-bottom: 10px !important;
+                color: #2c3e50 !important;
+                background: #f8f9fa !important;
+                padding: 8px 12px !important;
+                border-radius: 6px !important;
+                border: 1px solid #dee2e6 !important;
+            }
+            
+            /* Ensure proper spacing on very small screens */
+            @media (max-width: 600px) {
+                .container {
+                    padding: 5px !important;
+                }
+                
+                .main-layout {
+                    gap: 10px !important;
+                }
+                
+                .results-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) !important;
+                    gap: 6px !important;
+                }
+                
+                .result-card {
+                    padding: 6px !important;
+                }
+                
+                .result-card h4 {
+                    font-size: 10px !important;
+                }
+                
+                .result-value {
+                    font-size: 12px !important;
+                }
+                
+                .result-detail {
+                    font-size: 9px !important;
+                }
+            }
+        }
+        
+        /* Responsive header adjustments */
+        @media (max-width: 768px) {
+            .project-header > div {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            
+            .project-header .header-item {
+                min-width: auto !important;
+            }
+            
+            .project-header button {
+                width: 100% !important;
+                margin: 2px 0 !important;
+            }
         }
         
         /* Landscape-specific header optimization */
@@ -943,22 +1148,29 @@
             <div class="container">
         <!-- Project Header Information -->
         <div class="project-header">
-            <div class="header-grid">
-                <div class="header-item">
-                    <label for="projectName">Project Name:</label>
-                    <input type="text" id="projectName" placeholder="Enter project name">
-            </div>
-                <div class="header-item">
-                    <label for="projectDescription">Description:</label>
-                    <input type="text" id="projectDescription" placeholder="Brief project description">
-        </div>
-                <div class="header-item">
-                    <label for="projectRevision">Revision:</label>
-                    <input type="text" id="projectRevision" value="1.0" placeholder="1.0">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    <div class="header-item" style="min-width: 150px;">
+                        <label for="projectName">Project Name:</label>
+                        <input type="text" id="projectName" placeholder="Enter project name">
+                    </div>
+                    <div class="header-item" style="min-width: 150px;">
+                        <label for="projectDescription">Description:</label>
+                        <input type="text" id="projectDescription" placeholder="Brief project description">
+                    </div>
+                    <div class="header-item" style="min-width: 100px;">
+                        <label for="projectRevision">Revision:</label>
+                        <input type="text" id="projectRevision" value="1.0" placeholder="1.0">
+                    </div>
+                    <div class="header-item" style="min-width: 120px;">
+                        <label for="projectDate">Date:</label>
+                        <input type="date" id="projectDate" value="">
+                    </div>
                 </div>
-                <div class="header-item">
-                    <label for="projectDate">Date:</label>
-                    <input type="date" id="projectDate" value="">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Download CSV</button>
+                    <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
+                    <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
                 </div>
             </div>
         </div>
@@ -969,7 +1181,7 @@
             <div class="left-panel">
                 <!-- Project Summary -->
         <div class="results" id="results">
-            <h2>📊 Project Summary</h2>
+            <h2 onclick="toggleMobileSection('results')" style="cursor: pointer; user-select: none;">📊 Project Summary</h2>
             <div class="results-grid">
                         <div class="result-card">
                             <h4>🔌 Total Cables</h4>
@@ -1004,7 +1216,7 @@
                 <div class="result-card">
                     <h4>🧰 Material Cost</h4>
                     <div class="result-value" id="materialCost">$130</div>
-                    <div class="result-detail">cables + terminations</div>
+                    <div class="result-detail">rack supplies & expendables</div>
                 </div>
                         
                         <div class="result-card">
@@ -1063,8 +1275,8 @@
                 </div>
                 
                 <!-- Time Breakdown -->
-            <div class="breakdown">
-                <h3>🔍 Time Breakdown</h3>
+            <div class="breakdown" id="breakdown">
+                <h3 onclick="toggleBreakdown()">🔍 Time Breakdown</h3>
                 <div class="breakdown-item">
                     <span>Termination Work:</span>
                     <span id="breakdownTermination">0.05 hours</span>
@@ -1116,10 +1328,6 @@
                 <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;">
                     <button onclick="showChart()" style="background: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">📊 Show Time Chart</button>
                     <button onclick="showCostChart()" style="background: #e67e22; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">💰 Show Cost Chart</button>
-                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 12px 20px; border-radius: 8px; margin: 5px; cursor: pointer; font-size: 14px;">📄 Download CSV</button>
-                    <button onclick="saveProject()" class="save-btn">💾 Save Project</button>
-                    <button onclick="loadProject()" class="load-btn">📂 Load Project</button>
-                    <button onclick="resetToDefaults()" class="reset-btn">🔄 Reset to Defaults</button>
                 </div>
             </div>
             
@@ -1224,9 +1432,9 @@
                 <div id="staffLineItems" class="section-content">
                 <div id="staffLineItemsContainer">
                     <div class="line-item">
-                        <input type="text" placeholder="Description" class="staff-desc">
-                        <input type="text" placeholder="Note" class="staff-note">
-                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()">
+                        <input type="text" placeholder="Description" class="staff-desc" style="flex: 2;">
+                        <input type="text" placeholder="Note" class="staff-note" style="flex: 3;">
+                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()" style="width: 60px;">
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
@@ -1236,7 +1444,7 @@
             
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('cableSupplier')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 📋 Cable Supplier
+                    <span class="toggle-icon">▶</span> 📋 Quotes
                 </h3>
                 <div id="cableSupplier" class="section-content">
                 <div id="vendorQuotes">
@@ -1244,11 +1452,11 @@
                         <input type="text" placeholder="Vendor Name" class="vendor-name">
                         <input type="text" placeholder="Item Description/Part #" class="vendor-desc">
                         <input type="text" placeholder="Quote #" class="vendor-quote">
-                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()">
+                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px;">
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
-                <button onclick="addVendorQuote()" class="add-item-btn">➕ Add Cable Supplier</button>
+                <button onclick="addVendorQuote()" class="add-item-btn">➕ Add Quote</button>
                 </div>
             </div>
             
@@ -1275,6 +1483,9 @@
                 </div>
                 
                 <div id="vendor1Details" class="vendor-details">
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                    </div>
                     <div class="vendor-name-row">
                         <label for="vendor1Name">Vendor 1 Name:</label>
                         <input type="text" id="vendor1Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
@@ -1296,6 +1507,9 @@
                 </div>
                 
                 <div id="vendor2Details" class="vendor-details" style="display: none;">
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                    </div>
                     <div class="vendor-name-row">
                         <label for="vendor2Name">Vendor 2 Name:</label>
                         <input type="text" id="vendor2Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
@@ -1317,6 +1531,9 @@
                 </div>
                 
                 <div id="vendor3Details" class="vendor-details" style="display: none;">
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                        <strong>Note:</strong> Use this section for actual vendor orders. For cable and termination pricing, use the Setup Configuration section above.
+                    </div>
                     <div class="vendor-name-row">
                         <label for="vendor3Name">Vendor 3 Name:</label>
                         <input type="text" id="vendor3Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
@@ -1406,11 +1623,16 @@
                 </div>
                 
                 <div id="singleLabor">
-                    <label for="numTechnicians">Number of Technicians:</label>
-                    <input type="number" id="numTechnicians" value="1" min="1">
-                    
-                    <label for="hourlyRate">Hourly Rate ($):</label>
-                    <input type="number" id="hourlyRate" value="60" min="1">
+                    <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
+                        <div style="width: 120px; text-align: center;"># of Techs</div>
+                        <div style="width: 100px; text-align: center;">Hourly Rate</div>
+                        <div style="width: 120px; text-align: center;">Hours per Day</div>
+                    </div>
+                    <div class="line-item">
+                        <input type="number" id="numTechnicians" value="1" min="1" style="width: 120px; text-align: center;">
+                        <input type="number" id="hourlyRate" value="60" min="1" style="width: 100px; text-align: center;">
+                        <input type="number" id="workHoursPerDay" value="8" min="1" max="12" style="width: 120px; text-align: center;">
+                    </div>
                 </div>
                 
                 <div id="splitLabor" style="display: none;">
@@ -1437,8 +1659,7 @@
                     </div>
                 </div>
                 
-                <label for="workHoursPerDay">Work Hours per Day:</label>
-                <input type="number" id="workHoursPerDay" value="8" min="1" max="12">
+
                 
                 <label for="overtimeToggle">
                     <input type="checkbox" id="overtimeToggle" style="width: auto; margin-right: 8px;">
@@ -1476,6 +1697,31 @@
                     <div class="setup-item">
                         <label for="spoolLength">Cable Spool Length (feet):</label>
                         <input type="number" id="spoolLength" value="1000" min="1">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="cableCostPerFoot">Cable Cost per Foot ($):</label>
+                        <input type="number" id="cableCostPerFoot" value="0" min="0" step="0.01">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="terminationCost">Termination Cost per Connector ($):</label>
+                        <input type="number" id="terminationCost" value="0" min="0" step="0.01">
+                    </div>
+                    
+                    <div class="setup-item">
+                        <label for="autoSave">Auto Save:</label>
+                        <input type="checkbox" id="autoSave" style="width: auto; margin-left: 10px;">
+                    </div>
+                </div>
+                
+                <!-- Setup Control Buttons -->
+                <div style="margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border: 1px solid #b3d9ff;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Controls</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="saveDefaults()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Defaults</button>
+                        <button onclick="resetToDefaults()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Defaults</button>
+                        <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
                     </div>
                 </div>
                 </div>
@@ -1795,7 +2041,26 @@
         }
         
         function resetToDefaults() {
-            if (confirm('Are you sure you want to reset all values to defaults? This will clear all current data.')) {
+            // Load saved defaults from localStorage
+            const savedDefaults = localStorage.getItem('projectDefaults');
+            if (savedDefaults) {
+                try {
+                    const defaults = JSON.parse(savedDefaults);
+                    loadProjectData(defaults);
+                    alert('Project has been reset to saved defaults!');
+                } catch (error) {
+                    console.error('Error loading defaults:', error);
+                    alert('Error loading saved defaults. Using factory defaults instead.');
+                    resetToZero();
+                }
+            } else {
+                alert('No saved defaults found. Use "Save Defaults" to save current settings as defaults.');
+                resetToZero();
+            }
+        }
+        
+        function resetToZero() {
+            if (confirm('Are you sure you want to reset all values to zero? This will clear all current data.')) {
                 try {
                     // Clear localStorage first to prevent reloading old data
                     localStorage.removeItem('vendorPricing');
@@ -1914,6 +2179,9 @@
                     document.getElementById('wasteFactor').value = '0';
                     document.getElementById('connectorWasteFactor').value = '0';
                     document.getElementById('spoolLength').value = '0';
+                    document.getElementById('cableCostPerFoot').value = '0';
+                    document.getElementById('terminationCost').value = '0';
+                    document.getElementById('autoSave').checked = false;
                     
                     // Hide spool mismatch notification
                     const notification = document.getElementById('spoolMismatchNotification');
@@ -1928,11 +2196,38 @@
                     // Final calculation
                     calculate();
                     
-                    alert('Project has been reset to defaults!');
+                    alert('Project has been reset to zero!');
                 } catch (error) {
                     console.error('Error during reset:', error);
                     alert('Error during reset: ' + error.message);
                 }
+            }
+        }
+        
+        function saveDefaults() {
+            try {
+                const projectData = {
+                    header: {
+                        name: document.getElementById('projectName').value,
+                        description: document.getElementById('projectDescription').value,
+                        revision: document.getElementById('projectRevision').value,
+                        date: document.getElementById('projectDate').value
+                    },
+                    inputs: getAllInputValues(),
+                    vendorQuotes: getVendorQuotes(),
+                    otherMaterials: getOtherMaterials(),
+                    staffLineItems: getStaffLineItems(),
+                    cableLengths: getCableLengths(),
+                    cableLengthMode: cableLengthMode,
+                    vendorPricing: vendorPricing,
+                    currentVendor: currentVendor
+                };
+                
+                localStorage.setItem('projectDefaults', JSON.stringify(projectData));
+                alert('Current settings have been saved as defaults!');
+            } catch (error) {
+                console.error('Error saving defaults:', error);
+                alert('Error saving defaults: ' + error.message);
             }
         }
         
@@ -2157,9 +2452,9 @@
                 div.className = 'line-item';
                 div.innerHTML = `
                     <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}">
-                    <input type="text" placeholder="Description" class="vendor-desc" value="${desc}">
+                    <input type="text" placeholder="Item Description/Part #" class="vendor-desc" value="${desc}">
                     <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}">
-                    <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()">
+                    <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px;">
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2217,9 +2512,9 @@
                 const div = document.createElement('div');
                 div.className = 'line-item';
                 div.innerHTML = `
-                    <input type="text" placeholder="Description" class="staff-desc" value="${desc}">
-                    <input type="text" placeholder="Note" class="staff-note" value="${note}">
-                    <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="${hours}" oninput="calculate()" onchange="calculate()">
+                    <input type="text" placeholder="Description" class="staff-desc" value="${desc}" style="flex: 2;">
+                    <input type="text" placeholder="Note" class="staff-note" value="${note}" style="flex: 3;">
+                    <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="${hours}" oninput="calculate()" onchange="calculate()" style="width: 60px;">
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2319,6 +2614,13 @@
             }
         }
         
+        function toggleBreakdown() {
+            const breakdown = document.getElementById('breakdown');
+            if (breakdown) {
+                breakdown.classList.toggle('collapsed');
+            }
+        }
+        
         function removeLineItem(button) {
             button.parentElement.remove();
             saveLineItems(); // Save after removing item
@@ -2393,6 +2695,36 @@
 
         
         function calculate() {
+            // Auto-save functionality
+            const autoSaveEnabled = document.getElementById('autoSave') && document.getElementById('autoSave').checked;
+            if (autoSaveEnabled) {
+                // Debounce auto-save to avoid excessive saves
+                clearTimeout(window.autoSaveTimeout);
+                window.autoSaveTimeout = setTimeout(() => {
+                    try {
+                        const projectData = {
+                            header: {
+                                name: document.getElementById('projectName').value,
+                                description: document.getElementById('projectDescription').value,
+                                revision: document.getElementById('projectRevision').value,
+                                date: document.getElementById('projectDate').value
+                            },
+                            inputs: getAllInputValues(),
+                            vendorQuotes: getVendorQuotes(),
+                            otherMaterials: getOtherMaterials(),
+                            staffLineItems: getStaffLineItems(),
+                            cableLengths: getCableLengths(),
+                            cableLengthMode: cableLengthMode,
+                            vendorPricing: vendorPricing,
+                            currentVendor: currentVendor
+                        };
+                        localStorage.setItem('autoSavedProject', JSON.stringify(projectData));
+                    } catch (error) {
+                        console.error('Auto-save error:', error);
+                    }
+                }, 1000); // Save after 1 second of inactivity
+            }
+            
             var cables = 0;
             if (cableLengthMode === 'average') {
                 cables = parseInt(document.getElementById('numCables').value) || 0;
@@ -2407,12 +2739,23 @@
             var cutoverTime = parseFloat(document.getElementById('cutoverTime').value) || 0;
             var decommissioningTime = parseFloat(document.getElementById('decommissioningTime').value) || 0;
             var hoursPerDay = parseInt(document.getElementById('workHoursPerDay').value) || 8;
-            // Get connector and cable costs from vendor items (first two items)
-            var termCost = 0;
-            var cableCost = 0;
-            if (vendorPricing[currentVendor] && vendorPricing[currentVendor].items && vendorPricing[currentVendor].items.length >= 2) {
-                termCost = vendorPricing[currentVendor].items[0].cost || 0;
-                cableCost = vendorPricing[currentVendor].items[1].cost || 0;
+            // Get connector and cable costs from configuration fields first, then fall back to vendor items
+            var termCost = parseFloat(document.getElementById('terminationCost').value) || 0;
+            var cableCost = parseFloat(document.getElementById('cableCostPerFoot').value) || 0;
+            
+            // Only use vendor items for cost calculation if config fields are zero and items are specifically marked as pricing
+            if (termCost === 0 && cableCost === 0 && vendorPricing[currentVendor] && vendorPricing[currentVendor].items && vendorPricing[currentVendor].items.length >= 2) {
+                // Check if the first two items are pricing items (not actual orders)
+                const firstItem = vendorPricing[currentVendor].items[0];
+                const secondItem = vendorPricing[currentVendor].items[1];
+                
+                // Only use as pricing if the description suggests it's a pricing item, not an order
+                if (firstItem.desc && (firstItem.desc.toLowerCase().includes('connector') || firstItem.desc.toLowerCase().includes('termination'))) {
+                    termCost = firstItem.cost || 0;
+                }
+                if (secondItem.desc && (secondItem.desc.toLowerCase().includes('cable') || secondItem.desc.toLowerCase().includes('per foot'))) {
+                    cableCost = secondItem.cost || 0;
+                }
             }
             var length = 0;
             var totalCableQuantity = 0;
@@ -2601,6 +2944,7 @@
                 staffHoursTotal += hours;
             });
             
+            // Calculate total cost - include material costs calculated from cable/termination pricing
             var totalCost = laborCost + totalMat + equipmentCost + vendorQuotesTotal + activeVendorTotal;
             
             var totalCableNeeded = length;
@@ -2708,6 +3052,7 @@
             document.getElementById('totalHours').textContent = totalHours.toFixed(1) + ' total hours';
             document.getElementById('laborCost').textContent = '$' + laborCost;
             document.getElementById('laborDetails').textContent = laborDetails;
+            // Update material cost display
             document.getElementById('materialCost').textContent = '$' + totalMat;
             document.getElementById('equipmentCost').textContent = '$' + equipmentCost;
             document.getElementById('vendorQuotesTotal').textContent = '$' + vendorQuotesTotal;
@@ -3039,6 +3384,14 @@
             }
         }
         
+        // Mobile collapsible sections functionality
+        function toggleMobileSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.toggle('collapsed');
+            }
+        }
+        
         // Check on load and resize
         window.addEventListener('resize', checkLandscapeAndOptimize);
         
@@ -3093,6 +3446,18 @@
             
             // Check landscape and optimize header
             checkLandscapeAndOptimize();
+            
+            // Auto-load functionality
+            const autoSavedProject = localStorage.getItem('autoSavedProject');
+            if (autoSavedProject) {
+                try {
+                    const projectData = JSON.parse(autoSavedProject);
+                    loadProjectData(projectData);
+                    console.log('Auto-saved project loaded successfully');
+                } catch (error) {
+                    console.error('Error loading auto-saved project:', error);
+                }
+            }
             
             calculate();
         });
