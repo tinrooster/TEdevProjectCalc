@@ -107,6 +107,37 @@
                 font-size: 14px;
             }
             
+            /* Special handling for cable line items to keep them horizontal on mobile */
+            .cable-line-item {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                gap: 5px;
+                align-items: center;
+            }
+            
+            .cable-line-item .cable-type {
+                width: 60px !important;
+                min-width: 60px;
+            }
+            
+            .cable-line-item .cable-qty {
+                width: 60px !important;
+                min-width: 60px;
+            }
+            
+            .cable-line-item .cable-length {
+                width: 80px !important;
+                min-width: 80px;
+            }
+            
+            .cable-line-item button {
+                width: 30px !important;
+                min-width: 30px;
+                height: 30px;
+                padding: 0;
+                margin-left: 5px;
+            }
+            
             .setup-grid {
                 grid-template-columns: 1fr;
                 gap: 10px;
@@ -904,16 +935,16 @@
                 
                 <div id="calculatedLengthMode" style="display: none;">
                     <div id="cableLengths">
-                        <div class="line-item">
-                            <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;">
+                        <div class="line-item cable-line-item">
+                            <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
                                 <option value="1855">1855</option>
                                 <option value="1505">1505</option>
                                 <option value="1694">1694</option>
                                 <option value="cat6">Cat6</option>
                                 <option value="other">Other</option>
                             </select>
-                            <input type="number" placeholder="Qty" class="cable-qty" min="1" value="1" style="width: 60px;" oninput="calculate()" onchange="calculate()">
-                            <input type="number" placeholder="Length" class="cable-length" min="1" style="width: 80px;" oninput="calculate()" onchange="calculate()">
+                            <input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()">
+                            <input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()">
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
@@ -1484,7 +1515,7 @@
                 
                 document.getElementById('staffLineItemsContainer').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc"><input type="text" placeholder="Note" class="staff-note"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="0"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                 
-                document.getElementById('cableLengths').innerHTML = '<div class="line-item"><select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                document.getElementById('cableLengths').innerHTML = '<div class="line-item cable-line-item"><select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                 
                 // Reset vendor pricing to empty
                 vendorPricing = {
@@ -1851,7 +1882,7 @@
             const container = document.getElementById('cableLengths');
             if (container) {
                 const div = document.createElement('div');
-                div.className = 'line-item';
+                div.className = 'line-item cable-line-item';
                 div.innerHTML = `
                     <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
                         <option value="1855" ${cableType === '1855' ? 'selected' : ''}>1855</option>
