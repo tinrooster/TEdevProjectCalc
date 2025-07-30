@@ -264,6 +264,81 @@
             .control-buttons button {
                 margin-bottom: 8px;
             }
+            
+            /* Mobile landscape optimizations */
+            @media (max-width: 768px) and (orientation: landscape) {
+                .project-header {
+                    padding: 8px 10px;
+                    margin-bottom: 10px;
+                }
+                
+                .header-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 8px;
+                }
+                
+                .header-item label {
+                    font-size: 11px;
+                    margin-bottom: 2px;
+                }
+                
+                .header-item input {
+                    padding: 4px 6px;
+                    font-size: 12px;
+                }
+                
+                .container {
+                    padding: 8px;
+                }
+                
+                .main-layout {
+                    margin-top: 8px;
+                    gap: 10px;
+                }
+                
+                .input-group {
+                    padding: 8px;
+                    margin-bottom: 8px;
+                }
+                
+                .section-header {
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                }
+                
+                .results-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 6px;
+                }
+                
+                .result-card {
+                    padding: 8px;
+                    margin-bottom: 4px;
+                }
+                
+                .result-card h4 {
+                    font-size: 12px;
+                    margin-bottom: 4px;
+                }
+                
+                .result-value {
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+                
+                .result-detail {
+                    font-size: 10px;
+                }
+                
+                h2 {
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                }
+                
+                h3 {
+                    font-size: 14px;
+                }
+            }
         }
         
         .left-panel {
