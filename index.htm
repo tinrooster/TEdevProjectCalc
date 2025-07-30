@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEdev KGO Engineering Project Calculator</title>
+    <title>KGO Engineering Project Calculator</title>
     <style>
         * {
             margin: 0;
@@ -33,6 +33,206 @@
             gap: 20px;
             margin-top: 15px;
             height: calc(100vh - 200px);
+        }
+        
+        /* Mobile responsive design */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                margin-top: 15px;
+                height: auto;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 10px;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .project-header {
+                padding: 15px 10px;
+            }
+            
+            .header-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .result-card {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+            
+            .result-card h4 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+            
+            .result-value {
+                font-size: 18px;
+                margin-bottom: 4px;
+            }
+            
+            .result-detail {
+                font-size: 11px;
+            }
+            
+            .input-group {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .section-header {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+            
+            .line-item {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+            
+            .line-item input,
+            .line-item select {
+                width: 100%;
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .setup-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .setup-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .setup-item label {
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+            
+            .setup-item input {
+                width: 100%;
+                padding: 8px;
+                font-size: 14px;
+            }
+            
+            .toggle-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .toggle-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .labor-split {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .split-section {
+                width: 100%;
+            }
+            
+            .vendor-name-row {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+            
+            .vendor-active-toggle {
+                width: 100%;
+                text-align: center;
+                padding: 8px;
+            }
+            
+            .add-item-btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+            
+            .save-btn, .load-btn, .reset-btn {
+                width: 100%;
+                margin: 5px 0;
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            
+            h3 {
+                font-size: 18px;
+            }
+            
+            /* Make charts responsive */
+            .chart-container {
+                width: 100%;
+                height: 300px;
+            }
+            
+            /* Improve touch targets */
+            button {
+                min-height: 44px;
+            }
+            
+            input, select {
+                min-height: 44px;
+            }
+            
+            /* Additional mobile improvements */
+            .alert {
+                padding: 12px;
+                margin: 10px 0;
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .time-breakdown {
+                font-size: 14px;
+            }
+            
+            .time-breakdown div {
+                padding: 8px 0;
+            }
+            
+            /* Improve scrolling on mobile */
+            .left-panel, .right-panel {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Better spacing for mobile */
+            .results {
+                margin-bottom: 20px;
+            }
+            
+            /* Make sure buttons don't overlap */
+            .control-buttons button {
+                margin-bottom: 8px;
+            }
         }
         
         .left-panel {
