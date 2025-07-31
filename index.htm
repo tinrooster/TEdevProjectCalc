@@ -1247,6 +1247,8 @@
                     <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Export CSV</button>
                     <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
                     <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
+                    <button onclick="reconcileConnectorsAndTerminations()" style="background: #8e44ad; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Run Reconciliation Report</button>
+                    <button onclick="viewReconciliationHistory()" style="background: #2980b9; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📋 View History</button>
                 </div>
             </div>
         </div>
@@ -1416,8 +1418,8 @@
                 </h3>
                 <div id="cableConfig" class="section-content">
                 <div class="toggle-group" style="margin-top: 15px;">
-                    <div class="toggle-btn active" onclick="setCableLengthMode('average')">Average Length</div>
-                    <div class="toggle-btn" onclick="setCableLengthMode('calculated')">Calculated Quantity and Length</div>
+                    <div class="toggle-btn active" onclick="setCableLengthMode('average', event)">Average Length</div>
+                    <div class="toggle-btn" onclick="setCableLengthMode('calculated', event)">Calculated Quantity and Length</div>
                 </div>
                 
                 <div id="averageLengthMode">
@@ -1434,8 +1436,8 @@
                             <option value="cat6">Cat6</option>
                             <option value="other">Other</option>
                         </select>
-                        <input type="number" id="numCables" value="1" min="1" oninput="calculate()" onchange="calculate()" class="avg-length-input">
-                        <input type="number" id="avgCableLength" value="25" min="1" oninput="calculate()" onchange="calculate()" class="avg-length-input">
+                        <input type="number" id="numCables" min="1" oninput="calculate()" onchange="calculate()" class="avg-length-input">
+                        <input type="number" id="avgCableLength" min="1" oninput="calculate()" onchange="calculate()" class="avg-length-input">
                     </div>
                 </div>
                 
@@ -1455,8 +1457,8 @@
                                 <option value="cat6">Cat6</option>
                                 <option value="other">Other</option>
                             </select>
-                            <input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()">
-                            <input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()">
+                            <input type="number" placeholder="Qty" class="cable-qty" min="1" style="width: 60px;" oninput="calculate()" onchange="calculate()">
+                            <input type="number" placeholder="Length" class="cable-length" min="1" style="width: 80px;" oninput="calculate()" onchange="calculate()">
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
@@ -1525,15 +1527,15 @@
                 </h3>
                 <div id="vendorPricing" class="section-content">
                 <div class="toggle-group">
-                    <div class="toggle-btn active" onclick="setVendor(1)">
+                    <div class="toggle-btn active" onclick="setVendor(1, event)">
                         Vendor 1
                         <span class="vendor-status active-status">●</span>
                     </div>
-                    <div class="toggle-btn" onclick="setVendor(2)">
+                    <div class="toggle-btn" onclick="setVendor(2, event)">
                         Vendor 2
                         <span class="vendor-status inactive-status">○</span>
                     </div>
-                    <div class="toggle-btn" onclick="setVendor(3)">
+                    <div class="toggle-btn" onclick="setVendor(3, event)">
                         Vendor 3
                         <span class="vendor-status inactive-status">○</span>
                     </div>
@@ -1824,7 +1826,7 @@
                     
                     <div class="setup-item" style="background: #e8f4fd; padding: 15px; border-radius: 8px; border: 1px solid #b3d9ff; margin-top: 15px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()">
+                            <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()" checked>
                             <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
                         </div>
                         <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">
@@ -1874,81 +1876,6 @@
         let currentVendor = 1;
         let currentLaborMode = 'single';
         let cableLengthMode = 'average';
-        
-        // Load saved vendor pricing on page load
-        function loadVendorPricing() {
-            const savedPricing = localStorage.getItem('vendorPricing');
-            if (savedPricing) {
-                try {
-                    const parsed = JSON.parse(savedPricing);
-                    // Ensure all vendors exist with proper structure
-                    for (let i = 1; i <= 3; i++) {
-                        if (!parsed[i]) {
-                            parsed[i] = { name: '', items: [], active: i === 1 };
-                        } else {
-                            // Ensure vendor has all required properties
-                            if (!parsed[i].name) parsed[i].name = '';
-                            if (!parsed[i].items) parsed[i].items = [];
-                            if (typeof parsed[i].active !== 'boolean') parsed[i].active = i === 1;
-                        }
-                    }
-                    Object.assign(vendorPricing, parsed);
-                } catch (error) {
-                    console.error('Error loading vendor pricing:', error);
-                    // Reset to defaults if loading fails
-                    for (let i = 1; i <= 3; i++) {
-                        vendorPricing[i] = { name: '', items: [], active: i === 1 };
-                    }
-                }
-            }
-            
-            const savedVendor = localStorage.getItem('currentVendor');
-            if (savedVendor) {
-                currentVendor = parseInt(savedVendor);
-                if (isNaN(currentVendor) || currentVendor < 1 || currentVendor > 3) {
-                    currentVendor = 1;
-                }
-            }
-            
-            // Update UI to reflect saved vendor
-            document.querySelectorAll('.toggle-group .toggle-btn').forEach((btn, index) => {
-                if (index === currentVendor - 1) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            // Load all vendor data and show current vendor
-            for (let i = 1; i <= 3; i++) {
-                const vendor = vendorPricing[i];
-                if (vendor && document.getElementById('vendor' + i + 'Name')) {
-                    document.getElementById('vendor' + i + 'Name').value = vendor.name || '';
-                    
-                    // Update the visual state of the active toggle
-                    const toggleDiv = document.querySelector('#vendor' + i + 'Details .vendor-active-toggle');
-                    if (toggleDiv) {
-                        const span = toggleDiv.querySelector('span');
-                        if (vendor.active) {
-                            toggleDiv.className = 'vendor-active-toggle active';
-                            if (span) span.textContent = 'ACTIVE';
-                        } else {
-                            toggleDiv.className = 'vendor-active-toggle inactive';
-                            if (span) span.textContent = 'INACTIVE';
-                        }
-                    }
-                }
-            }
-            
-            // Show current vendor details
-            setVendor(currentVendor);
-        }
-        
-        // Save vendor pricing to localStorage
-        function saveVendorPricing() {
-            localStorage.setItem('vendorPricing', JSON.stringify(vendorPricing));
-            localStorage.setItem('currentVendor', currentVendor.toString());
-        }
         
         function toggleVendorActive(vendorNum) {
             const toggleDiv = document.querySelector('#vendor' + vendorNum + 'Details .vendor-active-toggle');
@@ -2005,14 +1932,17 @@
                 active: active
             };
             
-            saveVendorPricing();
             calculate();
         }
         
-        function setVendor(vendor) {
+        function setVendor(vendor, event) {
             currentVendor = vendor;
-            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) {
+            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => {
+                if (btn && btn.classList) {
+                    btn.classList.remove('active');
+                }
+            });
+            if (event && event.target && event.target.classList) {
                 event.target.classList.add('active');
             }
             
@@ -2066,7 +1996,6 @@
             // Load vendor items
             loadVendorItems(vendor);
             
-            saveVendorPricing();
             calculate();
         }
         
@@ -2183,10 +2112,7 @@
             if (confirm('Are you sure you want to reset all values to zero? This will clear all current data.')) {
                 try {
                     // Clear localStorage first to prevent reloading old data
-                    localStorage.removeItem('vendorPricing');
-                    localStorage.removeItem('currentVendor');
-                    localStorage.removeItem('lineItems');
-                    
+
                     // Clear vendor pricing data (can't reassign const, so clear properties)
                     vendorPricing[1] = { name: '', items: [], active: true };
                     vendorPricing[2] = { name: '', items: [], active: false };
@@ -2272,7 +2198,7 @@
                     }
                     
                     // Save to localStorage
-                    saveVendorPricing();
+                    calculate();
                     
                     // Force update vendor pricing to ensure it's cleared
                     updateVendorPricing();
@@ -2371,6 +2297,7 @@
         
         function loadProjectData(data) {
             try {
+                console.log('Starting loadProjectData with data:', data);
                 // Load header
                 if (data.header) {
                     document.getElementById('projectName').value = data.header.name || '';
@@ -2380,9 +2307,8 @@
                     updateProjectHeader(); // Update the display header
                 }
                 
-                // Load inputs
+                // Load inputs (will be re-applied after cable configuration is loaded)
                 if (data.inputs) {
-                    setAllInputValues(data.inputs);
                     updateProjectHeader(); // Update header after loading all inputs
                 }
                 
@@ -2401,13 +2327,24 @@
                     loadStaffLineItems(data.staffLineItems);
                 }
                 
+                // Load cable configuration - handle both modes
+                console.log('Loading cable configuration...');
+                if (data.cableLengthMode) {
+                    console.log('Setting cable length mode to:', data.cableLengthMode);
+                    cableLengthMode = data.cableLengthMode;
+                    setCableLengthMode(cableLengthMode);
+                    console.log('Cable length mode set successfully');
+                }
+                
                 if (data.cableLengths) {
                     loadCableLengths(data.cableLengths);
                 }
                 
-                if (data.cableLengthMode) {
-                    cableLengthMode = data.cableLengthMode;
-                    setCableLengthMode(cableLengthMode);
+                // Re-apply inputs after cable mode is set to ensure values persist
+                if (data.inputs) {
+                    console.log('Loading saved input values:', data.inputs);
+                    setAllInputValues(data.inputs);
+                    console.log('After setAllInputValues - numCables:', document.getElementById('numCables')?.value, 'avgCableLength:', document.getElementById('avgCableLength')?.value);
                 }
                 
                 // Load vendor pricing with error handling
@@ -2425,18 +2362,22 @@
                 }
                 
                 if (data.currentVendor) {
+                    console.log('Setting current vendor to:', data.currentVendor);
                     currentVendor = data.currentVendor;
                     setVendor(currentVendor);
+                    console.log('Current vendor set successfully');
                 }
                 
                 if (data.currentLaborMode) {
+                    console.log('Setting current labor mode to:', data.currentLaborMode);
                     currentLaborMode = data.currentLaborMode;
                     setLaborMode(currentLaborMode);
+                    console.log('Current labor mode set successfully');
                 }
                 
                 // Load auto-save state
-                if (data.autoSaveEnabled !== undefined && document.getElementById('autoSave')) {
-                    document.getElementById('autoSave').checked = data.autoSaveEnabled;
+                if (document.getElementById('autoSave')) {
+                    document.getElementById('autoSave').checked = (data.autoSaveEnabled !== undefined) ? data.autoSaveEnabled : true;
                 }
                 
                 calculate();
@@ -2534,9 +2475,7 @@
                 const length = parseFloat(item.querySelector('.cable-length').value) || 0;
                 const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
                 const cableType = item.querySelector('.cable-type').value || '1855';
-                if (length > 0) {
-                    lengths.push({ length, qty, cableType });
-                }
+                lengths.push({ length, qty, cableType });
             });
             return lengths;
         }
@@ -2555,10 +2494,21 @@
         function loadCableLengths(lengths) {
             const container = document.getElementById('cableLengths');
             if (container) {
+                // Clear existing line items but keep the header
+                const header = container.querySelector('.cable-header-row');
                 container.innerHTML = '';
-                lengths.forEach(item => {
-                    addCableLength(item.qty || 1, item.length, item.cableType || '1855');
-                });
+                if (header) {
+                    container.appendChild(header);
+                }
+                
+                if (!lengths || lengths.length === 0) {
+                    // Add a default row if no saved cables
+                    addCableLength();
+                } else {
+                    lengths.forEach(item => {
+                        addCableLength(item.qty || 1, item.length, item.cableType || '1855');
+                    });
+                }
                 addEventListenersToLineItems();
             }
         }
@@ -2683,23 +2633,7 @@
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
-                
-                // Add event listeners to the new inputs
-                const newInputs = div.querySelectorAll('input');
-                newInputs.forEach(input => {
-                    input.addEventListener('input', function() {
-                        console.log('New cable input changed:', input.className, input.value);
-                        calculate();
-                        saveLineItems();
-                    });
-                    input.addEventListener('change', function() {
-                        console.log('New cable change event:', input.className, input.value);
-                        calculate();
-                        saveLineItems();
-                    });
-                });
-                
-                saveLineItems(); // Save after adding new item
+                calculate();
             }
         }
         
@@ -2752,76 +2686,73 @@
         
         function removeLineItem(button) {
             button.parentElement.remove();
-            saveLineItems(); // Save after removing item
-        }
-        
-        function saveLineItems() {
-            const lineItemsData = {
-                otherMaterials: getOtherMaterials(),
-                vendorQuotes: getVendorQuotes(),
-                staffLineItems: getStaffLineItems(),
-                cableLengths: getCableLengths(),
-                cableLengthMode: cableLengthMode,
-                cableType: document.querySelector('#averageLengthMode .cable-type') ? document.querySelector('#averageLengthMode .cable-type').value : '1855'
-            };
-            localStorage.setItem('lineItems', JSON.stringify(lineItemsData));
-        }
-        
-        function loadLineItems() {
-            const savedLineItems = localStorage.getItem('lineItems');
-            if (savedLineItems) {
-                try {
-                    const lineItemsData = JSON.parse(savedLineItems);
-                    
-                    if (lineItemsData.otherMaterials && lineItemsData.otherMaterials.length > 0) {
-                        loadOtherMaterials(lineItemsData.otherMaterials);
-                    }
-                    
-                    if (lineItemsData.vendorQuotes && lineItemsData.vendorQuotes.length > 0) {
-                        loadVendorQuotes(lineItemsData.vendorQuotes);
-                    }
-                    
-                    if (lineItemsData.staffLineItems && lineItemsData.staffLineItems.length > 0) {
-                        loadStaffLineItems(lineItemsData.staffLineItems);
-                    }
-                    
-                    if (lineItemsData.cableLengths && lineItemsData.cableLengths.length > 0) {
-                        loadCableLengths(lineItemsData.cableLengths);
-                    }
-                    
-                    if (lineItemsData.cableLengthMode) {
-                        cableLengthMode = lineItemsData.cableLengthMode;
-                        setCableLengthMode(cableLengthMode);
-                    }
-                    
-                    if (lineItemsData.cableType) {
-                        const avgCableType = document.querySelector('#averageLengthMode .cable-type');
-                        if (avgCableType) {
-                            avgCableType.value = lineItemsData.cableType;
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error loading line items:', error);
-                }
-            }
-        }
-        
-        function setCableLengthMode(mode) {
-            cableLengthMode = mode;
-            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (mode === 'average') {
-                document.getElementById('averageLengthMode').style.display = 'block';
-                document.getElementById('calculatedLengthMode').style.display = 'none';
-            } else {
-                document.getElementById('averageLengthMode').style.display = 'none';
-                document.getElementById('calculatedLengthMode').style.display = 'block';
-            }
             calculate();
         }
         
+        function setCableLengthMode(mode, event) {
+            try {
+                cableLengthMode = mode;
+                document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => {
+                    if (btn && btn.classList) {
+                        btn.classList.remove('active');
+                    }
+                });
+                if (event && event.target && event.target.classList) {
+                    event.target.classList.add('active');
+                }
+                
+                const avgMode = document.getElementById('averageLengthMode');
+                const calcMode = document.getElementById('calculatedLengthMode');
+                
+                if (mode === 'average') {
+                    if (avgMode) avgMode.style.display = 'block';
+                    if (calcMode) calcMode.style.display = 'none';
+                } else {
+                    if (avgMode) avgMode.style.display = 'none';
+                    if (calcMode) calcMode.style.display = 'block';
+                }
+                calculate();
+            } catch (error) {
+                console.error('Error in setCableLengthMode:', error);
+            }
+        }
+        
         // Function to update the project header display
+        function saveLineItems() {
+            // Auto-save functionality for line items
+            const autoSaveEnabled = document.getElementById('autoSave') && document.getElementById('autoSave').checked;
+            if (autoSaveEnabled) {
+                // Debounce auto-save to avoid excessive saves
+                clearTimeout(window.lineItemSaveTimeout);
+                window.lineItemSaveTimeout = setTimeout(() => {
+                    try {
+                        const inputs = getAllInputValues();
+                        const projectData = {
+                            header: {
+                                name: document.getElementById('projectName').value,
+                                description: document.getElementById('projectDescription').value,
+                                revision: document.getElementById('projectRevision').value,
+                                date: document.getElementById('projectDate').value
+                            },
+                            inputs: inputs,
+                            vendorQuotes: getVendorQuotes(),
+                            otherMaterials: getOtherMaterials(),
+                            staffLineItems: getStaffLineItems(),
+                            cableLengths: getCableLengths(),
+                            cableLengthMode: cableLengthMode,
+                            vendorPricing: vendorPricing,
+                            currentVendor: currentVendor,
+                            autoSaveEnabled: document.getElementById('autoSave') ? document.getElementById('autoSave').checked : false
+                        };
+                        localStorage.setItem('autoSavedProject', JSON.stringify(projectData));
+                        console.log('Line items auto-saved');
+                    } catch (error) {
+                        console.error('Line items auto-save error:', error);
+                    }
+                }, 500); // Save after 0.5 seconds of inactivity for line items
+            }
+        }
+        
         function updateProjectHeader() {
             const projectName = document.getElementById('projectName').value || 'Enter project name';
             const projectDescription = document.getElementById('projectDescription').value || 'Brief project description';
@@ -2870,6 +2801,8 @@
                 clearTimeout(window.autoSaveTimeout);
                 window.autoSaveTimeout = setTimeout(() => {
                     try {
+                        const inputs = getAllInputValues();
+                        console.log('Auto-saving inputs:', inputs);
                         const projectData = {
                             header: {
                                 name: document.getElementById('projectName').value,
@@ -2877,7 +2810,7 @@
                                 revision: document.getElementById('projectRevision').value,
                                 date: document.getElementById('projectDate').value
                             },
-                            inputs: getAllInputValues(),
+                            inputs: inputs,
                             vendorQuotes: getVendorQuotes(),
                             otherMaterials: getOtherMaterials(),
                             staffLineItems: getStaffLineItems(),
@@ -3481,6 +3414,7 @@
             var csvData = [];
             csvData.push('Server Rack Wiring Project Estimate');
             csvData.push('Generated on: ' + new Date().toLocaleDateString());
+            csvData.push('Project Name: ' + (document.getElementById('projectName').value || 'Unnamed Project'));
             csvData.push('Vendor: ' + currentVendor);
             csvData.push('Labor Mode: ' + currentLaborMode);
             csvData.push('');
@@ -3516,6 +3450,83 @@
             csvData.push('Connector Waste Factor (%),' + document.getElementById('connectorWasteFactor').value);
             csvData.push('Apply Overtime,' + (document.getElementById('overtimeToggle').checked ? 'Yes' : 'No'));
             csvData.push('');
+            
+            // Add Cable Configuration Details
+            csvData.push('CABLE CONFIGURATION');
+            // Check which mode is active
+            const avgMode = document.getElementById('averageLengthMode');
+            const calcMode = document.getElementById('calculatedLengthMode');
+            if (avgMode && avgMode.style.display !== 'none') {
+                csvData.push('Configuration Mode: Average Length');
+                const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+                const avgCableQty = document.querySelector('#averageLengthMode .cable-qty');
+                const avgLength = document.querySelector('#averageLengthMode .avg-length-input');
+                if (avgCableType && avgCableQty && avgLength) {
+                    csvData.push('Cable Type: ' + avgCableType.value);
+                    csvData.push('Cable Quantity: ' + avgCableQty.value);
+                    csvData.push('Average Length: ' + avgLength.value + ' feet');
+                }
+            } else if (calcMode && calcMode.style.display !== 'none') {
+                csvData.push('Configuration Mode: Calculated Length');
+                // Get all cable line items in calculated mode
+                const cableItems = document.querySelectorAll('#calculatedLengthMode .cable-line-item');
+                cableItems.forEach((item, index) => {
+                    const cableType = item.querySelector('.cable-type');
+                    const cableQty = item.querySelector('.cable-qty');
+                    const cableLength = item.querySelector('.cable-length');
+                    if (cableType && cableQty && cableLength && (cableType.value || cableQty.value || cableLength.value)) {
+                        csvData.push('Cable ' + (index + 1) + ' - Type: ' + cableType.value + ', Quantity: ' + cableQty.value + ', Length: ' + cableLength.value + ' feet');
+                    }
+                });
+            }
+            csvData.push('');
+            
+            // Add Individual Vendor Quotes
+            csvData.push('VENDOR QUOTES DETAILS');
+            const vendorQuotes = getVendorQuotes();
+            if (vendorQuotes && vendorQuotes.length > 0) {
+                csvData.push('Vendor Name,Description/Part #,Quote #,Amount');
+                vendorQuotes.forEach(quote => {
+                    csvData.push('"' + (quote.name || '') + '","' + (quote.desc || '') + '","' + (quote.quote || '') + '",$' + (quote.amount || '0'));
+                });
+            } else {
+                csvData.push('No vendor quotes entered');
+            }
+            csvData.push('');
+            
+            // Add Individual Other Materials
+            csvData.push('OTHER MATERIALS DETAILS');
+            const otherMaterials = getOtherMaterials();
+            if (otherMaterials && otherMaterials.length > 0) {
+                csvData.push('Description,Quantity,Amount');
+                otherMaterials.forEach(material => {
+                    csvData.push('"' + (material.desc || '') + '",' + (material.qty || '1') + ',$' + (material.amount || '0'));
+                });
+            } else {
+                csvData.push('No other materials entered');
+            }
+            csvData.push('');
+            
+            // Add Reconciliation History
+            csvData.push('RECONCILIATION HISTORY');
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                if (reconciliationHistory && reconciliationHistory.length > 0) {
+                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,ISO Timestamp');
+                    
+                    // Show last 10 reconciliations
+                    const recentReconciliations = reconciliationHistory.slice(-10);
+                    recentReconciliations.forEach(recon => {
+                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}","${recon.timestamp}"`);
+                    });
+                } else {
+                    csvData.push('No reconciliation history available');
+                }
+            } catch (error) {
+                csvData.push('Error loading reconciliation history: ' + error.message);
+            }
+            csvData.push('');
+            
             csvData.push('RESULTS');
             csvData.push('Total Terminations,' + document.getElementById('totalTerminations').textContent);
             csvData.push('Termination Time,' + document.getElementById('terminationHours').textContent);
@@ -3587,8 +3598,7 @@
         window.addEventListener('resize', checkLandscapeAndOptimize);
         
         window.addEventListener('load', function() {
-            loadVendorPricing(); // Load saved vendor pricing
-            loadLineItems(); // Load saved line items
+            // loadLineItems() removed - now using unified autoSavedProject loading
             
             // Set current date
             const today = new Date().toISOString().split('T')[0];
@@ -3632,8 +3642,11 @@
             
             // Add specific event listeners for vendor pricing inputs
             for (let i = 1; i <= 3; i++) {
-                document.getElementById('vendor' + i + 'Name').addEventListener('change', updateVendorPricing);
-                document.getElementById('vendor' + i + 'Active').addEventListener('change', updateVendorPricing);
+                const vendorNameElement = document.getElementById('vendor' + i + 'Name');
+                if (vendorNameElement) {
+                    vendorNameElement.addEventListener('change', updateVendorPricing);
+                }
+                // Note: vendor active state is handled by toggleVendorActive() function, not by input elements
             }
             
             // Add event listeners to initial line items
@@ -3644,15 +3657,44 @@
             
             // Auto-load functionality
             const autoSavedProject = localStorage.getItem('autoSavedProject');
+            console.log('Raw autoSavedProject from localStorage:', autoSavedProject);
             if (autoSavedProject) {
                 try {
                     const projectData = JSON.parse(autoSavedProject);
+                    console.log('Parsed project data:', projectData);
+                    console.log('Project data inputs:', projectData.inputs);
                     loadProjectData(projectData);
                     updateProjectHeader(); // Ensure header is updated after auto-load
                     console.log('Auto-saved project loaded successfully');
                 } catch (error) {
                     console.error('Error loading auto-saved project:', error);
                 }
+            } else {
+                // If no autoSavedProject, initialize with autoSaveEnabled: true and default values
+                const projectData = {
+                    autoSaveEnabled: true
+                };
+                localStorage.setItem('autoSavedProject', JSON.stringify(projectData));
+                const autoSaveCheckbox = document.getElementById('autoSave');
+                if (autoSaveCheckbox) {
+                    autoSaveCheckbox.checked = true;
+                }
+                
+                // Set default values for cable configuration
+                document.getElementById('numCables').value = '1';
+                document.getElementById('avgCableLength').value = '25';
+                
+                // Set default values for calculated mode
+                const calcQtyInput = document.querySelector('#calculatedLengthMode .cable-qty');
+                const calcLengthInput = document.querySelector('#calculatedLengthMode .cable-length');
+                if (calcQtyInput) calcQtyInput.value = '1';
+                if (calcLengthInput) calcLengthInput.value = '25';
+                
+                // Add event listeners to any newly created elements
+                addEventListenersToLineItems();
+                
+                // Ensure the default cable mode is set correctly
+                setCableLengthMode('average');
             }
             
             // Set default positions for collapsible sections
@@ -3719,6 +3761,11 @@
         
         // Reconciliation function to handle connectors and terminations
         function reconcileConnectorsAndTerminations() {
+            const reconciliationTimestamp = new Date();
+            const formatDate = reconciliationTimestamp.toLocaleDateString();
+            const formatTime = reconciliationTimestamp.toLocaleTimeString();
+            const isoTimestamp = reconciliationTimestamp.toISOString();
+            
             var reconciliationReport = [];
             var totalTerms = parseInt(document.getElementById('totalTerminations').textContent) || 0;
             
@@ -3790,8 +3837,13 @@
                 });
             }
             
-            // Generate reconciliation report
+            // Generate reconciliation report with timestamp
             reconciliationReport.push('=== CONNECTOR/TERMINATION RECONCILIATION ===');
+            reconciliationReport.push(`Reconciliation Date: ${formatDate}`);
+            reconciliationReport.push(`Reconciliation Time: ${formatTime}`);
+            reconciliationReport.push(`Project: ${document.getElementById('projectName').value || 'Unnamed Project'}`);
+            reconciliationReport.push(`Vendor: ${currentVendor}`);
+            reconciliationReport.push('');
             reconciliationReport.push(`Total terminations required: ${requiredConnectors}`);
             reconciliationReport.push('');
             
@@ -3800,6 +3852,27 @@
             if (cableTypes['1855']) bncRequired += cableTypes['1855'];
             if (cableTypes['1505']) bncRequired += cableTypes['1505'];
             if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+            
+            var reconciliationData = {
+                timestamp: isoTimestamp,
+                formatDate: formatDate,
+                formatTime: formatTime,
+                projectName: document.getElementById('projectName').value || 'Unnamed Project',
+                vendor: currentVendor,
+                totalRequired: requiredConnectors,
+                bnc: {
+                    required: bncRequired,
+                    ordered: bncConnectorsOrdered + bncTerminationsOrdered,
+                    status: bncRequired === 0 ? 'N/A' : 
+                           (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) ? 'SHORTAGE' :
+                           (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) ? 'OVERAGE' : 'MATCH'
+                },
+                cat6: {
+                    required: 0,
+                    ordered: cat6ConnectorsOrdered + cat6TerminationsOrdered,
+                    status: 'N/A'
+                }
+            };
             
             if (bncRequired > 0) {
                 reconciliationReport.push(`BNC Connectors/Terminations:`);
@@ -3819,6 +3892,12 @@
             var cat6Required = 0;
             if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
             
+            // Update cat6 data in reconciliation data
+            reconciliationData.cat6.required = cat6Required;
+            reconciliationData.cat6.status = cat6Required === 0 ? 'N/A' : 
+                                           (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) ? 'SHORTAGE' :
+                                           (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) ? 'OVERAGE' : 'MATCH';
+            
             if (cat6Required > 0) {
                 reconciliationReport.push(`Cat6 Connectors/Terminations:`);
                 reconciliationReport.push(`  Required: ${cat6Required}`);
@@ -3833,9 +3912,496 @@
                 reconciliationReport.push('');
             }
             
+            // Save reconciliation to history
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                reconciliationHistory.push(reconciliationData);
+                
+                // Keep only last 50 reconciliations to avoid storage bloat
+                if (reconciliationHistory.length > 50) {
+                    reconciliationHistory.splice(0, reconciliationHistory.length - 50);
+                }
+                
+                localStorage.setItem('reconciliationHistory', JSON.stringify(reconciliationHistory));
+                console.log('Reconciliation saved to history:', reconciliationData);
+            } catch (error) {
+                console.error('Error saving reconciliation history:', error);
+            }
+            
+            // Add footer with timestamp
+            reconciliationReport.push('================================');
+            reconciliationReport.push(`Generated: ${formatDate} at ${formatTime}`);
+            reconciliationReport.push(`Timestamp: ${isoTimestamp}`);
+            
             // Show reconciliation report
             alert(reconciliationReport.join('\n'));
+        }
+        
+        // Function to view reconciliation history
+        function viewReconciliationHistory() {
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                
+                if (!reconciliationHistory || reconciliationHistory.length === 0) {
+                    alert('No reconciliation history found. Run a reconciliation report first.');
+                    return;
+                }
+                
+                let historyReport = [];
+                historyReport.push('=== RECONCILIATION HISTORY ===');
+                historyReport.push(`Total Records: ${reconciliationHistory.length}`);
+                historyReport.push('');
+                
+                // Show last 10 reconciliations (most recent first)
+                const recentReconciliations = reconciliationHistory.slice(-10).reverse();
+                
+                recentReconciliations.forEach((recon, index) => {
+                    historyReport.push(`${index + 1}. ${recon.formatDate} at ${recon.formatTime}`);
+                    historyReport.push(`   Project: ${recon.projectName}`);
+                    historyReport.push(`   Vendor: ${recon.vendor}`);
+                    historyReport.push(`   Total Required: ${recon.totalRequired}`);
+                    
+                    if (recon.bnc.required > 0) {
+                        historyReport.push(`   BNC: ${recon.bnc.required} required, ${recon.bnc.ordered} ordered (${recon.bnc.status})`);
+                    }
+                    
+                    if (recon.cat6.required > 0) {
+                        historyReport.push(`   Cat6: ${recon.cat6.required} required, ${recon.cat6.ordered} ordered (${recon.cat6.status})`);
+                    }
+                    
+                    historyReport.push('');
+                });
+                
+                if (reconciliationHistory.length > 10) {
+                    historyReport.push(`... and ${reconciliationHistory.length - 10} older records`);
+                    historyReport.push('');
+                }
+                
+                historyReport.push('================================');
+                historyReport.push('Export CSV to see complete history');
+                
+                alert(historyReport.join('\n'));
+                
+            } catch (error) {
+                console.error('Error loading reconciliation history:', error);
+                alert('Error loading reconciliation history: ' + error.message);
+            }
+        }
+
+        // === TEMPORARY/DEBUG FUNCTIONS FROM BACKUP ===
+        function testFunction() {
+            console.log('Test function is working!');
+            alert('JavaScript is working!');
+        }
+
+        function testInventoryCalculation() {
+            try {
+                console.log('=== INVENTORY CALCULATION TEST ===');
+                // Get current values
+                const length = cableLengthMode === 'average' ? 
+                    (parseInt(document.getElementById('avgCableLength').value) || 0) : 
+                    (() => {
+                        let total = 0;
+                        document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                            const cableLength = parseFloat(item.querySelector('.cable-length').value) || 0;
+                            const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                            total += (cableLength * qty);
+                        });
+                        return total;
+                    })();
+                const totalCableQuantity = cableLengthMode === 'average' ? 
+                    (parseInt(document.getElementById('numCables').value) || 0) : 
+                    (() => {
+                        let total = 0;
+                        document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                            const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                            total += qty;
+                        });
+                        return total;
+                    })();
+                const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+                const totalTerms = totalCableQuantity * termsPerCable;
+                console.log('Current project needs:', {
+                    totalCableNeeded: length,
+                    totalConnectorsNeeded: totalTerms,
+                    totalCableQuantity: totalCableQuantity,
+                    termsPerCable: termsPerCable
+                });
+                // Check vendor orders
+                let cableOrdered = 0;
+                let connectorsOrdered = 0;
+                for (let i = 1; i <= 3; i++) {
+                    if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].items) {
+                        console.log(`Checking vendor ${i} items:`, vendorPricing[i].items);
+                        vendorPricing[i].items.forEach(item => {
+                            const desc = item.desc.toLowerCase();
+                            const qty = parseFloat(item.qty) || 1;
+                            if (desc.includes('cable') || desc.includes('ft') || desc.includes('foot') || desc.includes('cat6') || desc.includes('cat5') || desc.includes('1855') || desc.includes('1505') || desc.includes('1694') || desc.includes('network') || desc.includes('box') || desc.includes('spool') || desc.includes('roll') || desc.includes('coax') || desc.includes('coaxial')) {
+                                let cableLength = qty;
+                                const lengthMatch = desc.match(/(\d+)\s*(?:ft|foot|feet|')/i);
+                                if (lengthMatch) {
+                                    cableLength = parseInt(lengthMatch[1]) * qty;
+                                } else if (desc.includes('spool') || desc.includes('roll') || desc.includes('1000')) {
+                                    cableLength = qty * 1000;
+                                } else if (desc.includes('box')) {
+                                    cableLength = qty * 1000;
+                                } else if (desc.includes('500')) {
+                                    cableLength = qty * 500;
+                                } else if (desc.includes('250')) {
+                                    cableLength = qty * 250;
+                                }
+                                cableOrdered += cableLength;
+                                console.log('Cable item found:', item.desc, 'length:', cableLength, 'total cable ordered:', cableOrdered);
+                            }
+                            if (desc.includes('connector') || desc.includes('termination') || desc.includes('bnc') || desc.includes('cat6') || desc.includes('rj45') || desc.includes('plug') || desc.includes('jack') || desc.includes('end') || desc.includes('cap')) {
+                                connectorsOrdered += qty;
+                                console.log('Connector item found:', item.desc, 'qty:', qty, 'total connectors ordered:', connectorsOrdered);
+                            }
+                        });
+                    }
+                }
+                // Calculate inventory usage
+                const inventoryCableUsage = Math.max(0, length - cableOrdered);
+                const inventoryConnectorUsage = Math.max(0, totalTerms - connectorsOrdered);
+                console.log('Inventory calculation results:', {
+                    cableOrdered: cableOrdered,
+                    connectorsOrdered: connectorsOrdered,
+                    inventoryCableUsage: inventoryCableUsage,
+                    inventoryConnectorUsage: inventoryConnectorUsage
+                });
+                // Check inventory card display
+                const inventoryUsageElement = document.getElementById('inventoryUsage');
+                const inventoryDetailsElement = document.getElementById('inventoryDetails');
+                console.log('Inventory card elements:', {
+                    inventoryUsageElement: inventoryUsageElement,
+                    inventoryDetailsElement: inventoryDetailsElement,
+                    inventoryUsageText: inventoryUsageElement ? inventoryUsageElement.textContent : 'Element not found',
+                    inventoryDetailsText: inventoryDetailsElement ? inventoryDetailsElement.textContent : 'Element not found'
+                });
+                // Test with a simple scenario
+                console.log('=== TESTING SIMPLE SCENARIO ===');
+                const testLength = 400; // 400ft needed
+                const testCableOrdered = 250; // 250ft ordered
+                const testInventoryCable = Math.max(0, testLength - testCableOrdered); // Should be 150ft
+                const testConnectors = 100; // 100 connectors needed
+                const testConnectorsOrdered = 60; // 60 connectors ordered
+                const testInventoryConnectors = Math.max(0, testConnectors - testConnectorsOrdered); // Should be 40
+                console.log('Test scenario:', {
+                    testLength: testLength,
+                    testCableOrdered: testCableOrdered,
+                    testInventoryCable: testInventoryCable,
+                    testConnectors: testConnectors,
+                    testConnectorsOrdered: testConnectorsOrdered,
+                    testInventoryConnectors: testInventoryConnectors
+                });
+                alert(`Inventory Test Results:\n\nCable needed: ${length}ft\nCable ordered: ${cableOrdered}ft\nCable from inventory: ${inventoryCableUsage}ft\n\nConnectors needed: ${totalTerms}\nConnectors ordered: ${connectorsOrdered}\nConnectors from inventory: ${inventoryConnectorUsage}\n\nTest Scenario:\n400ft needed, 250ft ordered = 150ft from inventory\n100 connectors needed, 60 ordered = 40 connectors from inventory\n\nCheck console for detailed debug info.`);
+            } catch (error) {
+                console.error('Error in testInventoryCalculation:', error);
+                alert('Error during inventory test: ' + error.message);
+            }
+        }
+
+        function createTestScenario() {
+            console.log('=== CREATING TEST SCENARIO ===');
+            // Set up a test scenario: 400ft cable needed, 250ft ordered = 150ft from inventory
+            // 100 connectors needed, 60 ordered = 40 connectors from inventory
+            // Set cable configuration
+            if (cableLengthMode === 'average') {
+                document.getElementById('numCables').value = '20';
+                document.getElementById('avgCableLength').value = '20';
+            } else {
+                // Clear existing cable lengths and add test item
+                const cableLengthsContainer = document.getElementById('cableLengths');
+                cableLengthsContainer.innerHTML = '';
+                addCableLength('1855', '20', '20'); // 20 cables of 20ft each = 400ft total
+            }
+            // Set terminations
+            document.getElementById('terminationsPerCable').value = '5'; // 5 terminations per cable = 100 total
+            // Set up vendor pricing for test
+            vendorPricing[1] = {
+                name: 'Test Vendor',
+                active: true,
+                items: [
+                    { desc: '1855 Cable 250ft', qty: 1, cost: 100 },
+                    { desc: 'BNC Connectors', qty: 60, cost: 2 }
+                ]
+            };
+            // Update vendor display
+            setVendor(1);
+            // Set Setup Configuration values for inventory cost calculation
+            document.getElementById('cableCostPerFoot').value = '0.50';
+            document.getElementById('terminationCost').value = '1.00';
+            console.log('Test scenario created. Running calculation...');
+            calculate();
+            alert('Test scenario created!\n\nProject needs: 400ft cable, 100 connectors\nVendor ordered: 250ft cable, 60 connectors\nExpected inventory: 150ft cable, 40 connectors\n\nCheck the Inventory Usage card and console for results.');
+        }
+
+        function debugInventoryDisplay() {
+            console.log('=== INVENTORY DISPLAY DEBUG ===');
+            // Check if elements exist
+            const inventoryUsageElement = document.getElementById('inventoryUsage');
+            const inventoryDetailsElement = document.getElementById('inventoryDetails');
+            console.log('Element existence check:', {
+                inventoryUsageElement: inventoryUsageElement ? 'Found' : 'NOT FOUND',
+                inventoryDetailsElement: inventoryDetailsElement ? 'Found' : 'NOT FOUND'
+            });
+            if (!inventoryUsageElement || !inventoryDetailsElement) {
+                alert('ERROR: Inventory card elements not found! Check HTML structure.');
+                return;
+            }
+            // Check current display values
+            const currentUsageText = inventoryUsageElement.textContent;
+            const currentDetailsText = inventoryDetailsElement.textContent;
+            console.log('Current display values:', {
+                usageText: currentUsageText,
+                detailsText: currentDetailsText
+            });
+            // Check if elements are visible
+            const usageStyle = window.getComputedStyle(inventoryUsageElement);
+            const detailsStyle = window.getComputedStyle(inventoryDetailsElement);
+            console.log('Element visibility:', {
+                usageDisplay: usageStyle.display,
+                usageVisibility: usageStyle.visibility,
+                usageOpacity: usageStyle.opacity,
+                detailsDisplay: detailsStyle.display,
+                detailsVisibility: detailsStyle.visibility,
+                detailsOpacity: detailsStyle.opacity
+            });
+            // Check parent card visibility
+            const inventoryCard = inventoryUsageElement.closest('.result-card');
+            if (inventoryCard) {
+                const cardStyle = window.getComputedStyle(inventoryCard);
+                console.log('Parent card visibility:', {
+                    display: cardStyle.display,
+                    visibility: cardStyle.visibility,
+                    opacity: cardStyle.opacity
+                });
+            }
+            // Check global inventory variables
+            console.log('Global inventory variables:', {
+                globalInventoryCableUsage: globalInventoryCableUsage,
+                globalInventoryConnectorUsage: globalInventoryConnectorUsage,
+                globalTotalInventoryCost: globalTotalInventoryCost
+            });
+            // Check if calculate function is working
+            console.log('Testing calculate function...');
+            const originalUsageText = inventoryUsageElement.textContent;
+            const originalDetailsText = inventoryDetailsElement.textContent;
+            // Run calculate function
+            calculate();
+            // Check if values changed
+            setTimeout(() => {
+                const afterCalculateUsageText = inventoryUsageElement.textContent;
+                const afterCalculateDetailsText = inventoryDetailsElement.textContent;
+                console.log('Calculate function test:', {
+                    beforeUsage: originalUsageText,
+                    afterUsage: afterCalculateUsageText,
+                    beforeDetails: originalDetailsText,
+                    afterDetails: afterCalculateDetailsText,
+                    usageChanged: originalUsageText !== afterCalculateUsageText,
+                    detailsChanged: originalDetailsText !== afterCalculateDetailsText
+                });
+                if (originalUsageText === afterCalculateUsageText && originalDetailsText === afterCalculateDetailsText) {
+                    console.log('WARNING: Calculate function did not update inventory display!');
+                }
+            }, 100);
+            // Force update the display with test values
+            console.log('Forcing display update with test values...');
+            inventoryUsageElement.textContent = '$150';
+            inventoryDetailsElement.textContent = '150ft cable, 40 connectors from inventory';
+            // Check if the update worked
+            setTimeout(() => {
+                const newUsageText = inventoryUsageElement.textContent;
+                const newDetailsText = inventoryDetailsElement.textContent;
+                console.log('After forced update:', {
+                    usageText: newUsageText,
+                    detailsText: newDetailsText
+                });
+                if (newUsageText === '$150' && newDetailsText === '150ft cable, 40 connectors from inventory') {
+                    alert('SUCCESS: Display update works! The issue is in the calculation or variable values.\n\nCheck console for detailed debug info.');
+                } else {
+                    alert('ERROR: Display update failed! There may be a CSS or JavaScript issue preventing updates.\n\nCheck console for detailed debug info.');
+                }
+            }, 100);
+        }
+
+        function forceInventoryUpdate() {
+            console.log('=== FORCING INVENTORY UPDATE ===');
+            // Get current values
+            const length = cableLengthMode === 'average' ? 
+                (parseInt(document.getElementById('avgCableLength').value) || 0) : 
+                (() => {
+                    let total = 0;
+                    document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                        const cableLength = parseFloat(item.querySelector('.cable-length').value) || 0;
+                        const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                        total += (cableLength * qty);
+                    });
+                    return total;
+                })();
+            const totalCableQuantity = cableLengthMode === 'average' ? 
+                (parseInt(document.getElementById('numCables').value) || 0) : 
+                (() => {
+                    let total = 0;
+                    document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                        const qty = parseFloat(item.querySelector('.cable-qty').value) || 1;
+                        total += qty;
+                    });
+                    return total;
+                })();
+            const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+            const totalTerms = totalCableQuantity * termsPerCable;
+            // Check vendor orders
+            let cableOrdered = 0;
+            let connectorsOrdered = 0;
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].items) {
+                    vendorPricing[i].items.forEach(item => {
+                        const desc = item.desc.toLowerCase();
+                        const qty = parseFloat(item.qty) || 1;
+                        if (desc.includes('cable') || desc.includes('ft') || desc.includes('foot') || desc.includes('cat6') || desc.includes('cat5') || desc.includes('1855') || desc.includes('1505') || desc.includes('1694') || desc.includes('network') || desc.includes('box') || desc.includes('spool') || desc.includes('roll') || desc.includes('coax') || desc.includes('coaxial')) {
+                            let cableLength = qty;
+                            const lengthMatch = desc.match(/(\d+)\s*(?:ft|foot|feet|')/i);
+                            if (lengthMatch) {
+                                cableLength = parseInt(lengthMatch[1]) * qty;
+                            } else if (desc.includes('spool') || desc.includes('roll') || desc.includes('1000')) {
+                                cableLength = qty * 1000;
+                            } else if (desc.includes('box')) {
+                                cableLength = qty * 1000;
+                            } else if (desc.includes('500')) {
+                                cableLength = qty * 500;
+                            } else if (desc.includes('250')) {
+                                cableLength = qty * 250;
+                            }
+                            cableOrdered += cableLength;
+                        }
+                        if (desc.includes('connector') || desc.includes('termination') || desc.includes('bnc') || desc.includes('cat6') || desc.includes('rj45') || desc.includes('plug') || desc.includes('jack') || desc.includes('end') || desc.includes('cap')) {
+                            connectorsOrdered += qty;
+                        }
+                    });
+                }
+            }
+            // Calculate inventory usage
+            const inventoryCableUsage = Math.max(0, length - cableOrdered);
+            const inventoryConnectorUsage = Math.max(0, totalTerms - connectorsOrdered);
+            // Get Setup Configuration values for cost calculation
+            const cableCost = parseFloat(document.getElementById('cableCostPerFoot').value) || 0;
+            const termCost = parseFloat(document.getElementById('terminationCost').value) || 0;
+            const connectorWasteFactor = parseFloat(document.getElementById('connectorWasteFactor').value) || 0;
+            // Calculate inventory costs
+            const inventoryCableCost = inventoryCableUsage * cableCost;
+            const inventoryConnectorCost = inventoryConnectorUsage * termCost * (1 + connectorWasteFactor / 100);
+            const totalInventoryCost = inventoryCableCost + inventoryConnectorCost;
+            // Update display
+            const inventoryUsageElement = document.getElementById('inventoryUsage');
+            const inventoryDetailsElement = document.getElementById('inventoryDetails');
+            if (inventoryUsageElement) {
+                inventoryUsageElement.textContent = '$' + totalInventoryCost.toFixed(0);
+            }
+            let inventoryDetailsText = '';
+            if (inventoryCableUsage > 0 || inventoryConnectorUsage > 0) {
+                const details = [];
+                if (inventoryCableUsage > 0) {
+                    details.push(inventoryCableUsage.toFixed(0) + 'ft cable');
+                }
+                if (inventoryConnectorUsage > 0) {
+                    details.push(inventoryConnectorUsage.toFixed(0) + ' connectors');
+                }
+                inventoryDetailsText = details.join(', ') + ' from inventory';
+            } else {
+                inventoryDetailsText = 'all items ordered';
+            }
+            if (inventoryDetailsElement) {
+                inventoryDetailsElement.textContent = inventoryDetailsText;
+            }
+            console.log('Forced inventory update:', {
+                length: length,
+                totalTerms: totalTerms,
+                cableOrdered: cableOrdered,
+                connectorsOrdered: connectorsOrdered,
+                inventoryCableUsage: inventoryCableUsage,
+                inventoryConnectorUsage: inventoryConnectorUsage,
+                totalInventoryCost: totalInventoryCost,
+                inventoryDetailsText: inventoryDetailsText
+            });
+            alert(`Inventory Update Complete!\n\nCable needed: ${length}ft\nCable ordered: ${cableOrdered}ft\nCable from inventory: ${inventoryCableUsage}ft\n\nConnectors needed: ${totalTerms}\nConnectors ordered: ${connectorsOrdered}\nConnectors from inventory: ${inventoryConnectorUsage}\n\nTotal inventory cost: $${totalInventoryCost.toFixed(0)}`);
+        }
+
+        function testToggleSection() {
+            console.log('=== TESTING TOGGLE SECTION ===');
+            // Test if function exists
+            if (typeof toggleSection === 'function') {
+                console.log('\u2705 toggleSection function is defined');
+            } else {
+                console.error('\u274c toggleSection function is NOT defined');
+                return;
+            }
+            // Test if elements exist
+            const testSectionId = 'cableConfig';
+            const section = document.getElementById(testSectionId);
+            const header = section ? section.previousElementSibling : null;
+            const icon = header ? header.querySelector('.toggle-icon') : null;
+            console.log('Element check:', {
+                section: section ? 'Found' : 'NOT FOUND',
+                header: header ? 'Found' : 'NOT FOUND',
+                icon: icon ? 'Found' : 'NOT FOUND'
+            });
+            if (section && header && icon) {
+                console.log('\u2705 All elements found, testing toggle...');
+                toggleSection(testSectionId);
+                setTimeout(() => {
+                    const isExpanded = section.classList.contains('expanded');
+                    const iconText = icon.textContent;
+                    console.log('Toggle result:', {
+                        isExpanded: isExpanded,
+                        iconText: iconText
+                    });
+                    if (isExpanded) {
+                        alert('\u2705 Toggle test SUCCESSFUL! Section expanded.');
+                    } else {
+                        alert('\u274c Toggle test FAILED! Section did not expand.');
+                    }
+                }, 100);
+            } else {
+                console.error('\u274c Missing elements for toggle test');
+                alert('\u274c Toggle test FAILED! Missing required elements.');
+            }
+        }
+
+        // === TEST: Reconciliation Function ===
+        function testReconciliationFunction() {
+            // Setup: Clear vendor orders and set a known scenario
+            for (let i = 1; i <= 3; i++) {
+                vendorPricing[i] = { name: `Vendor ${i}`, active: false, items: [] };
+            }
+            vendorPricing[1] = {
+                name: 'Test Vendor',
+                active: true,
+                items: [
+                    { desc: '1855 Cable 250ft', qty: 1, cost: 100 },
+                    { desc: 'BNC Connectors', qty: 60, cost: 2 },
+                    { desc: 'Cat6 Cable 1000ft', qty: 1, cost: 200 },
+                    { desc: 'Cat6 RJ45 Plug', qty: 30, cost: 1 }
+                ]
+            };
+
+            // Set cable configuration for average mode
+            cableLengthMode = 'average';
+            document.getElementById('numCables').value = '20';
+            document.getElementById('avgCableLength').value = '20';
+            document.getElementById('terminationsPerCable').value = '5';
+
+            // Set total terminations for the test
+            document.getElementById('totalTerminations').textContent = (20 * 5).toString();
+
+            // Run reconciliation
+            console.log('Running testReconciliationFunction...');
+            reconcileConnectorsAndTerminations();
+            alert('Test scenario for reconciliation complete. Check the reconciliation report and console for details.');
         }
     </script>
 </body>
 </html>
+
+
+            
