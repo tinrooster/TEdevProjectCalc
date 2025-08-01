@@ -683,12 +683,79 @@
             margin-left: 10px;
         }
         
+        /* Help Modal Styles */
+        .help-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .help-modal-content {
+            background: white;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            background: #f8f9fa;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .help-modal-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+        
+        .help-modal-body {
+            padding: 20px;
+            color: #2c3e50;
+        }
+        
+        .help-modal-body h4 {
+            color: #3498db;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .help-modal-body ul,
+        .help-modal-body ol {
+            margin-left: 20px;
+        }
+        
+        .help-modal-body li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
         .project-header {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: white;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
+        }
+        
+        .header-value {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: white;
         }
         
         /* Mobile responsive layout for screens < 768x800 */
@@ -738,15 +805,12 @@
             .project-header .header-display {
                 min-width: auto !important;
                 margin-bottom: 5px !important;
-                font-size: 11px !important;
             }
             
-            .project-header .header-display strong {
-                font-size: 10px !important;
-            }
-            
-            .project-header .header-display span {
-                font-size: 11px !important;
+            .project-header .header-value {
+                font-size: 14px !important;
+                font-weight: 600 !important;
+                color: white !important;
             }
             
             .project-header button {
@@ -780,11 +844,44 @@
                 font-size: 16px !important;
             }
             
-            /* Ensure Time Breakdown header has proper contrast */
-            .breakdown h3 {
-                background: #2c3e50 !important;
-                color: white !important;
-            }
+                    /* Ensure Time Breakdown header has proper contrast */
+        .breakdown h3 {
+            background: #2c3e50 !important;
+            color: white !important;
+        }
+        
+        /* Reconciliation section styling */
+        #reconciliationSection {
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        #reconciliationSection h3 {
+            padding: 15px 20px;
+            margin: 0;
+            background: #2c3e50 !important;
+            color: white !important;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+        
+        #reconciliationSection h3:hover {
+            background: #34495e !important;
+        }
+        
+        .breakdown-content {
+            padding: 20px;
+        }
+        
+        #reconciliationStatus {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
             
             .results h2::after, .breakdown h3::after {
                 content: "▼" !important;
@@ -996,17 +1093,17 @@
         }
         
         .header-display {
-            color: #2c3e50;
+            color: white;
             font-size: 13px;
         }
         
         .header-display strong {
-            color: #7f8c8d;
+            color: white;
             font-weight: 600;
         }
         
         .header-display span {
-            color: #2c3e50;
+            color: white;
             font-weight: 500;
         }
         
@@ -1231,24 +1328,22 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                     <div class="header-display" style="min-width: 150px;">
-                        <strong>Project:</strong> <span id="projectNameDisplay">Enter project name</span>
+                        <span id="projectNameDisplay" class="header-value"></span>
                     </div>
                     <div class="header-display" style="min-width: 150px;">
-                        <strong>Description:</strong> <span id="projectDescriptionDisplay">Brief project description</span>
+                        <span id="projectDescriptionDisplay" class="header-value"></span>
                     </div>
                     <div class="header-display" style="min-width: 100px;">
-                        <strong>Revision:</strong> <span id="projectRevisionDisplay">1.0</span>
+                        <span id="projectRevisionDisplay" class="header-value"></span>
                     </div>
                     <div class="header-display" style="min-width: 120px;">
-                        <strong>Date:</strong> <span id="projectDateDisplay">Select date</span>
+                        <span id="projectDateDisplay" class="header-value"></span>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Export CSV</button>
                     <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
                     <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
-                    <button onclick="reconcileConnectorsAndTerminations()" style="background: #8e44ad; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Run Reconciliation Report</button>
-                    <button onclick="viewReconciliationHistory()" style="background: #2980b9; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📋 View History</button>
                 </div>
             </div>
         </div>
@@ -1291,16 +1386,12 @@
                     <div class="result-detail" id="laborDetails">2 techs × 2.5 hrs × $75/hr</div>
                 </div>
                 
-                <div class="result-card">
-                    <h4>🧰 Material Cost</h4>
-                    <div class="result-value" id="materialCost">$130</div>
-                    <div class="result-detail">rack supplies & expendables</div>
-                </div>
+
                         
                         <div class="result-card">
-                            <h4>🔧 Equipment Cost</h4>
+                            <h4>📦 Supplies & Expendables</h4>
                             <div class="result-value" id="equipmentCost">$0</div>
-                            <div class="result-detail">supplies and expendables line items</div>
+                            <div class="result-detail">additional materials and supplies</div>
                         </div>
                         
                         <div class="result-card">
@@ -1310,16 +1401,12 @@
                         </div>
                         
                         <div class="result-card">
-                            <h4>🏷️ Active Vendor Items</h4>
+                            <h4>🏷️ Orders</h4>
                             <div class="result-value" id="activeVendorTotal">$0</div>
                             <div class="result-detail">active vendor pricing items</div>
                         </div>
                         
-                        <div class="result-card">
-                            <h4>🧰 Other Materials</h4>
-                            <div class="result-value" id="otherMaterialsTotal">$0</div>
-                            <div class="result-detail">additional materials</div>
-                        </div>
+                        
                         
                         <div class="result-card">
                             <h4>👥 Staff Hours</h4>
@@ -1336,20 +1423,10 @@
                 <div class="result-card">
                     <h4>💵 Total Project Cost</h4>
                             <div class="result-value" id="totalCost">$550</div>
-                            <div class="result-detail">labor + materials + equipment + quotes + other + active vendor</div>
+                            <div class="result-detail">labor + supplies & expendables + vendor quotes + active vendor</div>
                 </div>
             </div>
             
-                    <!-- Spool Mismatch Notification -->
-                    <div id="spoolMismatchNotification" style="display: none; margin-top: 15px; padding: 12px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; color: #856404;">
-                        <div style="display: flex; align-items: center;">
-                            <span style="margin-right: 10px;">⚠️</span>
-                            <div>
-                                <strong>Cable Quantity Mismatch:</strong>
-                                <div id="mismatchMessage" style="margin-top: 5px; font-size: 0.9em; white-space: pre-line;"></div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Time Breakdown -->
@@ -1390,6 +1467,42 @@
                 <div class="breakdown-item" style="border-top: 2px solid #2c3e50; margin-top: 10px; padding-top: 10px; color: #2c3e50;">
                     <strong>Total Project Time:</strong>
                         <strong id="breakdownTotal">3.6 hours</strong>
+                </div>
+            </div>
+            
+            <!-- Reconciliation Report -->
+            <div class="breakdown" id="reconciliationSection">
+                <h3 onclick="toggleReconciliation()" style="position: relative;">
+                    🔄 Reconciliation Report
+                    <span id="reconciliationStatus" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; padding: 2px 6px; border-radius: 10px; background: #95a5a6; color: white;">Not Run</span>
+                </h3>
+                <div id="reconciliationContent" class="breakdown-content" style="display: none;">
+                    
+                    <!-- Control Buttons -->
+                    <div style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button onclick="runReconciliationToTab()" style="background: #8e44ad; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Run Report</button>
+                        <button onclick="showReconciliationHistory()" style="background: #2980b9; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📋 History</button>
+                        <button onclick="exportReconciliationCSV()" style="background: #27ae60; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📄 Export</button>
+                    </div>
+                    
+                    <!-- Status Summary -->
+                    <div id="reconciliationSummary" style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #3498db;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Quick Status:</div>
+                        <div id="reconciliationQuickStatus">Run reconciliation to see status</div>
+                    </div>
+                    
+                    <!-- Detailed Report -->
+                    <div id="reconciliationReport" style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 13px; white-space: pre-wrap; max-height: 300px; overflow-y: auto;">
+                        Click "Run Report" to generate reconciliation data...
+                    </div>
+                    
+                    <!-- History View -->
+                    <div id="reconciliationHistoryView" style="display: none;">
+                        <h4 style="margin: 15px 0 10px 0; font-size: 14px;">Recent Reconciliations:</h4>
+                        <div id="reconciliationHistoryList" style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 13px; white-space: pre-wrap; max-height: 250px; overflow-y: auto;">
+                            No history available
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1493,9 +1606,12 @@
                 
                 <div id="otherMaterials">
                     <div class="line-item">
-                        <input type="text" placeholder="Description" class="other-material-desc">
-                        <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="1" oninput="calculate()" onchange="calculate()">
-                        <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()">
+                        <input type="text" placeholder="Description" class="other-material-desc" style="flex: 3;">
+                        <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="1" oninput="calculate()" onchange="calculate()" style="width: 60px;">
+                        <div style="position: relative; display: inline-block; width: 80px;">
+                            <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                            <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                        </div>
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
@@ -1542,12 +1658,11 @@
                 </div>
                 
                 <div id="vendor1Details" class="vendor-details">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
-                        <strong>Quick Guide - Keyword Matching:</strong><br>
-                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
-                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
-                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Note:</strong> Use this section to enter line item orders from primary vendors.
+                        </div>
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor1Name">Vendor 1 Name:</label>
@@ -1560,9 +1675,12 @@
                     <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
                     <div id="vendor1Items">
                         <div class="line-item">
-                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
+                            <div style="position: relative; display: inline-block; width: 80px;">
+                                <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                            </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
@@ -1570,12 +1688,11 @@
                 </div>
                 
                 <div id="vendor2Details" class="vendor-details" style="display: none;">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
-                        <strong>Quick Guide - Keyword Matching:</strong><br>
-                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
-                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
-                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Note:</strong> Use this section for actual vendor orders.
+                        </div>
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor2Name">Vendor 2 Name:</label>
@@ -1588,9 +1705,12 @@
                     <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
                     <div id="vendor2Items">
                         <div class="line-item">
-                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
+                            <div style="position: relative; display: inline-block; width: 80px;">
+                                <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                            </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
@@ -1598,12 +1718,11 @@
                 </div>
                 
                 <div id="vendor3Details" class="vendor-details" style="display: none;">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Use this section for actual vendor orders.<br><br>
-                        <strong>Quick Guide - Keyword Matching:</strong><br>
-                        • <strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length<br>
-                        • <strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description<br>
-                        • <strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)
+                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>Note:</strong> Use this section for actual vendor orders.
+                        </div>
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
                     </div>
                     <div class="vendor-name-row">
                         <label for="vendor3Name">Vendor 3 Name:</label>
@@ -1616,9 +1735,12 @@
                     <h4 style="margin-top: 15px; color: #2c3e50;">Line Items</h4>
                     <div id="vendor3Items">
                         <div class="line-item">
-                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                            <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                            <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
+                            <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
+                            <div style="position: relative; display: inline-block; width: 80px;">
+                                <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                            </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
@@ -1637,7 +1759,10 @@
                         <input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;">
                         <input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;">
                         <input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;">
-                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px;">
+                        <div style="position: relative; display: inline-block; width: 80px;">
+                            <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                            <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                        </div>
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
@@ -1691,7 +1816,7 @@
             
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('laborConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 👥 Labor Configuration
+                    <span class="toggle-icon">▶</span> 👥 Labor
                 </h3>
                 <div id="laborConfig" class="section-content">
                 <div class="preset-selector">
@@ -1824,7 +1949,15 @@
                         <input type="number" id="terminationCost" value="0" min="0" step="0.01">
                     </div>
                     
-                    <div class="setup-item" style="background: #e8f4fd; padding: 15px; border-radius: 8px; border: 1px solid #b3d9ff; margin-top: 15px;">
+
+                </div>
+                
+                <!-- Setup Control Buttons -->
+                <div style="margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border: 1px solid #b3d9ff;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Controls</h4>
+                    
+                    <!-- Auto Save Project -->
+                    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()" checked>
                             <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
@@ -1833,16 +1966,11 @@
                             Automatically saves project to local storage every time you make changes
                         </div>
                     </div>
-                </div>
-                
-                <!-- Setup Control Buttons -->
-                <div style="margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border: 1px solid #b3d9ff;">
-                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Controls</h4>
+                    
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button onclick="saveDefaults()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Defaults</button>
                         <button onclick="resetToDefaults()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Defaults</button>
                         <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
-                        <button onclick="reconcileConnectorsAndTerminations()" style="background: #9b59b6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔍 Reconcile Connectors</button>
                     </div>
                 </div>
                 </div>
@@ -1850,6 +1978,32 @@
         </div>
         
         
+        </div>
+    </div>
+    
+    <!-- Help Modal -->
+    <div id="helpModal" class="help-modal" style="display: none;">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h3>Vendor Order Help Guide</h3>
+                <button onclick="closeHelpModal()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✕</button>
+            </div>
+            <div class="help-modal-body">
+                <h4>Quick Guide - Keyword Matching:</h4>
+                <ul>
+                    <li><strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length</li>
+                    <li><strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description</li>
+                    <li><strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)</li>
+                </ul>
+                
+                <h4>How to Use:</h4>
+                <ol>
+                    <li>Enter a vendor name to activate the section</li>
+                    <li>Add line items with descriptions, quantities, and costs</li>
+                    <li>Use keywords in descriptions for automatic calculations</li>
+                    <li>Toggle vendor active/inactive as needed</li>
+                </ol>
+            </div>
         </div>
     </div>
 
@@ -2143,18 +2297,18 @@
                     cableLengthMode = 'average';
                     
                     // Clear all line items with zero values
-                    document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="0" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc" style="flex: 3;"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="0" oninput="calculate()" onchange="calculate()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
-                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;"><input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;"><input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;"><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px;"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;"><input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;"><input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
-                    document.getElementById('staffLineItemsContainer').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc"><input type="text" placeholder="Note" class="staff-note"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="0"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('staffLineItemsContainer').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc" style="flex: 2;"><input type="text" placeholder="Note" class="staff-note" style="flex: 3;"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="0" style="width: 60px;"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     document.getElementById('cableLengths').innerHTML = '<div class="line-item cable-line-item"><select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     // Clear vendor item containers
-                    document.getElementById('vendor1Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
-                    document.getElementById('vendor2Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
-                    document.getElementById('vendor3Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor1Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor2Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor3Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     // Clear vendor names
                     document.getElementById('vendor1Name').value = '';
@@ -2533,7 +2687,10 @@
                     <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}" style="width: 120px;">
                     <input type="text" placeholder="Item Description/Part #" class="vendor-desc" value="${desc}" style="flex: 2;">
                     <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}" style="width: 100px;">
-                    <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px;">
+                    <div style="position: relative; display: inline-block; width: 80px;">
+                        <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                    </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2561,9 +2718,12 @@
                 const div = document.createElement('div');
                 div.className = 'line-item';
                 div.innerHTML = `
-                    <input type="text" placeholder="Description" class="other-material-desc" value="${desc}">
-                    <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="${qty}" oninput="calculate()" onchange="calculate()">
-                    <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()">
+                    <input type="text" placeholder="Description" class="other-material-desc" value="${desc}" style="flex: 3;">
+                    <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="${qty}" oninput="calculate()" onchange="calculate()" style="width: 60px;">
+                    <div style="position: relative; display: inline-block; width: 80px;">
+                        <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                        <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                    </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2643,9 +2803,12 @@
                 const div = document.createElement('div');
                 div.className = 'line-item';
                 div.innerHTML = `
-                    <input type="text" placeholder="Description/Part #" class="vendor-item-desc" value="${desc}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                    <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="${qty}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
-                    <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="${cost}" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                    <input type="text" placeholder="Description/Part #" class="vendor-item-desc" value="${desc}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
+                    <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="${qty}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
+                    <div style="position: relative; display: inline-block; width: 80px;">
+                        <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                        <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="${cost}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                    </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2754,40 +2917,63 @@
         }
         
         function updateProjectHeader() {
-            const projectName = document.getElementById('projectName').value || 'Enter project name';
-            const projectDescription = document.getElementById('projectDescription').value || 'Brief project description';
-            const projectRevision = document.getElementById('projectRevision').value || '1.0';
-            const projectDate = document.getElementById('projectDate').value || 'Select date';
+            // Get values from setup inputs, only if they're actually filled
+            const projectName = document.getElementById('projectName').value.trim();
+            const projectDescription = document.getElementById('projectDescription').value.trim();
+            const projectRevision = document.getElementById('projectRevision').value.trim();
+            const projectDate = document.getElementById('projectDate').value;
             
-            // Update display elements
+            // Update display elements - only show if value exists
             const nameDisplay = document.getElementById('projectNameDisplay');
             const descDisplay = document.getElementById('projectDescriptionDisplay');
             const revDisplay = document.getElementById('projectRevisionDisplay');
             const dateDisplay = document.getElementById('projectDateDisplay');
             
             if (nameDisplay) {
-                nameDisplay.textContent = projectName;
-                console.log('Updated project name display:', projectName);
-            } else {
-                console.warn('projectNameDisplay element not found');
+                if (projectName) {
+                    nameDisplay.textContent = projectName;
+                    nameDisplay.parentElement.style.display = 'block';
+                } else {
+                    nameDisplay.textContent = '';
+                    nameDisplay.parentElement.style.display = 'none';
+                }
             }
+            
             if (descDisplay) {
-                descDisplay.textContent = projectDescription;
-                console.log('Updated project description display:', projectDescription);
-            } else {
-                console.warn('projectDescriptionDisplay element not found');
+                if (projectDescription) {
+                    descDisplay.textContent = projectDescription;
+                    descDisplay.parentElement.style.display = 'block';
+                } else {
+                    descDisplay.textContent = '';
+                    descDisplay.parentElement.style.display = 'none';
+                }
             }
+            
             if (revDisplay) {
-                revDisplay.textContent = projectRevision;
-                console.log('Updated project revision display:', projectRevision);
-            } else {
-                console.warn('projectRevisionDisplay element not found');
+                if (projectRevision) {
+                    revDisplay.textContent = projectRevision;
+                    revDisplay.parentElement.style.display = 'block';
+                } else {
+                    revDisplay.textContent = '';
+                    revDisplay.parentElement.style.display = 'none';
+                }
             }
+            
             if (dateDisplay) {
-                dateDisplay.textContent = projectDate;
-                console.log('Updated project date display:', projectDate);
-            } else {
-                console.warn('projectDateDisplay element not found');
+                if (projectDate) {
+                    // Format date for better display
+                    const dateObj = new Date(projectDate);
+                    const formattedDate = dateObj.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                    dateDisplay.textContent = formattedDate;
+                    dateDisplay.parentElement.style.display = 'block';
+                } else {
+                    dateDisplay.textContent = '';
+                    dateDisplay.parentElement.style.display = 'none';
+                }
             }
         }
         
@@ -2981,7 +3167,7 @@
                 vendorQuotesTotal += amount;
             });
             
-            // Calculate active vendor items total
+            // Calculate orders total
             var activeVendorTotal = 0;
             var totalCableOrdered = 0;
             var cableTypeOrdered = {}; // Track cable types ordered
@@ -3168,31 +3354,27 @@
             document.getElementById('totalHours').textContent = totalHours.toFixed(1) + ' total hours';
             document.getElementById('laborCost').textContent = '$' + laborCost;
             document.getElementById('laborDetails').textContent = laborDetails;
-            // Update material cost display - show inventory cost indication if Setup values are used
-            var materialCostDisplay = totalMat;
-            var materialCostNote = '';
-            if (totalMat > 0 && !hasVendorCablePricing && !hasVendorTerminationPricing) {
-                materialCostNote = ' (inventory cost indication)';
-            }
-            document.getElementById('materialCost').textContent = '$' + materialCostDisplay + materialCostNote;
+
             document.getElementById('equipmentCost').textContent = '$' + equipmentCost;
             document.getElementById('vendorQuotesTotal').textContent = '$' + vendorQuotesTotal;
             document.getElementById('activeVendorTotal').textContent = '$' + activeVendorTotal;
-            document.getElementById('otherMaterialsTotal').textContent = '$' + otherMaterialsTotal;
             document.getElementById('staffHoursTotal').textContent = staffHoursTotal.toFixed(1);
             document.getElementById('spoolsRequired').textContent = spoolsRequired;
             document.getElementById('spoolDetails').textContent = totalCableNeeded + 'ft needed + ' + wasteFactor + '% waste';
             document.getElementById('totalCost').textContent = '$' + totalCost;
             
-            // Show/hide spool mismatch notification
-            const notification = document.getElementById('spoolMismatchNotification');
-            const messageDiv = document.getElementById('mismatchMessage');
-            if (spoolMismatch) {
-                messageDiv.textContent = mismatchMessage;
-                notification.style.display = 'block';
-            } else {
-                notification.style.display = 'none';
-            }
+            // Cable mismatch logic moved to reconciliation tab
+            // Store cable mismatch data for reconciliation use
+            window.cableMismatchData = {
+                hasMismatch: spoolMismatch || typeMismatches.length > 0,
+                message: mismatchMessage,
+                configuredCableTypes: configuredCableTypes,
+                cableTypeOrdered: cableTypeOrdered,
+                typeMismatches: typeMismatches,
+                totalCableOrdered: totalCableOrdered,
+                spoolsRequired: spoolsRequired,
+                spoolLength: spoolLength
+            };
             
             document.getElementById('breakdownTermination').textContent = termHours.toFixed(1) + ' hours';
             document.getElementById('breakdownRunning').textContent = runHours.toFixed(1) + ' hours';
@@ -3309,7 +3491,7 @@
                     let vendorTotal = 0;
                     if (vendorPricing[i].items) {
                         vendorPricing[i].items.forEach(item => {
-                            vendorTotal += (parseFloat(item.quantity) || 0) * (parseFloat(item.cost) || 0);
+                            vendorTotal += (parseFloat(item.qty) || 0) * (parseFloat(item.cost) || 0);
                         });
                     }
                     if (vendorTotal > 0) {
@@ -3343,14 +3525,12 @@
             
             // If no specific data, show summary totals
             if (data.length === 0) {
-                var materialCost = parseFloat(document.getElementById('materialCost').textContent.replace('$', '').replace(',', '')) || 0;
                 var equipmentCost = parseFloat(document.getElementById('equipmentCost').textContent.replace('$', '').replace(',', '')) || 0;
                 var vendorQuotesTotal = parseFloat(document.getElementById('vendorQuotesTotal').textContent.replace('$', '').replace(',', '')) || 0;
                 var activeVendorTotal = parseFloat(document.getElementById('activeVendorTotal').textContent.replace('$', '').replace(',', '')) || 0;
-                var otherMaterialsTotal = parseFloat(document.getElementById('otherMaterialsTotal').textContent.replace('$', '').replace(',', '')) || 0;
                 
-                data = [materialCost, equipmentCost, vendorQuotesTotal, activeVendorTotal, otherMaterialsTotal];
-                labels = ['Materials', 'Equipment', 'Vendor Quotes', 'Active Vendor', 'Other Materials'];
+                data = [equipmentCost, vendorQuotesTotal, activeVendorTotal];
+                labels = ['Supplies & Expendables', 'Vendor Quotes', 'Active Vendor'];
             }
             
             var total = data.reduce(function(a, b) { return a + b; }, 0);
@@ -3512,12 +3692,15 @@
             try {
                 const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
                 if (reconciliationHistory && reconciliationHistory.length > 0) {
-                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,ISO Timestamp');
+                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
                     
                     // Show last 10 reconciliations
                     const recentReconciliations = reconciliationHistory.slice(-10);
                     recentReconciliations.forEach(recon => {
-                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}","${recon.timestamp}"`);
+                        const cableOrdered = recon.cables ? recon.cables.totalOrdered : 0;
+                        const cableSpools = recon.cables ? recon.cables.spoolsRequired : 0;
+                        const cableStatus = recon.cables ? recon.cables.status : 'N/A';
+                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
                     });
                 } else {
                     csvData.push('No reconciliation history available');
@@ -3532,11 +3715,9 @@
             csvData.push('Termination Time,' + document.getElementById('terminationHours').textContent);
             csvData.push('Project Duration,' + document.getElementById('projectDays').textContent);
             csvData.push('Labor Cost,' + document.getElementById('laborCost').textContent);
-            csvData.push('Material Cost,' + document.getElementById('materialCost').textContent);
-            csvData.push('Equipment Cost,' + document.getElementById('equipmentCost').textContent);
+            csvData.push('Supplies & Expendables,' + document.getElementById('equipmentCost').textContent);
             csvData.push('Vendor Quotes Total,' + document.getElementById('vendorQuotesTotal').textContent);
-            csvData.push('Active Vendor Items Total,' + document.getElementById('activeVendorTotal').textContent);
-            csvData.push('Other Materials Total,' + document.getElementById('otherMaterialsTotal').textContent);
+            csvData.push('Orders Total,' + document.getElementById('activeVendorTotal').textContent);
             csvData.push('Staff Hours Total,' + document.getElementById('staffHoursTotal').textContent);
             csvData.push('Cable Spools Required,' + document.getElementById('spoolsRequired').textContent);
             csvData.push('Total Project Cost,' + document.getElementById('totalCost').textContent);
@@ -3935,6 +4116,384 @@
             
             // Show reconciliation report
             alert(reconciliationReport.join('\n'));
+        }
+        
+        // Toggle reconciliation section
+        function toggleReconciliation() {
+            const section = document.getElementById('reconciliationContent');
+            const header = document.querySelector('#reconciliationSection h3');
+            
+            if (section.style.display === 'none' || !section.style.display) {
+                section.style.display = 'block';
+                header.style.background = '#34495e';
+                header.style.color = 'white';
+            } else {
+                section.style.display = 'none';
+                header.style.background = '';
+                header.style.color = '';
+            }
+        }
+        
+        // Run reconciliation and display in tab
+        function runReconciliationToTab() {
+            const reconciliationTimestamp = new Date();
+            const formatDate = reconciliationTimestamp.toLocaleDateString();
+            const formatTime = reconciliationTimestamp.toLocaleTimeString();
+            const isoTimestamp = reconciliationTimestamp.toISOString();
+            
+            var reconciliationReport = [];
+            var totalTerms = parseInt(document.getElementById('totalTerminations').textContent) || 0;
+            
+            // Check for BNC and Cat6 connectors in vendor orders
+            var bncConnectorsOrdered = 0;
+            var cat6ConnectorsOrdered = 0;
+            var bncTerminationsOrdered = 0;
+            var cat6TerminationsOrdered = 0;
+            
+            // Scan all active vendor orders for connector/termination items
+            for (let i = 1; i <= 3; i++) {
+                if (vendorPricing[i] && vendorPricing[i].active && vendorPricing[i].items) {
+                    vendorPricing[i].items.forEach(item => {
+                        const desc = item.desc.toLowerCase();
+                        const qty = parseInt(item.qty) || 0;
+                        
+                        // Check for BNC connectors/terminations
+                        if (desc.includes('bnc')) {
+                            if (desc.includes('connector') || desc.includes('plug') || desc.includes('jack')) {
+                                bncConnectorsOrdered += qty;
+                            } else if (desc.includes('termination') || desc.includes('term')) {
+                                bncTerminationsOrdered += qty;
+                            } else {
+                                // Generic BNC item - assume connectors
+                                bncConnectorsOrdered += qty;
+                            }
+                        }
+                        
+                        // Check for Cat6 connectors/terminations
+                        if (desc.includes('cat6') || desc.includes('rj45') || desc.includes('network')) {
+                            if (desc.includes('connector') || desc.includes('plug') || desc.includes('jack')) {
+                                cat6ConnectorsOrdered += qty;
+                            } else if (desc.includes('termination') || desc.includes('term')) {
+                                cat6TerminationsOrdered += qty;
+                            } else {
+                                // Generic Cat6 item - assume connectors
+                                cat6ConnectorsOrdered += qty;
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Calculate required connectors based on cable configuration
+            var requiredConnectors = 0;
+            var cableTypes = {};
+            
+            if (cableLengthMode === 'average') {
+                const avgCableType = document.querySelector('#averageLengthMode .cable-type');
+                if (avgCableType) {
+                    const type = avgCableType.value;
+                    const qty = parseInt(document.getElementById('numCables').value) || 0;
+                    const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+                    cableTypes[type] = qty * termsPerCable;
+                    requiredConnectors += qty * termsPerCable;
+                }
+            } else {
+                // Calculated mode - check each line item
+                document.querySelectorAll('#cableLengths .line-item').forEach(item => {
+                    const cableType = item.querySelector('.cable-type').value;
+                    const qty = parseInt(item.querySelector('.cable-qty').value) || 1;
+                    const length = parseInt(item.querySelector('.cable-length').value) || 0;
+                    const termsPerCable = parseInt(document.getElementById('terminationsPerCable').value) || 2;
+                    const totalTerms = qty * termsPerCable;
+                    
+                    if (!cableTypes[cableType]) cableTypes[cableType] = 0;
+                    cableTypes[cableType] += totalTerms;
+                    requiredConnectors += totalTerms;
+                });
+            }
+            
+            // Check BNC requirements
+            var bncRequired = 0;
+            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
+            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
+            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+            
+            // Check Cat6 requirements
+            var cat6Required = 0;
+            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
+            
+            // Check cable quantity mismatches
+            var cableMismatchData = window.cableMismatchData || { hasMismatch: false };
+            var hasCableMismatch = cableMismatchData.hasMismatch;
+            
+            // Determine overall status
+            var hasShortages = false;
+            var hasOverages = false;
+            var hasIssues = false;
+            var bncStatus = 'N/A';
+            var cat6Status = 'N/A';
+            
+            if (bncRequired > 0) {
+                if (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) {
+                    bncStatus = 'SHORTAGE';
+                    hasShortages = true;
+                } else if (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) {
+                    bncStatus = 'OVERAGE';
+                    hasOverages = true;
+                } else {
+                    bncStatus = 'MATCH';
+                }
+            }
+            
+            if (cat6Required > 0) {
+                if (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) {
+                    cat6Status = 'SHORTAGE';
+                    hasShortages = true;
+                } else if (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) {
+                    cat6Status = 'OVERAGE';
+                    hasOverages = true;
+                } else {
+                    cat6Status = 'MATCH';
+                }
+            }
+            
+            // Include cable mismatch in overall status
+            if (hasCableMismatch) {
+                hasIssues = true;
+            }
+            
+            // Update status indicator
+            const statusElement = document.getElementById('reconciliationStatus');
+            if (hasShortages || hasCableMismatch) {
+                statusElement.textContent = hasShortages ? 'SHORTAGES' : 'ISSUES';
+                statusElement.style.background = '#e74c3c';
+            } else if (hasOverages) {
+                statusElement.textContent = 'OVERAGES';
+                statusElement.style.background = '#f39c12';
+            } else {
+                statusElement.textContent = 'ALL GOOD';
+                statusElement.style.background = '#27ae60';
+            }
+            
+            // Update quick status
+            let quickStatus = '';
+            if (hasShortages) {
+                quickStatus = '⚠️ Shortages detected - items need to be ordered';
+            } else if (hasCableMismatch) {
+                quickStatus = '⚠️ Cable quantity mismatches detected';
+            } else if (hasOverages) {
+                quickStatus = 'ℹ️ Overages detected - extra items ordered';
+            } else {
+                quickStatus = '✅ Perfect match - all requirements met';
+            }
+            document.getElementById('reconciliationQuickStatus').textContent = quickStatus;
+            
+            // Generate reconciliation report with timestamp
+            reconciliationReport.push('=== CONNECTOR/TERMINATION RECONCILIATION ===');
+            reconciliationReport.push(`Reconciliation Date: ${formatDate}`);
+            reconciliationReport.push(`Reconciliation Time: ${formatTime}`);
+            reconciliationReport.push(`Project: ${document.getElementById('projectName').value || 'Unnamed Project'}`);
+            reconciliationReport.push(`Vendor: ${currentVendor}`);
+            reconciliationReport.push('');
+            reconciliationReport.push(`Total terminations required: ${requiredConnectors}`);
+            reconciliationReport.push('');
+            
+            if (bncRequired > 0) {
+                reconciliationReport.push(`BNC Connectors/Terminations:`);
+                reconciliationReport.push(`  Required: ${bncRequired}`);
+                reconciliationReport.push(`  Ordered: ${bncConnectorsOrdered + bncTerminationsOrdered}`);
+                if (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) {
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${bncRequired - (bncConnectorsOrdered + bncTerminationsOrdered)} more`);
+                } else if (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) {
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(bncConnectorsOrdered + bncTerminationsOrdered) - bncRequired} extra`);
+                } else {
+                    reconciliationReport.push(`  ✅ Perfect match`);
+                }
+                reconciliationReport.push('');
+            }
+            
+            if (cat6Required > 0) {
+                reconciliationReport.push(`Cat6 Connectors/Terminations:`);
+                reconciliationReport.push(`  Required: ${cat6Required}`);
+                reconciliationReport.push(`  Ordered: ${cat6ConnectorsOrdered + cat6TerminationsOrdered}`);
+                if (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) {
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${cat6Required - (cat6ConnectorsOrdered + cat6TerminationsOrdered)} more`);
+                } else if (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) {
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(cat6ConnectorsOrdered + cat6TerminationsOrdered) - cat6Required} extra`);
+                } else {
+                    reconciliationReport.push(`  ✅ Perfect match`);
+                }
+                reconciliationReport.push('');
+            }
+            
+            // Add cable quantity reconciliation
+            if (hasCableMismatch && cableMismatchData.message) {
+                reconciliationReport.push('=== CABLE QUANTITY RECONCILIATION ===');
+                reconciliationReport.push(cableMismatchData.message);
+                reconciliationReport.push('');
+            }
+            
+            // Save reconciliation data to history
+            var reconciliationData = {
+                timestamp: isoTimestamp,
+                formatDate: formatDate,
+                formatTime: formatTime,
+                projectName: document.getElementById('projectName').value || 'Unnamed Project',
+                vendor: currentVendor,
+                totalRequired: requiredConnectors,
+                bnc: {
+                    required: bncRequired,
+                    ordered: bncConnectorsOrdered + bncTerminationsOrdered,
+                    status: bncStatus
+                },
+                cat6: {
+                    required: cat6Required,
+                    ordered: cat6ConnectorsOrdered + cat6TerminationsOrdered,
+                    status: cat6Status
+                },
+                cables: {
+                    hasMismatch: hasCableMismatch,
+                    totalOrdered: cableMismatchData.totalCableOrdered || 0,
+                    spoolsRequired: cableMismatchData.spoolsRequired || 0,
+                    status: hasCableMismatch ? 'MISMATCH' : 'OK'
+                }
+            };
+            
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                reconciliationHistory.push(reconciliationData);
+                
+                // Keep only last 50 reconciliations to avoid storage bloat
+                if (reconciliationHistory.length > 50) {
+                    reconciliationHistory.splice(0, reconciliationHistory.length - 50);
+                }
+                
+                localStorage.setItem('reconciliationHistory', JSON.stringify(reconciliationHistory));
+                console.log('Reconciliation saved to history:', reconciliationData);
+            } catch (error) {
+                console.error('Error saving reconciliation history:', error);
+            }
+            
+            // Add footer with timestamp
+            reconciliationReport.push('================================');
+            reconciliationReport.push(`Generated: ${formatDate} at ${formatTime}`);
+            reconciliationReport.push(`Timestamp: ${isoTimestamp}`);
+            
+            // Display report in tab
+            document.getElementById('reconciliationReport').textContent = reconciliationReport.join('\n');
+            
+            // Open the reconciliation tab if it's closed
+            const section = document.getElementById('reconciliationContent');
+            if (section.style.display === 'none' || !section.style.display) {
+                toggleReconciliation();
+            }
+            
+            // Hide history view and show report
+            document.getElementById('reconciliationHistoryView').style.display = 'none';
+            document.getElementById('reconciliationReport').style.display = 'block';
+        }
+        
+        // Show reconciliation history in tab
+        function showReconciliationHistory() {
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                
+                if (!reconciliationHistory || reconciliationHistory.length === 0) {
+                    document.getElementById('reconciliationHistoryList').textContent = 'No reconciliation history found. Run a reconciliation report first.';
+                } else {
+                    let historyReport = [];
+                    historyReport.push(`=== RECONCILIATION HISTORY (${reconciliationHistory.length} total) ===`);
+                    historyReport.push('');
+                    
+                    // Show last 15 reconciliations (most recent first)
+                    const recentReconciliations = reconciliationHistory.slice(-15).reverse();
+                    
+                    recentReconciliations.forEach((recon, index) => {
+                        historyReport.push(`${index + 1}. ${recon.formatDate} at ${recon.formatTime}`);
+                        historyReport.push(`   Project: ${recon.projectName}`);
+                        historyReport.push(`   Vendor: ${recon.vendor}`);
+                        historyReport.push(`   Total Required: ${recon.totalRequired}`);
+                        
+                        if (recon.bnc && recon.bnc.required > 0) {
+                            historyReport.push(`   BNC: ${recon.bnc.required} required, ${recon.bnc.ordered} ordered (${recon.bnc.status})`);
+                        }
+                        
+                        if (recon.cat6 && recon.cat6.required > 0) {
+                            historyReport.push(`   Cat6: ${recon.cat6.required} required, ${recon.cat6.ordered} ordered (${recon.cat6.status})`);
+                        }
+                        
+                        if (recon.cables && recon.cables.hasMismatch) {
+                            historyReport.push(`   Cables: ${recon.cables.totalOrdered}ft ordered, ${recon.cables.spoolsRequired} spools needed (${recon.cables.status})`);
+                        }
+                        
+                        historyReport.push('');
+                    });
+                    
+                    if (reconciliationHistory.length > 15) {
+                        historyReport.push(`... and ${reconciliationHistory.length - 15} older records`);
+                        historyReport.push('');
+                    }
+                    
+                    historyReport.push('================================');
+                    historyReport.push('Use "Export" button for complete CSV history');
+                    
+                    document.getElementById('reconciliationHistoryList').textContent = historyReport.join('\n');
+                }
+                
+                // Open the reconciliation tab if it's closed
+                const section = document.getElementById('reconciliationContent');
+                if (section.style.display === 'none' || !section.style.display) {
+                    toggleReconciliation();
+                }
+                
+                // Show history view and hide report
+                document.getElementById('reconciliationHistoryView').style.display = 'block';
+                document.getElementById('reconciliationReport').style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error loading reconciliation history:', error);
+                document.getElementById('reconciliationHistoryList').textContent = 'Error loading reconciliation history: ' + error.message;
+            }
+        }
+        
+        // Export reconciliation data as CSV
+        function exportReconciliationCSV() {
+            try {
+                const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
+                
+                var csvData = [];
+                csvData.push('Reconciliation History Export');
+                csvData.push('Generated on: ' + new Date().toLocaleDateString());
+                csvData.push('');
+                
+                if (reconciliationHistory && reconciliationHistory.length > 0) {
+                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
+                    
+                    reconciliationHistory.forEach(recon => {
+                        const cableOrdered = recon.cables ? recon.cables.totalOrdered : 0;
+                        const cableSpools = recon.cables ? recon.cables.spoolsRequired : 0;
+                        const cableStatus = recon.cables ? recon.cables.status : 'N/A';
+                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
+                    });
+                } else {
+                    csvData.push('No reconciliation history available');
+                }
+                
+                var csvContent = csvData.join('\n');
+                var blob = new Blob([csvContent], { type: 'text/csv' });
+                var url = window.URL.createObjectURL(blob);
+                
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'reconciliation_history.csv';
+                a.click();
+                
+                window.URL.revokeObjectURL(url);
+                
+            } catch (error) {
+                console.error('Error exporting reconciliation CSV:', error);
+                alert('Error exporting reconciliation CSV: ' + error.message);
+            }
         }
         
         // Function to view reconciliation history
@@ -4399,9 +4958,23 @@
             reconcileConnectorsAndTerminations();
             alert('Test scenario for reconciliation complete. Check the reconciliation report and console for details.');
         }
+        
+        // Help Modal Functions
+        function showVendorHelp() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+        
+        function closeHelpModal() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        document.getElementById('helpModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeHelpModal();
+            }
+        });
     </script>
 </body>
 </html>
 
-
-            
