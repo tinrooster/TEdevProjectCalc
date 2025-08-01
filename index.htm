@@ -109,7 +109,7 @@
             }
             
             .line-item input,
-            .line-item select {
+            .line-item select:not(.cable-type) {
                 width: 100%;
                 padding: 8px;
                 font-size: 14px;
@@ -148,8 +148,9 @@
             }
             
             #calculatedLengthMode .cable-line-item .cable-type {
-                width: 60px !important;
-                min-width: 60px;
+                width: 80px !important;
+                min-width: 80px !important;
+                flex: none !important;
             }
             
             #calculatedLengthMode .cable-line-item input {
@@ -177,14 +178,84 @@
                 align-items: center;
             }
             
-            .cable-line-item .cable-type {
-                width: 60px !important;
-                min-width: 60px;
+            .cable-line-item .cable-type,
+            #calculatedLengthMode .cable-type {
+                width: 80px !important;
+                min-width: 80px !important;
+                flex: none !important;
             }
             
             .cable-line-item .cable-qty {
                 width: 60px !important;
                 min-width: 60px;
+            }
+            
+            /* Cable type styling with color coding */
+            .cable-type {
+                font-size: 14px !important;
+                font-weight: 600 !important;
+                border: 2px solid #ddd !important;
+                border-radius: 4px !important;
+                padding: 4px !important;
+                width: 80px !important;
+                min-width: 80px !important;
+            }
+            
+            /* Color coding for cable types */
+            .cable-type option[value="1855"] {
+                background-color: #e8f5e8;
+                color: #2e7d32;
+            }
+            
+            .cable-type option[value="1505"] {
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+            
+            .cable-type option[value="1694"] {
+                background-color: #fff3e0;
+                color: #f57c00;
+            }
+            
+            .cable-type option[value="cat6"] {
+                background-color: #f3e5f5;
+                color: #7b1fa2;
+            }
+            
+            .cable-type option[value="other"] {
+                background-color: #fafafa;
+                color: #424242;
+            }
+            
+            /* Dynamic border colors based on selected value */
+            .cable-type[data-value="1855"] {
+                border-color: #2e7d32 !important;
+                background-color: #e8f5e8;
+                color: #2e7d32;
+            }
+            
+            .cable-type[data-value="1505"] {
+                border-color: #1976d2 !important;
+                background-color: #e3f2fd;
+                color: #1976d2;
+            }
+            
+            .cable-type[data-value="1694"] {
+                border-color: #f57c00 !important;
+                background-color: #fff3e0;
+                color: #f57c00;
+            }
+            
+            .cable-type[data-value="cat6"] {
+                border-color: #7b1fa2 !important;
+                background-color: #f3e5f5;
+                color: #7b1fa2;
+            }
+            
+            .cable-type[data-value="other"] {
+                border-color: #424242 !important;
+                background-color: #fafafa;
+                color: #424242;
             }
             
             .cable-line-item .cable-length {
@@ -1209,7 +1280,7 @@
         
         .add-item-btn {
             background: #27ae60;
-            color: white;
+            color: #888;
             border: none;
             padding: 8px 16px;
             border-radius: 6px;
@@ -1542,7 +1613,7 @@
                         <div style="width: 100px; text-align: center;">Avg Length (ft)</div>
                     </div>
                     <div class="line-item">
-                        <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
+                        <select class="cable-type" data-value="1855" onchange="calculate(); updateCableTypeColor(this)">
                             <option value="1855">1855</option>
                             <option value="1505">1505</option>
                             <option value="1694">1694</option>
@@ -1563,7 +1634,7 @@
                             <div style="width: 30px;"></div>
                         </div>
                         <div class="line-item cable-line-item">
-                            <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
+                            <select class="cable-type" data-value="1855" onchange="calculate(); updateCableTypeColor(this)">
                                 <option value="1855">1855</option>
                                 <option value="1505">1505</option>
                                 <option value="1694">1694</option>
@@ -1575,7 +1646,7 @@
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
-                    <button onclick="addCableLength()" class="add-item-btn">➕ Add Cable</button>
+                    <button onclick="addCableLength()" class="add-item-btn">➕</button>
                     
                     <div style="margin-top: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1600,39 +1671,22 @@
                     <span class="toggle-icon">▶</span> 🧰 Supplies and Expendables
                 </h3>
                 <div id="materialsEquipment" class="section-content">
-                <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                    <strong>Note:</strong> Use this section for line items such as cable management, rack panels, labeling supplies, and other supplies or expendables needed for the project.
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <button onclick="showHelp('supplies')" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">?</button>
                 </div>
                 
                 <div id="otherMaterials">
                     <div class="line-item">
                         <input type="text" placeholder="Description" class="other-material-desc" style="flex: 3;">
                         <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="1" oninput="calculate()" onchange="calculate()" style="width: 60px;">
-                        <div style="position: relative; display: inline-block; width: 80px;">
+                        <div style="position: relative; display: inline-block; width: 100px;">
                             <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                            <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                            <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
                         </div>
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
-                <button onclick="addOtherMaterial()" class="add-item-btn">➕ Add Supply/Expendable</button>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('staffLineItems')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 👥 Staff Line Items
-                </h3>
-                <div id="staffLineItems" class="section-content">
-                <div id="staffLineItemsContainer">
-                    <div class="line-item">
-                        <input type="text" placeholder="Description" class="staff-desc" style="flex: 2;">
-                        <input type="text" placeholder="Note" class="staff-note" style="flex: 3;">
-                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()" style="width: 60px;">
-                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
-                    </div>
-                </div>
-                <button onclick="addStaffLineItem()" class="add-item-btn">➕ Add Staff Line Item</button>
+                <button onclick="addOtherMaterial()" class="add-item-btn">➕</button>
                 </div>
             </div>
             
@@ -1658,15 +1712,11 @@
                 </div>
                 
                 <div id="vendor1Details" class="vendor-details">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>Note:</strong> Use this section to enter line item orders from primary vendors.
-                        </div>
-                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
-                    </div>
+
                     <div class="vendor-name-row">
                         <label for="vendor1Name">Vendor 1 Name:</label>
                         <input type="text" id="vendor1Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">?</button>
                         <div class="vendor-active-toggle active" onclick="toggleVendorActive(1)">
                             <span>ACTIVE</span>
                         </div>
@@ -1677,26 +1727,22 @@
                         <div class="line-item">
                             <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
                             <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
-                            <div style="position: relative; display: inline-block; width: 80px;">
+                            <div style="position: relative; display: inline-block; width: 100px;">
                                 <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;">
                             </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
-                    <button onclick="addVendorItem(1)" class="add-item-btn">➕ Add Line Item</button>
+                    <button onclick="addVendorItem(1)" class="add-item-btn">➕</button>
                 </div>
                 
                 <div id="vendor2Details" class="vendor-details" style="display: none;">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>Note:</strong> Use this section for actual vendor orders.
-                        </div>
-                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
-                    </div>
+
                     <div class="vendor-name-row">
                         <label for="vendor2Name">Vendor 2 Name:</label>
                         <input type="text" id="vendor2Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">?</button>
                         <div class="vendor-active-toggle inactive" onclick="toggleVendorActive(2)">
                             <span>INACTIVE</span>
                         </div>
@@ -1707,26 +1753,22 @@
                         <div class="line-item">
                             <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
                             <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
-                            <div style="position: relative; display: inline-block; width: 80px;">
+                            <div style="position: relative; display: inline-block; width: 100px;">
                                 <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;">
                             </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
-                    <button onclick="addVendorItem(2)" class="add-item-btn">➕ Add Line Item</button>
+                    <button onclick="addVendorItem(2)" class="add-item-btn">➕</button>
                 </div>
                 
                 <div id="vendor3Details" class="vendor-details" style="display: none;">
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <strong>Note:</strong> Use this section for actual vendor orders.
-                        </div>
-                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">❓ Help</button>
-                    </div>
+
                     <div class="vendor-name-row">
                         <label for="vendor3Name">Vendor 3 Name:</label>
                         <input type="text" id="vendor3Name" placeholder="Enter vendor name" oninput="updateVendorPricing()" onchange="updateVendorPricing()">
+                        <button onclick="showVendorHelp()" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">?</button>
                         <div class="vendor-active-toggle inactive" onclick="toggleVendorActive(3)">
                             <span>INACTIVE</span>
                         </div>
@@ -1737,14 +1779,14 @@
                         <div class="line-item">
                             <input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
                             <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
-                            <div style="position: relative; display: inline-block; width: 80px;">
+                            <div style="position: relative; display: inline-block; width: 100px;">
                                 <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                                <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;">
                             </div>
                             <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
                     </div>
-                    <button onclick="addVendorItem(3)" class="add-item-btn">➕ Add Line Item</button>
+                    <button onclick="addVendorItem(3)" class="add-item-btn">➕</button>
                 </div>
                 </div>
             </div>
@@ -1759,134 +1801,53 @@
                         <input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;">
                         <input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;">
                         <input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;">
-                        <div style="position: relative; display: inline-block; width: 80px;">
+                        <div style="position: relative; display: inline-block; width: 100px;">
                             <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                            <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                            <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
                         </div>
                         <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
                 </div>
-                <button onclick="addVendorQuote()" class="add-item-btn">➕ Add Quote</button>
+                <button onclick="addVendorQuote()" class="add-item-btn">➕</button>
                 </div>
             </div>
             
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('installationTasks')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> ⚡ Installation Tasks
-                </h3>
-                <div id="installationTasks" class="section-content">
-                <div class="setup-grid">
-                    <div class="setup-item">
-                        <label for="cableRunTime">Cable Running Time (min/cable):</label>
-                        <input type="number" id="cableRunTime" value="0" min="0" step="0.5">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="testingTime">Testing Time (min/cable):</label>
-                        <input type="number" id="testingTime" value="0" min="0" step="0.5">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="rackSetupTime">Rack Setup Time (hours):</label>
-                        <input type="number" id="rackSetupTime" value="0" min="0" step="0.5">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="labelingTime">Labeling Time (min/cable):</label>
-                        <input type="number" id="labelingTime" value="0" min="0" step="0.1">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="cleanupTime">Cleanup Time (hours):</label>
-                        <input type="number" id="cleanupTime" value="0" min="0" step="0.1">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="cutoverTime">Cutover Time (hours):</label>
-                        <input type="number" id="cutoverTime" value="0" min="0" step="0.5">
-                    </div>
-                    
-                    <div class="setup-item">
-                        <label for="decommissioningTime">Decommissioning Time (hours):</label>
-                        <input type="number" id="decommissioningTime" value="0" min="0" step="0.5">
-                    </div>
-                </div>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('laborConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 👥 Labor
-                </h3>
-                <div id="laborConfig" class="section-content">
-                <div class="preset-selector">
-                    <label for="laborPreset">Labor Preset:</label>
-                    <select id="laborPreset" onchange="applyLaborPreset()">
-                        <option value="custom">Custom Configuration</option>
-                        <option value="zeroed">Zeroed Labor (Equipment Only)</option>
-                        <option value="rateA">Rate A ($25/hr)</option>
-                        <option value="rateB">Rate B ($55/hr)</option>
-                        <option value="rateC">Rate C ($75/hr)</option>
-                        <option value="rateD">Rate D ($125/hr)</option>
-                    </select>
-                </div>
-                
-                <div class="toggle-group">
-                    <div class="toggle-btn active" onclick="setLaborMode('single')">Single Rate</div>
-                    <div class="toggle-btn" onclick="setLaborMode('split')">Project Lead + Tech</div>
-                </div>
-                
-                <div id="singleLabor">
-                    <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
-                        <div style="width: 120px; text-align: center;"># of Techs</div>
-                        <div style="width: 100px; text-align: center;">Hourly Rate</div>
-                        <div style="width: 120px; text-align: center;">Hours per Day</div>
-                    </div>
-                    <div class="line-item">
-                        <input type="number" id="numTechnicians" value="1" min="1" style="width: 120px; text-align: center;">
-                        <input type="number" id="hourlyRate" value="60" min="1" style="width: 100px; text-align: center;">
-                        <input type="number" id="workHoursPerDay" value="8" min="1" max="12" style="width: 120px; text-align: center;">
-                    </div>
-                </div>
-                
-                <div id="splitLabor" style="display: none;">
-                    <div class="labor-split">
-                        <div class="split-section">
-                            <h4>Project Lead</h4>
-                            <label for="numLeads">Number of Leads:</label>
-                            <input type="number" id="numLeads" value="1" min="0">
-                            
-                            <label for="leadRate">Lead Rate ($/hr):</label>
-                            <input type="number" id="leadRate" value="85" min="1">
-                        </div>
-                        <div class="split-section">
-                            <h4>Technicians</h4>
-                            <label for="numTechs">Number of Techs:</label>
-                            <input type="number" id="numTechs" value="2" min="0">
-                            
-                            <label for="techRate">Tech Rate ($/hr):</label>
-                            <input type="number" id="techRate" value="55" min="1">
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px; padding: 8px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
-                        <strong>Note:</strong> Time is split 30% for leads, 70% for technicians
-                    </div>
-                </div>
-                
 
-                
-                <label for="overtimeToggle">
-                    <input type="checkbox" id="overtimeToggle" style="width: auto; margin-right: 8px;">
-                    Apply Overtime Rules (1.5x after 8hrs, 2x after 12hrs)
-                </label>
+            
+            <!-- Assigned to Staff Section -->
+            <div class="input-group">
+                <h3 class="section-header" onclick="toggleSection('staffLineItems')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> 👥 Assigned to Staff
+                </h3>
+                <div id="staffLineItems" class="section-content">
+                <div id="staffLineItemsContainer">
+                    <div class="line-item">
+                        <input type="text" placeholder="Description" class="staff-desc" style="flex: 2;">
+                        <input type="text" placeholder="Note" class="staff-note" style="flex: 3;">
+                        <input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" oninput="calculate()" onchange="calculate()" style="width: 60px;">
+                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
+                    </div>
+                </div>
+                <button onclick="addStaffLineItem()" class="add-item-btn">➕</button>
                 </div>
             </div>
             
+            <!-- Project Section -->
             <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('setupConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> ⚙️ Setup
+                <h3 class="section-header" onclick="toggleSection('projectConfig')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> 📋 Project
                 </h3>
-                <div id="setupConfig" class="section-content">
+                <div id="projectConfig" class="section-content">
+                <!-- Project Management Controls -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px; border: 1px solid #b3d9ff;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Export CSV</button>
+                        <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
+                        <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
+                        <button onclick="showProjectHistory()" style="background: #9b59b6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📋 Project History</button>
+                    </div>
+                </div>
+                
                 <!-- Project Information -->
                 <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
                     <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Information</h4>
@@ -1910,9 +1871,161 @@
                     </div>
                 </div>
                 
-                <!-- Configuration Settings -->
+                <!-- Auto Save Project and Project Controls -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border: 1px solid #b3d9ff;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Controls</h4>
+                    
+                    <!-- Auto Save Project -->
+                    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()" checked>
+                            <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
+                        </div>
+                        <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">
+                            Automatically saves project to local storage every time you make changes
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="saveDefaults()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project Defaults</button>
+                        <button onclick="resetToDefaults()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Project Defaults</button>
+                        <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
+                    </div>
+
+                </div>
+                </div>
+            </div>
+            
+            <!-- Install Section -->
+            <div class="input-group">
+                <h3 class="section-header" onclick="toggleSection('installationTasks')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> ⚡ Install
+                </h3>
+                <div id="installationTasks" class="section-content">
+                
+                <!-- Installation Tasks -->
                 <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
-                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Configuration Settings</h4>
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Installation Tasks</h4>
+                    <div class="setup-grid">
+                        <div class="setup-item">
+                            <label for="cableRunTime">Cable Running Time (min/cable):</label>
+                            <input type="number" id="cableRunTime" value="0" min="0" step="0.5">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="testingTime">Testing Time (min/cable):</label>
+                            <input type="number" id="testingTime" value="0" min="0" step="0.5">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="rackSetupTime">Rack Setup Time (hours):</label>
+                            <input type="number" id="rackSetupTime" value="0" min="0" step="0.5">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="labelingTime">Labeling Time (min/cable):</label>
+                            <input type="number" id="labelingTime" value="0" min="0" step="0.1">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="cleanupTime">Cleanup Time (hours):</label>
+                            <input type="number" id="cleanupTime" value="0" min="0" step="0.1">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="cutoverTime">Cutover Time (hours):</label>
+                            <input type="number" id="cutoverTime" value="0" min="0" step="0.5">
+                        </div>
+                        
+                        <div class="setup-item">
+                            <label for="decommissioningTime">Decommissioning Time (hours):</label>
+                            <input type="number" id="decommissioningTime" value="0" min="0" step="0.5">
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Labor Section -->
+            <div class="input-group">
+                <h3 class="section-header" onclick="toggleSection('laborConfig')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> 👷 Labor
+                </h3>
+                <div id="laborConfig" class="section-content">
+                
+                <!-- Labor Configuration -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Labor Configuration</h4>
+                    <div class="preset-selector">
+                        <label for="laborPreset">Labor Preset:</label>
+                        <select id="laborPreset" onchange="applyLaborPreset()">
+                            <option value="custom">Custom Configuration</option>
+                            <option value="zeroed">Zeroed Labor (Equipment Only)</option>
+                            <option value="rateA">Rate A ($25/hr)</option>
+                            <option value="rateB">Rate B ($55/hr)</option>
+                            <option value="rateC">Rate C ($75/hr)</option>
+                            <option value="rateD">Rate D ($125/hr)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="toggle-group">
+                        <div class="toggle-btn active" onclick="setLaborMode('single')">Single Rate</div>
+                        <div class="toggle-btn" onclick="setLaborMode('split')">Project Lead + Tech</div>
+                    </div>
+                    
+                    <div id="singleLabor">
+                        <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
+                            <div style="width: 120px; text-align: center;"># of Techs</div>
+                            <div style="width: 100px; text-align: center;">Hourly Rate</div>
+                            <div style="width: 120px; text-align: center;">Hours per Day</div>
+                        </div>
+                        <div class="line-item">
+                            <input type="number" id="numTechnicians" value="1" min="1" style="width: 120px; text-align: center;">
+                            <input type="number" id="hourlyRate" value="60" min="1" style="width: 100px; text-align: center;">
+                            <input type="number" id="workHoursPerDay" value="8" min="1" max="12" style="width: 120px; text-align: center;">
+                        </div>
+                    </div>
+                    
+                    <div id="splitLabor" style="display: none;">
+                        <div class="labor-split">
+                            <div class="labor-section">
+                                <h5 style="margin-bottom: 10px; color: #2c3e50;">Project Lead + Tech</h5>
+                                <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
+                                    <div style="width: 120px; text-align: center;"># of Techs</div>
+                                    <div style="width: 100px; text-align: center;">Hourly Rate</div>
+                                    <div style="width: 120px; text-align: center;">Hours per Day</div>
+                                </div>
+                                <div class="line-item">
+                                    <input type="number" id="projectLeadCount" value="1" min="1" style="width: 120px; text-align: center;">
+                                    <input type="number" id="projectLeadRate" value="75" min="1" style="width: 100px; text-align: center;">
+                                    <input type="number" id="projectLeadHours" value="8" min="1" max="12" style="width: 120px; text-align: center;">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 14px; font-weight: 600; color: #2c3e50;">Labor Rate Information</span>
+                            <button onclick="showHelp('installation')" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">?</button>
+                        </div>
+                    </div>
+                    
+                    <label for="overtimeToggle">
+                        <input type="checkbox" id="overtimeToggle" style="width: auto; margin-right: 8px;">
+                        Apply Overtime Rules (1.5x after 8hrs, 2x after 12hrs)
+                    </label>
+                </div>
+                </div>
+            </div>
+            
+            <!-- Setup Section -->
+            <div class="input-group">
+                <h3 class="section-header" onclick="toggleSection('configSettings')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▶</span> ⚙️ Setup
+                </h3>
+                <div id="configSettings" class="section-content">
+                
+                <!-- Default Settings -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Default Settings</h4>
                     <div class="setup-grid">
                         <div class="setup-item">
                             <label for="terminationsPerCable">Terminations per Cable:</label>
@@ -1952,27 +2065,10 @@
 
                 </div>
                 
-                <!-- Setup Control Buttons -->
-                <div style="margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border: 1px solid #b3d9ff;">
-                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Project Controls</h4>
-                    
-                    <!-- Auto Save Project -->
-                    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()" checked>
-                            <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
-                        </div>
-                        <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">
-                            Automatically saves project to local storage every time you make changes
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="saveDefaults()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Defaults</button>
-                        <button onclick="resetToDefaults()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Defaults</button>
-                        <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
-                    </div>
-                </div>
+                <!-- Default Settings Controls -->
+                <div style="margin-top: 15px; text-align: center; display: flex; gap: 10px; justify-content: center;">
+                                    <button onclick="saveDefaultSettings()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Default Settings</button>
+                <button onclick="loadDefaultSettings()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Default Settings</button>
                 </div>
             </div>
         </div>
@@ -1985,24 +2081,11 @@
     <div id="helpModal" class="help-modal" style="display: none;">
         <div class="help-modal-content">
             <div class="help-modal-header">
-                <h3>Vendor Order Help Guide</h3>
+                <h3 id="helpModalTitle">Help Guide</h3>
                 <button onclick="closeHelpModal()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">✕</button>
             </div>
-            <div class="help-modal-body">
-                <h4>Quick Guide - Keyword Matching:</h4>
-                <ul>
-                    <li><strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length</li>
-                    <li><strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description</li>
-                    <li><strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)</li>
-                </ul>
-                
-                <h4>How to Use:</h4>
-                <ol>
-                    <li>Enter a vendor name to activate the section</li>
-                    <li>Add line items with descriptions, quantities, and costs</li>
-                    <li>Use keywords in descriptions for automatic calculations</li>
-                    <li>Toggle vendor active/inactive as needed</li>
-                </ol>
+            <div class="help-modal-body" id="helpModalBody">
+                <!-- Content will be dynamically loaded -->
             </div>
         </div>
     </div>
@@ -2236,6 +2319,9 @@
                 link.click();
                 
                 URL.revokeObjectURL(url);
+                
+                // Log project save action
+                logProjectChange('Project Saved', `Project saved as ${link.download}`);
             }
         }
         
@@ -2297,18 +2383,18 @@
                     cableLengthMode = 'average';
                     
                     // Clear all line items with zero values
-                    document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc" style="flex: 3;"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="0" oninput="calculate()" onchange="calculate()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('otherMaterials').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="other-material-desc" style="flex: 3;"><input type="number" placeholder="Qty" class="other-material-qty" min="1" value="0" oninput="calculate()" onchange="calculate()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 100px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
-                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;"><input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;"><input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendorQuotes').innerHTML = '<div class="line-item"><input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;"><input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;"><input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;"><div style="position: relative; display: inline-block; width: 100px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="0" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     document.getElementById('staffLineItemsContainer').innerHTML = '<div class="line-item"><input type="text" placeholder="Description" class="staff-desc" style="flex: 2;"><input type="text" placeholder="Note" class="staff-note" style="flex: 3;"><input type="number" placeholder="Hours" class="staff-hours" step="0.1" min="0" value="0" style="width: 60px;"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
-                    document.getElementById('cableLengths').innerHTML = '<div class="line-item cable-line-item"><select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('cableLengths').innerHTML = '<div class="line-item cable-line-item"><select class="cable-type" data-value="1855" onchange="calculate(); updateCableTypeColor(this)"><option value="1855">1855</option><option value="1505">1505</option><option value="1694">1694</option><option value="cat6">Cat6</option><option value="other">Other</option></select><input type="number" placeholder="Qty" class="cable-qty" min="1" value="0" style="width: 60px;" oninput="calculate()" onchange="calculate()"><input type="number" placeholder="Length" class="cable-length" min="1" value="0" style="width: 80px;" oninput="calculate()" onchange="calculate()"><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     // Clear vendor item containers
-                    document.getElementById('vendor1Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
-                    document.getElementById('vendor2Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
-                    document.getElementById('vendor3Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 80px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor1Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 100px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor2Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 100px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
+                    document.getElementById('vendor3Items').innerHTML = '<div class="line-item"><input type="text" placeholder="Description/Part #" class="vendor-item-desc" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;"><input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;"><div style="position: relative; display: inline-block; width: 100px;"><span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span><input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="0" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;"></div><button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button></div>';
                     
                     // Clear vendor names
                     document.getElementById('vendor1Name').value = '';
@@ -2427,9 +2513,160 @@
                 
                 localStorage.setItem('projectDefaults', JSON.stringify(projectData));
                 alert('Current settings have been saved as defaults!');
+                
+                // Log project defaults save action
+                logProjectChange('Project Defaults Saved', 'Global project defaults updated');
             } catch (error) {
                 console.error('Error saving defaults:', error);
                 alert('Error saving defaults: ' + error.message);
+            }
+        }
+        
+        function saveDefaultSettings() {
+            try {
+                const defaultSettings = {
+                    terminationsPerCable: document.getElementById('terminationsPerCable').value,
+                    timePerTermination: document.getElementById('timePerTermination').value,
+                    wasteFactor: document.getElementById('wasteFactor').value,
+                    connectorWasteFactor: document.getElementById('connectorWasteFactor').value,
+                    spoolLength: document.getElementById('spoolLength').value,
+                    cableCostPerFoot: document.getElementById('cableCostPerFoot').value,
+                    terminationCost: document.getElementById('terminationCost').value
+                };
+                
+                localStorage.setItem('defaultSettings', JSON.stringify(defaultSettings));
+                alert('Default settings have been saved!');
+                
+                // Log default settings save action
+                logProjectChange('Default Settings Saved', 'Configuration defaults updated');
+            } catch (error) {
+                console.error('Error saving default settings:', error);
+                alert('Error saving default settings: ' + error.message);
+            }
+        }
+        
+        function loadDefaultSettings() {
+            try {
+                const savedDefaults = localStorage.getItem('defaultSettings');
+                if (savedDefaults) {
+                    const defaultSettings = JSON.parse(savedDefaults);
+                    
+                    // Load each default setting if it exists
+                    if (defaultSettings.terminationsPerCable !== undefined) {
+                        document.getElementById('terminationsPerCable').value = defaultSettings.terminationsPerCable;
+                    }
+                    if (defaultSettings.timePerTermination !== undefined) {
+                        document.getElementById('timePerTermination').value = defaultSettings.timePerTermination;
+                    }
+                    if (defaultSettings.wasteFactor !== undefined) {
+                        document.getElementById('wasteFactor').value = defaultSettings.wasteFactor;
+                    }
+                    if (defaultSettings.connectorWasteFactor !== undefined) {
+                        document.getElementById('connectorWasteFactor').value = defaultSettings.connectorWasteFactor;
+                    }
+                    if (defaultSettings.spoolLength !== undefined) {
+                        document.getElementById('spoolLength').value = defaultSettings.spoolLength;
+                    }
+                    if (defaultSettings.cableCostPerFoot !== undefined) {
+                        document.getElementById('cableCostPerFoot').value = defaultSettings.cableCostPerFoot;
+                    }
+                    if (defaultSettings.terminationCost !== undefined) {
+                        document.getElementById('terminationCost').value = defaultSettings.terminationCost;
+                    }
+                    
+                    calculate(); // Recalculate with new values
+                    alert('Default settings have been loaded!');
+                    
+                    // Log default settings load action
+                    logProjectChange('Default Settings Loaded', 'Configuration defaults restored');
+                } else {
+                    alert('No saved default settings found.');
+                }
+            } catch (error) {
+                console.error('Error loading default settings:', error);
+                alert('Error loading default settings: ' + error.message);
+            }
+        }
+        
+        function logProjectChange(action, details) {
+            try {
+                const timestamp = new Date().toISOString();
+                const changeEntry = {
+                    timestamp: timestamp,
+                    action: action,
+                    details: details,
+                    projectName: document.getElementById('projectName').value || 'Untitled Project'
+                };
+                
+                // Get existing changelog or create new array
+                const existingLog = localStorage.getItem('projectChangelog');
+                let changelog = existingLog ? JSON.parse(existingLog) : [];
+                
+                // Add new entry to beginning of array (most recent first)
+                changelog.unshift(changeEntry);
+                
+                // Keep only last 50 entries to prevent storage bloat
+                if (changelog.length > 50) {
+                    changelog = changelog.slice(0, 50);
+                }
+                
+                // Save updated changelog
+                localStorage.setItem('projectChangelog', JSON.stringify(changelog));
+            } catch (error) {
+                console.error('Error logging project change:', error);
+            }
+        }
+        
+        function showProjectHistory() {
+            try {
+                const changelog = localStorage.getItem('projectChangelog');
+                if (changelog) {
+                    const history = JSON.parse(changelog);
+                    
+                    let historyHTML = '<h3>Project History</h3>';
+                    historyHTML += '<div style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 12px;">';
+                    
+                    if (history.length === 0) {
+                        historyHTML += '<p>No project history found.</p>';
+                    } else {
+                        history.forEach((entry, index) => {
+                            const date = new Date(entry.timestamp).toLocaleString();
+                            historyHTML += `<div style="margin-bottom: 10px; padding: 8px; background: ${index % 2 === 0 ? '#f8f9fa' : '#ffffff'}; border-radius: 4px;">`;
+                            historyHTML += `<strong>${date}</strong><br/>`;
+                            historyHTML += `<span style="color: #2c3e50;">${entry.projectName}</span> - `;
+                            historyHTML += `<span style="color: #27ae60;">${entry.action}</span><br/>`;
+                            if (entry.details) {
+                                historyHTML += `<small style="color: #7f8c8d;">${entry.details}</small>`;
+                            }
+                            historyHTML += '</div>';
+                        });
+                    }
+                    
+                    historyHTML += '</div>';
+                    historyHTML += '<div style="margin-top: 15px; text-align: center;">';
+                    historyHTML += '<button onclick="clearProjectHistory()" style="background: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-right: 10px;">Clear History</button>';
+                    historyHTML += '<button onclick="closeHelpModal()" style="background: #95a5a6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Close</button>';
+                    historyHTML += '</div>';
+                    
+                    // Use the existing help modal to display history
+                    document.getElementById('helpModalTitle').textContent = 'Project History';
+                    document.getElementById('helpModalBody').innerHTML = historyHTML;
+                    document.getElementById('helpModal').style.display = 'flex';
+                } else {
+                    alert('No project history found.');
+                }
+            } catch (error) {
+                console.error('Error showing project history:', error);
+                alert('Error loading project history: ' + error.message);
+            }
+        }
+        
+        function clearProjectHistory() {
+            if (confirm('Are you sure you want to clear all project history? This action cannot be undone.')) {
+                localStorage.removeItem('projectChangelog');
+                logProjectChange('History Cleared', 'All project history has been cleared');
+                alert('Project history has been cleared.');
+                closeHelpModal();
             }
         }
         
@@ -2535,6 +2772,10 @@
                 }
                 
                 calculate();
+                
+                // Log project load action
+                const projectName = data.header?.name || 'Unnamed Project';
+                logProjectChange('Project Loaded', `Project "${projectName}" loaded successfully`);
             } catch (error) {
                 console.error('Error in loadProjectData:', error);
                 alert('Error loading project data: ' + error.message);
@@ -2687,9 +2928,9 @@
                     <input type="text" placeholder="Vendor Name" class="vendor-name" value="${name}" style="width: 120px;">
                     <input type="text" placeholder="Item Description/Part #" class="vendor-desc" value="${desc}" style="flex: 2;">
                     <input type="text" placeholder="Quote #" class="vendor-quote" value="${quote}" style="width: 100px;">
-                    <div style="position: relative; display: inline-block; width: 80px;">
+                    <div style="position: relative; display: inline-block; width: 100px;">
                         <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                        <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
                     </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
@@ -2720,9 +2961,9 @@
                 div.innerHTML = `
                     <input type="text" placeholder="Description" class="other-material-desc" value="${desc}" style="flex: 3;">
                     <input type="number" placeholder="Qty" class="other-material-qty" min="1" value="${qty}" oninput="calculate()" onchange="calculate()" style="width: 60px;">
-                    <div style="position: relative; display: inline-block; width: 80px;">
+                    <div style="position: relative; display: inline-block; width: 100px;">
                         <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                        <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 80px; padding-left: 15px;">
+                        <input type="number" placeholder="Amount" class="other-material-amount" step="0.01" value="${amount}" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
                     </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
@@ -2781,7 +3022,7 @@
                 const div = document.createElement('div');
                 div.className = 'line-item cable-line-item';
                 div.innerHTML = `
-                    <select class="cable-type" style="padding: 4px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px; width: 60px;" onchange="calculate()">
+                    <select class="cable-type" data-value="${cableType}" onchange="calculate(); updateCableTypeColor(this)">
                         <option value="1855" ${cableType === '1855' ? 'selected' : ''}>1855</option>
                         <option value="1505" ${cableType === '1505' ? 'selected' : ''}>1505</option>
                         <option value="1694" ${cableType === '1694' ? 'selected' : ''}>1694</option>
@@ -2805,9 +3046,9 @@
                 div.innerHTML = `
                     <input type="text" placeholder="Description/Part #" class="vendor-item-desc" value="${desc}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="flex: 3;">
                     <input type="number" placeholder="Qty" class="vendor-item-qty" min="1" value="${qty}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 60px;">
-                    <div style="position: relative; display: inline-block; width: 80px;">
+                    <div style="position: relative; display: inline-block; width: 100px;">
                         <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                        <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="${cost}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 80px; padding-left: 15px;">
+                        <input type="number" placeholder="Cost" class="vendor-item-cost" step="0.01" value="${cost}" oninput="updateVendorPricing()" onchange="updateVendorPricing()" style="width: 100px; padding-left: 15px;">
                     </div>
                     <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                 `;
@@ -2916,6 +3157,54 @@
             }
         }
         
+        // Function to update cable type colors
+        function updateCableTypeColor(selectElement) {
+            const value = selectElement.value || selectElement.getAttribute('data-value') || '1855';
+            selectElement.setAttribute('data-value', value);
+            
+            // Apply color styling based on cable type
+            selectElement.style.borderColor = '';
+            selectElement.style.backgroundColor = '';
+            selectElement.style.color = '';
+            
+            switch(value) {
+                case '1855':
+                    selectElement.style.borderColor = '#2e7d32';
+                    selectElement.style.backgroundColor = '#e8f5e8';
+                    selectElement.style.color = '#2e7d32';
+                    break;
+                case '1505':
+                    selectElement.style.borderColor = '#1976d2';
+                    selectElement.style.backgroundColor = '#e3f2fd';
+                    selectElement.style.color = '#1976d2';
+                    break;
+                case '1694':
+                    selectElement.style.borderColor = '#f57c00';
+                    selectElement.style.backgroundColor = '#fff3e0';
+                    selectElement.style.color = '#f57c00';
+                    break;
+                case 'cat6':
+                    selectElement.style.borderColor = '#7b1fa2';
+                    selectElement.style.backgroundColor = '#f3e5f5';
+                    selectElement.style.color = '#7b1fa2';
+                    break;
+                case 'other':
+                    selectElement.style.borderColor = '#424242';
+                    selectElement.style.backgroundColor = '#fafafa';
+                    selectElement.style.color = '#424242';
+                    break;
+            }
+        }
+        
+        // Initialize cable type colors on page load
+        function initializeCableTypeColors() {
+            const cableTypes = document.querySelectorAll('.cable-type');
+            cableTypes.forEach(select => {
+                const value = select.value || '1855';
+                select.setAttribute('data-value', value);
+            });
+        }
+        
         function updateProjectHeader() {
             // Get values from setup inputs, only if they're actually filled
             const projectName = document.getElementById('projectName').value.trim();
@@ -2931,32 +3220,32 @@
             
             if (nameDisplay) {
                 if (projectName) {
-                    nameDisplay.textContent = projectName;
+                nameDisplay.textContent = projectName;
                     nameDisplay.parentElement.style.display = 'block';
-                } else {
+            } else {
                     nameDisplay.textContent = '';
                     nameDisplay.parentElement.style.display = 'none';
-                }
+            }
             }
             
             if (descDisplay) {
                 if (projectDescription) {
-                    descDisplay.textContent = projectDescription;
+                descDisplay.textContent = projectDescription;
                     descDisplay.parentElement.style.display = 'block';
-                } else {
+            } else {
                     descDisplay.textContent = '';
                     descDisplay.parentElement.style.display = 'none';
-                }
+            }
             }
             
             if (revDisplay) {
                 if (projectRevision) {
-                    revDisplay.textContent = projectRevision;
+                revDisplay.textContent = projectRevision;
                     revDisplay.parentElement.style.display = 'block';
-                } else {
+            } else {
                     revDisplay.textContent = '';
                     revDisplay.parentElement.style.display = 'none';
-                }
+            }
             }
             
             if (dateDisplay) {
@@ -2970,7 +3259,7 @@
                     });
                     dateDisplay.textContent = formattedDate;
                     dateDisplay.parentElement.style.display = 'block';
-                } else {
+            } else {
                     dateDisplay.textContent = '';
                     dateDisplay.parentElement.style.display = 'none';
                 }
@@ -3743,6 +4032,9 @@
             a.click();
             
             window.URL.revokeObjectURL(url);
+            
+            // Log CSV export action
+            logProjectChange('CSV Exported', 'Project data exported to CSV file');
         }
         
         // Landscape detection and header optimization
@@ -4960,8 +5252,88 @@
         }
         
         // Help Modal Functions
+        const helpContent = {
+            'vendors': {
+                title: 'Vendor Orders Help Guide',
+                content: `
+                    <h4>Quick Guide - Keyword Matching:</h4>
+                    <ul>
+                        <li><strong>Cable spools:</strong> Include "spool", "reel", or "box" in the description to calculate based on spool length</li>
+                        <li><strong>Connectors/terminations:</strong> Include "connector", "termination", "BNC", "Cat6", or "RJ45" in the description</li>
+                        <li><strong>Inventory pricing:</strong> If cable/termination items aren't ordered here, in-stock/inventory pricing from Setup will be used as cost indication against standing reserves (not factored into total project cost)</li>
+                    </ul>
+                    
+                    <h4>How to Use:</h4>
+                    <ol>
+                        <li>Enter a vendor name to activate the section</li>
+                        <li>Add line items with descriptions, quantities, and costs</li>
+                        <li>Use keywords in descriptions for automatic calculations</li>
+                        <li>Toggle vendor active/inactive as needed</li>
+                    </ol>
+                    
+                    <h4>Purpose:</h4>
+                    <p>Use this section to enter line item orders from primary vendors (up to 3 vendors supported).</p>
+                `
+            },
+            'supplies': {
+                title: 'Supplies & Expendables Help Guide',
+                content: `
+                    <h4>What to Include:</h4>
+                    <ul>
+                        <li><strong>Cable management:</strong> Cable trays, conduits, cable ties, velcro straps</li>
+                        <li><strong>Rack panels:</strong> Patch panels, blank panels, cable management panels</li>
+                        <li><strong>Labeling supplies:</strong> Label makers, labels, cable markers, wire markers</li>
+                        <li><strong>Installation supplies:</strong> Screws, anchors, mounting hardware</li>
+                        <li><strong>Other expendables:</strong> Any consumable items needed for the project</li>
+                    </ul>
+                    
+                    <h4>How to Use:</h4>
+                    <ol>
+                        <li>Enter a description of the supply or expendable item</li>
+                        <li>Specify the quantity needed</li>
+                        <li>Enter the total cost/amount for that quantity</li>
+                        <li>Add more items as needed using the ➕ button</li>
+                    </ol>
+                    
+                    <h4>Purpose:</h4>
+                    <p>Track all non-cable, non-connector items needed to complete the project successfully.</p>
+                `
+            },
+            'installation': {
+                title: 'Installation Tasks Help Guide',
+                content: `
+                    <h4>Time Allocation:</h4>
+                    <ul>
+                        <li><strong>Lead Technician:</strong> 30% of total task time</li>
+                        <li><strong>Standard Technicians:</strong> 70% of total task time</li>
+                    </ul>
+                    
+                    <h4>Task Types:</h4>
+                    <ul>
+                        <li><strong>Cable Running:</strong> Time per cable to run from point A to point B</li>
+                        <li><strong>Testing:</strong> Time per cable for connectivity and performance testing</li>
+                        <li><strong>Labeling:</strong> Time per cable for proper identification labeling</li>
+                        <li><strong>Rack Setup:</strong> Total time needed for rack preparation and organization</li>
+                        <li><strong>Cleanup:</strong> Total time for site cleanup and restoration</li>
+                    </ul>
+                    
+                    <h4>Purpose:</h4>
+                    <p>Accurately estimate installation time and labor costs based on project complexity and team composition.</p>
+                `
+            }
+        };
+        
+        function showHelp(topic) {
+            const help = helpContent[topic];
+            if (help) {
+                document.getElementById('helpModalTitle').textContent = help.title;
+                document.getElementById('helpModalBody').innerHTML = help.content;
+                document.getElementById('helpModal').style.display = 'flex';
+            }
+        }
+        
         function showVendorHelp() {
-            document.getElementById('helpModal').style.display = 'flex';
+            showHelp('vendors');
         }
         
         function closeHelpModal() {
@@ -4974,7 +5346,22 @@
                 closeHelpModal();
             }
         });
+        
+        // Initialize page components
+        setTimeout(() => {
+            initializeCableTypeColors();
+            // Force cable type width override and apply colors
+            const cableTypes = document.querySelectorAll('.cable-type');
+            cableTypes.forEach(select => {
+                select.style.width = '80px';
+                select.style.minWidth = '80px';
+                // Apply initial color
+                updateCableTypeColor(select);
+            });
+            
+            // Initialize project history logging
+            logProjectChange('Application Started', 'TEdevProjectCalc application loaded and initialized');
+        }, 100); // Small delay to ensure DOM is ready
     </script>
 </body>
 </html>
-
