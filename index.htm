@@ -971,7 +971,7 @@
                 color: #2c3e50 !important;
             }
             
-            .results.collapsed .results-grid, .breakdown.collapsed .breakdown-item {
+            .results.collapsed .results-grid, .breakdown.collapsed .breakdown-item, .breakdown.collapsed .breakdown-content {
                 display: none !important;
             }
             
@@ -1395,25 +1395,31 @@
             <div class="container">
         <!-- Project Header Display -->
         <div class="project-header">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                    <div class="header-display" style="min-width: 150px;">
-                        <span id="projectNameDisplay" class="header-value"></span>
-                    </div>
-                    <div class="header-display" style="min-width: 150px;">
-                        <span id="projectDescriptionDisplay" class="header-value"></span>
-                    </div>
-                    <div class="header-display" style="min-width: 100px;">
-                        <span id="projectRevisionDisplay" class="header-value"></span>
-                    </div>
-                    <div class="header-display" style="min-width: 120px;">
-                        <span id="projectDateDisplay" class="header-value"></span>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 8px 12px;">
+                <!-- Logo and App Name -->
+                <div style="display: flex; align-items: center; gap: 10px; min-width: 150px;">
+                    <div style="font-size: 16px; font-weight: bold; color: #ecf0f1; white-space: nowrap;">
+                        🏗️ KGO Project Tool
                     </div>
                 </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📄 Export CSV</button>
-                    <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Project</button>
-                    <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Project</button>
+                
+                <!-- Project Info Fields - Compact -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; justify-content: center;">
+                                         <input type="text" id="projectNameDisplay" placeholder="Project Name" style="background: #34495e; border: 1px solid #5a6c7d; padding: 4px 6px; border-radius: 3px; font-size: 15px; font-weight: bold; color: white; width: 140px; min-width: 120px;" oninput="syncHeaderToSetup()">
+                     <input type="text" id="projectDescriptionDisplay" placeholder="Description" style="background: #34495e; border: 1px solid #5a6c7d; padding: 4px 6px; border-radius: 3px; font-size: 15px; font-weight: bold; color: white; width: 180px; min-width: 160px;" oninput="syncHeaderToSetup()">
+                     <div style="display: flex; align-items: center; gap: 3px;">
+                         <label style="font-size: 13px; color: #ecf0f1;">Rev:</label>
+                         <input type="text" id="projectRevisionDisplay" placeholder="1.0" style="background: #34495e; border: 1px solid #5a6c7d; padding: 4px 6px; border-radius: 3px; font-size: 15px; font-weight: bold; color: white; width: 55px;" oninput="syncHeaderToSetup()">
+                     </div>
+                     <input type="date" id="projectDateDisplay" style="background: #34495e; border: 1px solid #5a6c7d; padding: 4px 6px; border-radius: 3px; font-size: 15px; font-weight: bold; color: white; width: 120px;" oninput="syncHeaderToSetup()">
+                     <input type="date" id="projectEndDateDisplay" style="background: #34495e; border: 1px solid #5a6c7d; padding: 4px 6px; border-radius: 3px; font-size: 15px; font-weight: bold; color: white; width: 120px;" oninput="syncHeaderToSetup()">
+                </div>
+                
+                <!-- Action Buttons - Compact -->
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; min-width: 200px; justify-content: flex-end;">
+                    <button onclick="exportCSV()" style="background: #27ae60; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📄 Export</button>
+                    <button onclick="saveProject()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">💾 Save</button>
+                    <button onclick="loadProject()" style="background: #f39c12; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📂 Load</button>
                 </div>
             </div>
         </div>
@@ -1542,7 +1548,7 @@
             
             <!-- Reconciliation Report -->
             <div class="breakdown" id="reconciliationSection">
-                <h3 onclick="toggleReconciliation()" style="position: relative; background: #34495e; color: white;">
+                <h3 onclick="toggleReconciliation()" style="position: relative; cursor: pointer; user-select: none;">
                     🔄 Reconciliation Report
                     <span id="reconciliationStatus" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; padding: 2px 6px; border-radius: 10px; background: #95a5a6; color: white;">Not Run</span>
                 </h3>
@@ -1550,9 +1556,10 @@
                     
                     <!-- Control Buttons -->
                     <div style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
-                                        <button onclick="runReconciliationToTab()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Run Report</button>
-                <button onclick="showReconciliationHistory()" style="background: #9b59b6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📋 History</button>
-                        <button onclick="exportReconciliationCSV()" style="background: #27ae60; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📄 Export</button>
+                                        <button onclick="event.stopPropagation(); runReconciliationToTab()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Run Report</button>
+                <button onclick="event.stopPropagation(); showReconciliationHistory()" style="background: #9b59b6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📋 History</button>
+                        <button onclick="event.stopPropagation(); exportReconciliationCSV()" style="background: #27ae60; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📄 Export All</button>
+                        <button onclick="event.stopPropagation(); exportCurrentReconciliationCSV()" style="background: #1abc9c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📑 Export Current</button>
                     </div>
                     
                     <!-- Status Summary -->
@@ -1563,7 +1570,6 @@
                     
                     <!-- Detailed Report -->
                     <div id="reconciliationReport" style="background: white; border: 1px solid #ddd; border-radius: 6px; padding: 12px; font-family: monospace; font-size: 13px; white-space: pre-wrap; max-height: 300px; overflow-y: auto;">
-                        Click "Run Report" to generate reconciliation data...
                     </div>
                     
                     <!-- History View -->
@@ -1597,7 +1603,7 @@
                 <div class="input-grid">
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('cableConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 📡 Cable Configuration
+                    <span class="toggle-icon">▶</span> 📡 Wirelist / Cables
                 </h3>
                 <div id="cableConfig" class="section-content">
                 <div class="toggle-group" style="margin-top: 15px;">
@@ -1865,13 +1871,20 @@
                             <label for="projectDescription">Description:</label>
                             <input type="text" id="projectDescription" placeholder="Brief project description" oninput="updateProjectHeader()">
                         </div>
-                        <div class="setup-item">
-                            <label for="projectRevision">Revision:</label>
+                                            <div class="setup-item">
+                        <label for="projectRevision">Revision:</label>
+                        <div style="display: flex; gap: 5px; align-items: center;">
                             <input type="text" id="projectRevision" value="1.0" placeholder="1.0" oninput="updateProjectHeader()">
+                            <button onclick="incrementRevision()" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 11px;">+</button>
+                        </div>
+                    </div>
+                        <div class="setup-item">
+                            <label for="projectDate">Start Date:</label>
+                            <input type="date" id="projectDate" value="" oninput="updateProjectHeader()">
                         </div>
                         <div class="setup-item">
-                            <label for="projectDate">Date:</label>
-                            <input type="date" id="projectDate" value="" oninput="updateProjectHeader()">
+                            <label for="projectEndDate">End Date:</label>
+                            <input type="date" id="projectEndDate" value="" oninput="updateProjectHeader()">
                         </div>
                     </div>
                 </div>
@@ -1884,6 +1897,12 @@
                     <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <input type="checkbox" id="autoSave" style="width: 20px; height: 20px; margin: 0;" onchange="updateProjectHeader()" checked>
+                            <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
+                        </div>
+                        <!-- Excel Format Toggle -->
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top:10px;">
+                            <input type="checkbox" id="excelFormatToggle" style="width: 20px; height: 20px; margin: 0;">
+                            <label for="excelFormatToggle" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Excel Table Format on Export</label>
                             <label for="autoSave" style="font-weight: 600; color: #2c3e50; margin: 0; font-size: 14px;">Auto Save Project</label>
                         </div>
                         <div style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">
@@ -2138,8 +2157,42 @@
         };
         
         let currentVendor = 1;
+        let currentLaborMode = 'single';
+        
+         let cableLengthMode = 'average';
 
-        let cableLengthMode = 'average';
+        // === Export Helpers ===
+        function isExcelFormat(){
+            const cb=document.getElementById('excelFormatToggle');
+            return cb && cb.checked;
+        }
+        function sanitizeLine(s){
+            return s.replace(/[\u{1F300}-\u{1FAFF}]/gu,'').replace(/[⚠️ℹ️✅🔄📍]/g,'');
+        }
+        function convertLinesToTableCSV(lines){
+            return lines.map(l=>{
+                l=sanitizeLine(l);
+                if(l.trim().startsWith('===')){
+                    return '"'+l.replace(/=/g,'').trim()+'"';
+                }
+                const idx=l.indexOf(':');
+                if(idx!==-1){
+                    const key=l.slice(0,idx).trim();
+                    const val=l.slice(idx+1).trim();
+                    return `"${key}","${val}"`;
+                }
+                return '"'+l.trim()+'"';
+            }).join('\n');
+        }
+        function generateExportFileName(baseName){
+            const now = new Date();
+            const ts = now.toISOString().slice(0,19).replace(/[:T]/g,'-');
+            const count = (window.exportCounter || 1);
+            window.exportCounter = count + 1;
+            const ext = isExcelFormat() ? 'xlsx' : 'csv';
+            return `${baseName}_${ts}_${count}.${ext}`;
+        }
+        let exportCounter = 1;
         
         function toggleVendorActive(vendorNum) {
             const toggleDiv = document.querySelector('#vendor' + vendorNum + 'Details .vendor-active-toggle');
@@ -2284,6 +2337,9 @@
                 // Activate second toggle button
                 if (toggleButtons[1]) toggleButtons[1].classList.add('active');
             }
+            
+            // Update global labor mode
+            currentLaborMode = mode;
             
             calculate();
         }
@@ -3191,6 +3247,14 @@
             const breakdown = document.getElementById('breakdown');
             if (breakdown) {
                 breakdown.classList.toggle('collapsed');
+                
+                // Clear any direct style overrides when expanding
+                if (!breakdown.classList.contains('collapsed')) {
+                    const breakdownItems = breakdown.querySelectorAll('.breakdown-item');
+                    breakdownItems.forEach(item => {
+                        item.style.display = '';
+                    });
+                }
             }
         }
         
@@ -3312,64 +3376,106 @@
         }
         
         function updateProjectHeader() {
-            // Get values from setup inputs, only if they're actually filled
+            // Sync values between setup inputs and header inputs
             const projectName = document.getElementById('projectName').value.trim();
             const projectDescription = document.getElementById('projectDescription').value.trim();
             const projectRevision = document.getElementById('projectRevision').value.trim();
             const projectDate = document.getElementById('projectDate').value;
+            const projectEndDate = document.getElementById('projectEndDate').value;
             
-            // Update display elements - only show if value exists
+            // Update header input fields
             const nameDisplay = document.getElementById('projectNameDisplay');
             const descDisplay = document.getElementById('projectDescriptionDisplay');
             const revDisplay = document.getElementById('projectRevisionDisplay');
             const dateDisplay = document.getElementById('projectDateDisplay');
+            const endDateDisplay = document.getElementById('projectEndDateDisplay');
             
-            if (nameDisplay) {
-                if (projectName) {
-                nameDisplay.textContent = projectName;
-                    nameDisplay.parentElement.style.display = 'block';
-            } else {
-                    nameDisplay.textContent = '';
-                    nameDisplay.parentElement.style.display = 'none';
-            }
-            }
+            if (nameDisplay) nameDisplay.value = projectName;
+            if (descDisplay) descDisplay.value = projectDescription;
+            if (revDisplay) revDisplay.value = projectRevision;
+            if (dateDisplay) dateDisplay.value = projectDate;
+            if (endDateDisplay) endDateDisplay.value = projectEndDate;
+        }
+        
+        // Function to increment revision number
+        function incrementRevision() {
+            const revInput = document.getElementById('projectRevision');
+            const revDisplay = document.getElementById('projectRevisionDisplay');
+            const currentRev = revInput.value.trim();
             
-            if (descDisplay) {
-                if (projectDescription) {
-                descDisplay.textContent = projectDescription;
-                    descDisplay.parentElement.style.display = 'block';
-            } else {
-                    descDisplay.textContent = '';
-                    descDisplay.parentElement.style.display = 'none';
-            }
-            }
-            
-            if (revDisplay) {
-                if (projectRevision) {
-                revDisplay.textContent = projectRevision;
-                    revDisplay.parentElement.style.display = 'block';
-            } else {
-                    revDisplay.textContent = '';
-                    revDisplay.parentElement.style.display = 'none';
-            }
-            }
-            
-            if (dateDisplay) {
-                if (projectDate) {
-                    // Format date for better display
-                    const dateObj = new Date(projectDate);
-                    const formattedDate = dateObj.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                    });
-                    dateDisplay.textContent = formattedDate;
-                    dateDisplay.parentElement.style.display = 'block';
-            } else {
-                    dateDisplay.textContent = '';
-                    dateDisplay.parentElement.style.display = 'none';
+            if (currentRev) {
+                // Parse current revision (e.g., "2.05" -> major: 2, minor: 5)
+                const parts = currentRev.split('.');
+                let major = parseInt(parts[0]) || 1;
+                let minor = parts.length > 1 ? parseInt(parts[1]) : 0;
+                
+                // Handle floating point precision issues by ensuring we're working with integers
+                if (isNaN(major)) major = 1;
+                if (isNaN(minor)) minor = 0;
+                
+                // Increment minor version (01-09)
+                minor += 1;
+                
+                // If minor reaches 10, increment major and reset minor to 01
+                if (minor >= 10) {
+                    major += 1;
+                    minor = 1;
                 }
+                
+                // Format new revision with leading zero for minor version
+                const newRev = major + '.' + minor.toString().padStart(2, '0');
+                
+                // Update both inputs
+                revInput.value = newRev;
+                if (revDisplay) revDisplay.value = newRev;
+                
+                console.log(`Revision incremented from ${currentRev} to ${newRev}`);
             }
+        }
+        
+        // Function to sync header inputs back to setup inputs
+        function syncHeaderToSetup() {
+            const nameDisplay = document.getElementById('projectNameDisplay');
+            const descDisplay = document.getElementById('projectDescriptionDisplay');
+            const revDisplay = document.getElementById('projectRevisionDisplay');
+            const dateDisplay = document.getElementById('projectDateDisplay');
+            const endDateDisplay = document.getElementById('projectEndDateDisplay');
+            
+            const nameInput = document.getElementById('projectName');
+            const descInput = document.getElementById('projectDescription');
+            const revInput = document.getElementById('projectRevision');
+            const dateInput = document.getElementById('projectDate');
+            const endDateInput = document.getElementById('projectEndDate');
+            
+            if (nameDisplay && nameInput) nameInput.value = nameDisplay.value;
+            if (descDisplay && descInput) descInput.value = descDisplay.value;
+            if (revDisplay && revInput) {
+                // Clean up revision number to ensure proper format
+                const cleanRev = cleanRevisionNumber(revDisplay.value);
+                revInput.value = cleanRev;
+                revDisplay.value = cleanRev;
+            }
+            if (dateDisplay && dateInput) dateInput.value = dateDisplay.value;
+            if (endDateDisplay && endDateInput) endDateInput.value = endDateDisplay.value;
+        }
+        
+        // Function to clean up revision numbers and ensure proper format
+        function cleanRevisionNumber(rev) {
+            if (!rev || typeof rev !== 'string') return '1.01';
+            
+            // Remove any floating point precision issues
+            const parts = rev.split('.');
+            if (parts.length >= 2) {
+                const major = parseInt(parts[0]) || 1;
+                const minor = parseInt(parts[1]) || 1;
+                
+                // Ensure minor is between 1-9
+                const cleanMinor = Math.max(1, Math.min(9, minor));
+                
+                return major + '.' + cleanMinor.toString().padStart(2, '0');
+            }
+            
+            return '1.01';
         }
         
 
@@ -4184,7 +4290,7 @@
             try {
                 const reconciliationHistory = JSON.parse(localStorage.getItem('reconciliationHistory') || '[]');
                 if (reconciliationHistory && reconciliationHistory.length > 0) {
-                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
+                    csvData.push('Date,Time,Project,Active Vendors,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
                     
                     // Show last 10 reconciliations
                     const recentReconciliations = reconciliationHistory.slice(-10);
@@ -4192,7 +4298,7 @@
                         const cableOrdered = recon.cables ? recon.cables.totalOrdered : 0;
                         const cableSpools = recon.cables ? recon.cables.spoolsRequired : 0;
                         const cableStatus = recon.cables ? recon.cables.status : 'N/A';
-                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
+                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendorNames}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
                     });
                 } else {
                     csvData.push('No reconciliation history available');
@@ -4225,13 +4331,23 @@
             csvData.push('Rack Setup,' + document.getElementById('breakdownRack').textContent);
             csvData.push('Total Project Time,' + document.getElementById('breakdownTotal').textContent);
 
-            var csvContent = csvData.join('\n');
-            var blob = new Blob([csvContent], { type: 'text/csv' });
+            let blob;
+                if(isExcelFormat()){
+                    const ws = XLSX.utils.aoa_to_sheet(csvData.map(r => sanitizeLine(r).split(',')));
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'Estimate');
+                    const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
+                    blob = new Blob([wbout], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                }else{
+                    const csvContent = csvData.map(sanitizeLine).join('\n');
+                    blob = new Blob([csvContent], { type: 'text/csv' });
+                }
             var url = window.URL.createObjectURL(blob);
             
             var a = document.createElement('a');
             a.href = url;
-            a.download = 'wiring_project_estimate.csv';
+            const projectName = (document.getElementById('projectName').value || 'Unnamed_Project').replace(/\s+/g,'_');
+            a.download = generateExportFileName(projectName + '_estimate');
             a.click();
             
             window.URL.revokeObjectURL(url);
@@ -4266,7 +4382,23 @@
         function toggleMobileSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (section) {
+                // Project Summary should always stay expanded
+                if (sectionId === 'results') {
+                    console.log('📊 Project Summary should always stay expanded - ignoring toggle');
+                    return;
+                }
+                
                 section.classList.toggle('collapsed');
+                
+                // Clear any direct style overrides when expanding
+                if (!section.classList.contains('collapsed')) {
+                    if (sectionId === 'results') {
+                        const resultsGrid = section.querySelector('.results-grid');
+                        if (resultsGrid) {
+                            resultsGrid.style.display = '';
+                        }
+                    }
+                }
             }
         }
         
@@ -4389,6 +4521,10 @@
             
             var reconciliationReport = [];
             var totalTerms = parseInt(document.getElementById('totalTerminations').textContent) || 0;
+            // Determine active vendors and their names
+            const activeVendorEntries = Object.entries(vendorPricing).filter(([idx,v]) => v.active);
+            const activeVendorCount = activeVendorEntries.length;
+            const activeVendorNamesList = activeVendorEntries.map(([idx,v]) => (v.name && v.name.trim()) ? v.name.trim() : `Vendor ${idx}`).join(', ');
             
             // Check for BNC and Cat6 connectors in vendor orders
             var bncConnectorsOrdered = 0;
@@ -4523,7 +4659,7 @@
             reconciliationReport.push(`Reconciliation Date: ${formatDate}`);
             reconciliationReport.push(`Reconciliation Time: ${formatTime}`);
             reconciliationReport.push(`Project: ${document.getElementById('projectName').value || 'Unnamed Project'}`);
-            reconciliationReport.push(`Vendor: ${currentVendor}`);
+            reconciliationReport.push(`Active Vendors (${activeVendorCount}): ${activeVendorNamesList}`);
             reconciliationReport.push('');
             reconciliationReport.push(`Total terminations required (base): ${requiredConnectors}`);
             if (connectorWasteFactor > 0) {
@@ -4538,7 +4674,8 @@
                 formatDate: formatDate,
                 formatTime: formatTime,
                 projectName: document.getElementById('projectName').value || 'Unnamed Project',
-                vendor: currentVendor,
+                vendorCount: activeVendorCount,
+                vendorNames: activeVendorNamesList,
                 totalRequired: requiredConnectors,
                 bnc: {
                     required: bncRequired,
@@ -4634,17 +4771,23 @@
         
         // Toggle reconciliation section
         function toggleReconciliation() {
-            const section = document.getElementById('reconciliationContent');
-            const header = document.querySelector('#reconciliationSection h3');
-            
-            if (section.style.display === 'none' || !section.style.display) {
-                section.style.display = 'block';
-                header.style.background = '#34495e';
-                header.style.color = 'white';
-            } else {
-                section.style.display = 'none';
-                header.style.background = '';
-                header.style.color = '';
+            const reconciliationSection = document.getElementById('reconciliationSection');
+            if (reconciliationSection) {
+                reconciliationSection.classList.toggle('collapsed');
+                
+                // Clear any direct style overrides when expanding (similar to Time Breakdown)
+                if (!reconciliationSection.classList.contains('collapsed')) {
+                    const reconciliationContent = document.getElementById('reconciliationContent');
+                    if (reconciliationContent) {
+                        reconciliationContent.style.display = '';
+                    }
+                } else {
+                    // When collapsing, ensure content is hidden
+                    const reconciliationContent = document.getElementById('reconciliationContent');
+                    if (reconciliationContent) {
+                        reconciliationContent.style.display = 'none';
+                    }
+                }
             }
         }
         
@@ -4657,6 +4800,10 @@
             
             var reconciliationReport = [];
             var totalTerms = parseInt(document.getElementById('totalTerminations').textContent) || 0;
+            // Determine active vendors and their names
+            const activeVendorEntries = Object.entries(vendorPricing).filter(([idx,v]) => v.active);
+            const activeVendorCount = activeVendorEntries.length;
+            const activeVendorNamesList = activeVendorEntries.map(([idx,v]) => (v.name && v.name.trim()) ? v.name.trim() : `Vendor ${idx}`).join(', ');
             
             // Check for BNC and Cat6 connectors in vendor orders
             var bncConnectorsOrdered = 0;
@@ -4730,6 +4877,61 @@
             var cableMismatchData = window.cableMismatchData || { hasMismatch: false };
             var hasCableMismatch = cableMismatchData.hasMismatch;
             
+            // Calculate required connectors by cable type for status functions
+            var bncRequired = 0;
+            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
+            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
+            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+            
+            var cat6Required = 0;
+            if (cableTypes['CAT6']) cat6Required += cableTypes['CAT6'];
+            if (cableTypes['Cat6']) cat6Required += cableTypes['Cat6'];
+            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
+
+            // Calculate waste-adjusted requirements for connector reconciliation
+            const connectorWasteFactor = parseFloat(document.getElementById('connectorWasteFactor').value) || 0;
+            const bncRequiredWithWaste = Math.ceil(bncRequired * (1 + connectorWasteFactor / 100));
+            const cat6RequiredWithWaste = Math.ceil(cat6Required * (1 + connectorWasteFactor / 100));
+
+            // Helper functions to evaluate status
+            function getBncStatus() {
+                if (bncRequired === 0) return 'N/A';
+                const ordered = bncConnectorsOrdered + bncTerminationsOrdered;
+                const tolerance = Math.max(1, Math.ceil(bncRequired * 0.05));
+                if (connectorWasteFactor > 0) {
+                    if (ordered >= bncRequiredWithWaste - tolerance && ordered <= bncRequiredWithWaste + tolerance) {
+                        return 'RECONCILED (with waste factor)';
+                    } else if (ordered < bncRequiredWithWaste - tolerance) {
+                        return 'SHORTAGE';
+                    } else {
+                        return 'OVERAGE';
+                    }
+                } else {
+                    if (ordered < bncRequired) return 'SHORTAGE';
+                    if (ordered > bncRequired) return 'OVERAGE';
+                    return 'MATCH';
+                }
+            }
+
+            function getCat6Status() {
+                if (cat6Required === 0) return 'N/A';
+                const ordered = cat6ConnectorsOrdered + cat6TerminationsOrdered;
+                const tolerance = Math.max(1, Math.ceil(cat6Required * 0.05));
+                if (connectorWasteFactor > 0) {
+                    if (ordered >= cat6RequiredWithWaste - tolerance && ordered <= cat6RequiredWithWaste + tolerance) {
+                        return 'RECONCILED (with waste factor)';
+                    } else if (ordered < cat6RequiredWithWaste - tolerance) {
+                        return 'SHORTAGE';
+                    } else {
+                        return 'OVERAGE';
+                    }
+                } else {
+                    if (ordered < cat6Required) return 'SHORTAGE';
+                    if (ordered > cat6Required) return 'OVERAGE';
+                    return 'MATCH';
+                }
+            }
+            
             // Use the new waste-aware status functions
             var bncStatus = bncRequired > 0 ? getBncStatus() : 'N/A';
             var cat6Status = cat6Required > 0 ? getCat6Status() : 'N/A';
@@ -4796,7 +4998,7 @@
             reconciliationReport.push(`Reconciliation Date: ${formatDate}`);
             reconciliationReport.push(`Reconciliation Time: ${formatTime}`);
             reconciliationReport.push(`Project: ${document.getElementById('projectName').value || 'Unnamed Project'}`);
-            reconciliationReport.push(`Vendor: ${currentVendor}`);
+            reconciliationReport.push(`Active Vendors (${activeVendorCount}): ${activeVendorNamesList}`);
             reconciliationReport.push('');
             reconciliationReport.push(`Total terminations required: ${requiredConnectors}`);
             reconciliationReport.push('');
@@ -4842,7 +5044,8 @@
                 formatDate: formatDate,
                 formatTime: formatTime,
                 projectName: document.getElementById('projectName').value || 'Unnamed Project',
-                vendor: currentVendor,
+                vendorCount: activeVendorCount,
+                vendorNames: activeVendorNamesList,
                 totalRequired: requiredConnectors,
                 bnc: {
                     required: bncRequired,
@@ -4884,11 +5087,17 @@
             
             // Display report in tab
             document.getElementById('reconciliationReport').textContent = reconciliationReport.join('\n');
+            // Save for export
+            window.lastReconciliationReport = reconciliationReport.slice();
             
-            // Open the reconciliation tab if it's closed
-            const section = document.getElementById('reconciliationContent');
-            if (section.style.display === 'none' || !section.style.display) {
-                toggleReconciliation();
+            // Ensure reconciliation section is open (don't toggle if already open)
+            const reconciliationSection = document.getElementById('reconciliationSection');
+            if (reconciliationSection && reconciliationSection.classList.contains('collapsed')) {
+                reconciliationSection.classList.remove('collapsed');
+                const reconciliationContent = document.getElementById('reconciliationContent');
+                if (reconciliationContent) {
+                    reconciliationContent.style.display = '';
+                }
             }
             
             // Hide history view and show report
@@ -4914,7 +5123,7 @@
                     recentReconciliations.forEach((recon, index) => {
                         historyReport.push(`${index + 1}. ${recon.formatDate} at ${recon.formatTime}`);
                         historyReport.push(`   Project: ${recon.projectName}`);
-                        historyReport.push(`   Vendor: ${recon.vendor}`);
+                        historyReport.push(`   Active Vendors (${recon.vendorCount}): ${recon.vendorNames}`);
                         historyReport.push(`   Total Required: ${recon.totalRequired}`);
                         
                         if (recon.bnc && recon.bnc.required > 0) {
@@ -4943,10 +5152,14 @@
                     document.getElementById('reconciliationHistoryList').textContent = historyReport.join('\n');
                 }
                 
-                // Open the reconciliation tab if it's closed
-                const section = document.getElementById('reconciliationContent');
-                if (section.style.display === 'none' || !section.style.display) {
-                    toggleReconciliation();
+                // Ensure reconciliation section is open (don't toggle if already open)
+                const reconciliationSection = document.getElementById('reconciliationSection');
+                if (reconciliationSection && reconciliationSection.classList.contains('collapsed')) {
+                    reconciliationSection.classList.remove('collapsed');
+                    const reconciliationContent = document.getElementById('reconciliationContent');
+                    if (reconciliationContent) {
+                        reconciliationContent.style.display = '';
+                    }
                 }
                 
                 // Show history view and hide report
@@ -4970,25 +5183,35 @@
                 csvData.push('');
                 
                 if (reconciliationHistory && reconciliationHistory.length > 0) {
-                    csvData.push('Date,Time,Project,Vendor,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
+                    csvData.push('Date,Time,Project,Active Vendors,Total Required,BNC Required,BNC Ordered,BNC Status,Cat6 Required,Cat6 Ordered,Cat6 Status,Cable Ordered,Cable Spools,Cable Status,ISO Timestamp');
                     
                     reconciliationHistory.forEach(recon => {
                         const cableOrdered = recon.cables ? recon.cables.totalOrdered : 0;
                         const cableSpools = recon.cables ? recon.cables.spoolsRequired : 0;
                         const cableStatus = recon.cables ? recon.cables.status : 'N/A';
-                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendor}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
+                        csvData.push(`"${recon.formatDate}","${recon.formatTime}","${recon.projectName}","${recon.vendorNames}",${recon.totalRequired},${recon.bnc.required},${recon.bnc.ordered},"${recon.bnc.status}",${recon.cat6.required},${recon.cat6.ordered},"${recon.cat6.status}",${cableOrdered},${cableSpools},"${cableStatus}","${recon.timestamp}"`);
                     });
                 } else {
                     csvData.push('No reconciliation history available');
                 }
                 
-                var csvContent = csvData.join('\n');
-                var blob = new Blob([csvContent], { type: 'text/csv' });
+                let blob;
+                if(isExcelFormat()){
+                    const ws = XLSX.utils.aoa_to_sheet(csvData.map(r => sanitizeLine(r).split(',')));
+                    const wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, ws, 'History');
+                    const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
+                    blob = new Blob([wbout], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+                }else{
+                    const csvContent = csvData.map(sanitizeLine).join('\n');
+                    blob = new Blob([csvContent], { type: 'text/csv' });
+                }
                 var url = window.URL.createObjectURL(blob);
                 
                 var a = document.createElement('a');
                 a.href = url;
-                a.download = 'reconciliation_history.csv';
+                const projectName = (document.getElementById('projectName').value || 'Unnamed_Project').replace(/\s+/g,'_');
+                a.download = generateExportFileName(projectName + '_history');
                 a.click();
                 
                 window.URL.revokeObjectURL(url);
@@ -4999,6 +5222,40 @@
             }
         }
         
+        // Export current reconciliation as CSV
+        function exportCurrentReconciliationCSV() {
+            if (!window.lastReconciliationReport || window.lastReconciliationReport.length === 0) {
+                alert('Run a reconciliation report first.');
+                return;
+            }
+            let blob;
+            if(isExcelFormat()){
+                const pairs = window.lastReconciliationReport.map(line=>{
+                    const l=sanitizeLine(line);
+                    if(l.trim().startsWith('===')) return [l.replace(/=/g,'').trim(),''];
+                    const idx=l.indexOf(':');
+                    if(idx!==-1) return [l.slice(0,idx).trim(), l.slice(idx+1).trim()];
+                    return [l.trim(),''];
+                });
+                const ws = XLSX.utils.aoa_to_sheet(pairs);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Report');
+                const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
+                blob = new Blob([wbout], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            }else{
+                const csvContent = window.lastReconciliationReport.map(sanitizeLine).join('\n');
+                blob = new Blob([csvContent], { type: 'text/csv' });
+            }
+            const projectName = (document.getElementById('projectName').value || 'Unnamed_Project').replace(/\s+/g, '_');
+            const fileName = generateExportFileName(projectName + '_report');
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
         // Function to view reconciliation history
         function viewReconciliationHistory() {
             try {
@@ -5020,7 +5277,7 @@
                 recentReconciliations.forEach((recon, index) => {
                     historyReport.push(`${index + 1}. ${recon.formatDate} at ${recon.formatTime}`);
                     historyReport.push(`   Project: ${recon.projectName}`);
-                    historyReport.push(`   Vendor: ${recon.vendor}`);
+                    historyReport.push(`   Active Vendors (${recon.vendorCount}): ${recon.vendorNames}`);
                     historyReport.push(`   Total Required: ${recon.totalRequired}`);
                     
                     if (recon.bnc.required > 0) {
@@ -5600,48 +5857,76 @@
             
         });
 
-        // Simple function to collapse all sections using existing toggle methods
-        function forceAllSectionsCollapsed() {
-            console.log('🔧 Collapsing all sections...');
+        // Set default section states - Project Summary expanded, others collapsed
+        function setDefaultSectionStates() {
+            console.log('🔧 SETTING DEFAULT SECTION STATES...');
             
             try {
-                // For sections that use 'collapsed' class (results, breakdown, reconciliation)
+                // FORCE Project Summary EXPANDED (always visible)
                 const resultsSection = document.getElementById('results');
-                if (resultsSection && !resultsSection.classList.contains('collapsed')) {
-                    console.log('📊 Collapsing Project Summary');
-                    toggleMobileSection('results');
+                if (resultsSection) {
+                    console.log('📊 FORCE Project Summary to stay expanded');
+                    resultsSection.classList.remove('collapsed');
+                    // Ensure results grid is visible
+                    const resultsGrid = resultsSection.querySelector('.results-grid');
+                    if (resultsGrid) {
+                        resultsGrid.style.display = '';
+                        console.log('📊 Ensuring results-grid is visible');
+                    }
                 }
                 
+                // FORCE Time Breakdown collapsed
                 const breakdownSection = document.getElementById('breakdown');
-                if (breakdownSection && !breakdownSection.classList.contains('collapsed')) {
-                    console.log('🔍 Collapsing Time Breakdown');
-                    toggleBreakdown();
+                if (breakdownSection) {
+                    console.log('🔍 FORCE Collapsing Time Breakdown');
+                    breakdownSection.classList.add('collapsed');
+                    // Also directly hide breakdown items
+                    const breakdownItems = breakdownSection.querySelectorAll('.breakdown-item');
+                    breakdownItems.forEach(item => {
+                        item.style.display = 'none';
+                    });
+                    if (breakdownItems.length > 0) {
+                        console.log('🔍 Also hiding breakdown items directly');
+                    }
                 }
                 
+                // FORCE Reconciliation collapsed
                 const reconciliationSection = document.getElementById('reconciliationSection');
-                if (reconciliationSection && !reconciliationSection.classList.contains('collapsed')) {
-                    console.log('📋 Collapsing Reconciliation');
+                if (reconciliationSection) {
+                    console.log('📋 FORCE Collapsing Reconciliation');
                     reconciliationSection.classList.add('collapsed');
+                    // Also directly hide reconciliation content
+                    const reconciliationContent = document.getElementById('reconciliationContent');
+                    if (reconciliationContent) {
+                        reconciliationContent.style.display = 'none';
+                        console.log('📋 Also hiding reconciliation content directly');
+                    }
                 }
                 
-                // For sections that use 'expanded' class (section-content elements)
+                // FORCE all section-content elements collapsed
                 const sectionsToCollapse = ['cableConfig', 'materialsEquipment', 'vendorPricing', 'staffLineItems', 'setupConfig'];
                 sectionsToCollapse.forEach(sectionId => {
                     const section = document.getElementById(sectionId);
-                    if (section && section.classList.contains('expanded')) {
-                        console.log(`⚙️ Collapsing ${sectionId}`);
-                        toggleSection(sectionId);
+                    const header = document.querySelector(`[onclick*="${sectionId}"]`);
+                    const icon = header ? header.querySelector('.toggle-icon') : null;
+                    
+                    if (section) {
+                        console.log(`⚙️ FORCE Collapsing ${sectionId}`);
+                        section.classList.remove('expanded');
+                        if (header) header.classList.remove('expanded');
+                        if (icon) icon.textContent = '▶';
                     }
                 });
                 
-                console.log('✅ All sections collapsed');
+                console.log('✅ DEFAULT SECTION STATES SET');
             } catch (error) {
-                console.error('❌ Error collapsing sections:', error);
+                console.error('❌ Error setting default section states:', error);
             }
         }
         
         // Run after everything is loaded with a delay to override auto-saved states
-        setTimeout(forceAllSectionsCollapsed, 600);
+        setTimeout(setDefaultSectionStates, 600);
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </body>
 </html>
