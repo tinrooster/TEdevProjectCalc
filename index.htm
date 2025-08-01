@@ -1224,7 +1224,7 @@
         }
         
         .section-content.expanded {
-            max-height: 1000px;
+            max-height: 2000px;
             opacity: 1;
             margin-bottom: 15px;
         }
@@ -1388,7 +1388,6 @@
             background: #fff3cd !important;
             transition: background-color 0.3s ease;
         }
-        
 
     </style>
 </head>
@@ -1543,16 +1542,16 @@
             
             <!-- Reconciliation Report -->
             <div class="breakdown" id="reconciliationSection">
-                <h3 onclick="toggleReconciliation()" style="position: relative;">
+                <h3 onclick="toggleReconciliation()" style="position: relative; background: #34495e; color: white;">
                     🔄 Reconciliation Report
                     <span id="reconciliationStatus" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; padding: 2px 6px; border-radius: 10px; background: #95a5a6; color: white;">Not Run</span>
                 </h3>
-                <div id="reconciliationContent" class="breakdown-content" style="display: none;">
+                <div id="reconciliationContent" class="breakdown-content" style="display: block;">
                     
                     <!-- Control Buttons -->
                     <div style="margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button onclick="runReconciliationToTab()" style="background: #8e44ad; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Run Report</button>
-                        <button onclick="showReconciliationHistory()" style="background: #2980b9; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📋 History</button>
+                                        <button onclick="runReconciliationToTab()" style="background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">🔄 Run Report</button>
+                <button onclick="showReconciliationHistory()" style="background: #9b59b6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📋 History</button>
                         <button onclick="exportReconciliationCSV()" style="background: #27ae60; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">📄 Export</button>
                     </div>
                     
@@ -1693,23 +1692,27 @@
 
             <div class="input-group">
                 <h3 class="section-header" onclick="toggleSection('vendorPricing')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 🏷️ Vendor Orders
+                    <span class="toggle-icon">▶</span> 🏷️ Vendor
                 </h3>
                 <div id="vendorPricing" class="section-content">
-                <div class="toggle-group">
-                    <div class="toggle-btn active" onclick="setVendor(1, event)">
-                        Vendor 1
-                        <span class="vendor-status active-status">●</span>
+                
+                <!-- Vendor Orders Subsection -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">📦 Vendor Orders</h4>
+                    <div class="toggle-group">
+                        <div class="toggle-btn active" onclick="setVendor(1, event)">
+                            Vendor 1
+                            <span class="vendor-status active-status">●</span>
+                        </div>
+                        <div class="toggle-btn" onclick="setVendor(2, event)">
+                            Vendor 2
+                            <span class="vendor-status inactive-status">○</span>
+                        </div>
+                        <div class="toggle-btn" onclick="setVendor(3, event)">
+                            Vendor 3
+                            <span class="vendor-status inactive-status">○</span>
+                        </div>
                     </div>
-                    <div class="toggle-btn" onclick="setVendor(2, event)">
-                        Vendor 2
-                        <span class="vendor-status inactive-status">○</span>
-                    </div>
-                    <div class="toggle-btn" onclick="setVendor(3, event)">
-                        Vendor 3
-                        <span class="vendor-status inactive-status">○</span>
-                    </div>
-                </div>
                 
                 <div id="vendor1Details" class="vendor-details">
 
@@ -1789,26 +1792,24 @@
                     <button onclick="addVendorItem(3)" class="add-item-btn">➕</button>
                 </div>
                 </div>
-            </div>
-            
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('cableSupplier')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 📋 Quotes
-                </h3>
-                <div id="cableSupplier" class="section-content">
-                <div id="vendorQuotes">
-                    <div class="line-item">
-                        <input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;">
-                        <input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;">
-                        <input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;">
-                        <div style="position: relative; display: inline-block; width: 100px;">
-                            <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
-                            <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
+                
+                <!-- Quotes Subsection -->
+                <div style="margin-top: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">📋 Quotes</h4>
+                    <div id="vendorQuotes">
+                        <div class="line-item">
+                            <input type="text" placeholder="Vendor Name" class="vendor-name" style="width: 120px;">
+                            <input type="text" placeholder="Item Description/Part #" class="vendor-desc" style="flex: 2;">
+                            <input type="text" placeholder="Quote #" class="vendor-quote" style="width: 100px;">
+                            <div style="position: relative; display: inline-block; width: 100px;">
+                                <span style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #666; pointer-events: none; z-index: 1;">$</span>
+                                <input type="number" placeholder="Amount" class="vendor-amount" step="0.01" oninput="calculate()" onchange="calculate()" style="width: 100px; padding-left: 15px;">
+                            </div>
+                            <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                         </div>
-                        <button onclick="removeLineItem(this)" style="background: #e74c3c; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 12px; cursor: pointer; width: 24px; height: 24px;">✕</button>
                     </div>
+                    <button onclick="addVendorQuote()" class="add-item-btn">➕</button>
                 </div>
-                <button onclick="addVendorQuote()" class="add-item-btn">➕</button>
                 </div>
             </div>
             
@@ -1832,12 +1833,16 @@
                 </div>
             </div>
             
-            <!-- Project Section -->
+            <!-- Setup Section -->
             <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('projectConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 📋 Project
+                <h3 class="section-header expanded" onclick="toggleSection('setupConfig')" style="cursor: pointer; user-select: none;">
+                    <span class="toggle-icon">▼</span> ⚙️ Setup
                 </h3>
-                <div id="projectConfig" class="section-content">
+                <div id="setupConfig" class="section-content expanded">
+                
+                <!-- Project Subsection -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">📋 Project</h4>
                 <!-- Project Management Controls -->
                 <div style="margin-bottom: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px; border: 1px solid #b3d9ff;">
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -1892,16 +1897,13 @@
                         <button onclick="resetToZero()" style="background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">🔄 Reset to Zero</button>
                     </div>
 
+
                 </div>
                 </div>
-            </div>
-            
-            <!-- Install Section -->
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('installationTasks')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> ⚡ Install
-                </h3>
-                <div id="installationTasks" class="section-content">
+                
+                <!-- Install Subsection -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">⚡ Install</h4>
                 
                 <!-- Installation Tasks -->
                 <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
@@ -1944,88 +1946,110 @@
                     </div>
                 </div>
                 </div>
-            </div>
-            
-            <!-- Labor Section -->
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('laborConfig')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> 👷 Labor
-                </h3>
-                <div id="laborConfig" class="section-content">
                 
-                <!-- Labor Configuration -->
-                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
-                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Labor Configuration</h4>
-                    <div class="preset-selector">
-                        <label for="laborPreset">Labor Preset:</label>
-                        <select id="laborPreset" onchange="applyLaborPreset()">
-                            <option value="custom">Custom Configuration</option>
-                            <option value="zeroed">Zeroed Labor (Equipment Only)</option>
-                            <option value="rateA">Rate A ($25/hr)</option>
-                            <option value="rateB">Rate B ($55/hr)</option>
-                            <option value="rateC">Rate C ($75/hr)</option>
-                            <option value="rateD">Rate D ($125/hr)</option>
-                        </select>
+                <!-- Labor Subsection -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">👷 Labor</h4>
+                
+                <!-- Labor Preset -->
+                <div style="margin-bottom: 15px;">
+                    <label for="laborPreset" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Labor Preset:</label>
+                    <select id="laborPreset" onchange="applyLaborPreset()" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        <option value="custom">Custom Configuration</option>
+                        <option value="zeroed">Zeroed Labor (Equipment Only)</option>
+                        <option value="rateA">Rate A ($25/hr)</option>
+                        <option value="rateB">Rate B ($55/hr)</option>
+                        <option value="rateC">Rate C ($75/hr)</option>
+                        <option value="rateD">Rate D ($125/hr Rate B)</option>
+                    </select>
+                </div>
+                
+                <!-- Labor Mode Toggle -->
+                <div class="toggle-group" style="margin-bottom: 20px;">
+                    <div class="toggle-btn active" onclick="setLaborMode('single')">Single Rate</div>
+                    <div class="toggle-btn" onclick="setLaborMode('dual')">Rate A + Rate B</div>
+                </div>
+                
+                <!-- Single Rate Mode -->
+                <div id="singleLabor" style="margin-bottom: 20px;">
+                    <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
+                        <div style="width: 120px; text-align: center;"># of Techs</div>
+                        <div style="width: 100px; text-align: center;">Hourly Rate</div>
+                        <div style="width: 120px; text-align: center;">Hours Scheduled</div>
                     </div>
-                    
-                    <div class="toggle-group">
-                        <div class="toggle-btn active" onclick="setLaborMode('single')">Single Rate</div>
-                        <div class="toggle-btn" onclick="setLaborMode('split')">Project Lead + Tech</div>
+                    <div class="line-item">
+                        <input type="number" id="numTechnicians" value="1" min="0" style="width: 120px; text-align: center;" oninput="calculate()">
+                        <input type="number" id="hourlyRate" value="25" min="0" step="0.01" style="width: 100px; text-align: center;" oninput="calculate()">
+                        <input type="number" id="workHoursPerDay" value="0" min="0" max="240" step="0.1" style="width: 120px; text-align: center;" oninput="calculate()">
                     </div>
-                    
-                    <div id="singleLabor">
-                        <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
-                            <div style="width: 120px; text-align: center;"># of Techs</div>
-                            <div style="width: 100px; text-align: center;">Hourly Rate</div>
-                            <div style="width: 120px; text-align: center;">Hours per Day</div>
-                        </div>
-                        <div class="line-item">
-                            <input type="number" id="numTechnicians" value="1" min="1" style="width: 120px; text-align: center;">
-                            <input type="number" id="hourlyRate" value="60" min="1" style="width: 100px; text-align: center;">
-                            <input type="number" id="workHoursPerDay" value="8" min="1" max="12" style="width: 120px; text-align: center;">
-                        </div>
-                    </div>
-                    
-                    <div id="splitLabor" style="display: none;">
-                        <div class="labor-split">
-                            <div class="labor-section">
-                                <h5 style="margin-bottom: 10px; color: #2c3e50;">Project Lead + Tech</h5>
-                                <div class="cable-header-row" style="display: flex; gap: 10px; margin-bottom: 10px; font-weight: 500; font-size: 14px; color: #2c3e50;">
-                                    <div style="width: 120px; text-align: center;"># of Techs</div>
-                                    <div style="width: 100px; text-align: center;">Hourly Rate</div>
-                                    <div style="width: 120px; text-align: center;">Hours per Day</div>
-                                </div>
-                                <div class="line-item">
-                                    <input type="number" id="projectLeadCount" value="1" min="1" style="width: 120px; text-align: center;">
-                                    <input type="number" id="projectLeadRate" value="75" min="1" style="width: 100px; text-align: center;">
-                                    <input type="number" id="projectLeadHours" value="8" min="1" max="12" style="width: 120px; text-align: center;">
-                                </div>
+                </div>
+                
+                <!-- Dual Rate Mode -->
+                <div id="dualLabor" style="display: none; margin-bottom: 20px;">
+                    <div class="labor-split" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="split-section" style="padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                            <h5 style="margin-bottom: 15px; color: #2c3e50;">👥 Technician Rate A</h5>
+                            <div style="margin-bottom: 10px;">
+                                <label for="techACount" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Number of Techs:</label>
+                                <input type="number" id="techACount" value="1" min="0" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label for="techARate" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Rate ($/hr):</label>
+                                <input type="number" id="techARate" value="25" min="0" step="0.01" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
+                            </div>
+                            <div>
+                                <label for="techAHours" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Hours Scheduled:</label>
+                                <input type="number" id="techAHours" value="0" min="0" max="240" step="0.1" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
                             </div>
                         </div>
-                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 14px; font-weight: 600; color: #2c3e50;">Labor Rate Information</span>
-                            <button onclick="showHelp('installation')" style="background: #3498db; color: white; border: none; padding: 4px 8px; border-radius: 50%; cursor: pointer; font-size: 12px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">?</button>
+                        <div class="split-section" style="padding: 15px; background: #f0f8ff; border-radius: 8px; border: 1px solid #b3d9ff;">
+                            <h5 style="margin-bottom: 15px; color: #2c3e50;">🔧 Technician Rate B</h5>
+                            <div style="margin-bottom: 10px;">
+                                <label for="techBCount" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Number of Techs:</label>
+                                <input type="number" id="techBCount" value="1" min="0" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label for="techBRate" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Rate ($/hr):</label>
+                                <input type="number" id="techBRate" value="125" min="0" step="0.01" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
+                            </div>
+                            <div>
+                                <label for="techBHours" style="font-weight: 600; color: #2c3e50; margin-bottom: 5px; display: block;">Hours Scheduled:</label>
+                                <input type="number" id="techBHours" value="0" min="0" max="240" step="0.1" style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" oninput="calculate()">
+                            </div>
                         </div>
                     </div>
-                    
-                    <label for="overtimeToggle">
-                        <input type="checkbox" id="overtimeToggle" style="width: auto; margin-right: 8px;">
-                        Apply Overtime Rules (1.5x after 8hrs, 2x after 12hrs)
-                    </label>
+                    <div style="margin-top: 10px; padding: 8px; background: #e8f4fd; border-radius: 6px; border-left: 3px solid #3498db; font-size: 0.9em; color: #2c3e50;">
+                        <strong>Note:</strong> Overtime automatically applies: 1.5x after 8hrs/day, 2x after 12hrs/day
+                    </div>
                 </div>
-                </div>
-            </div>
-            
-            <!-- Setup Section -->
-            <div class="input-group">
-                <h3 class="section-header" onclick="toggleSection('configSettings')" style="cursor: pointer; user-select: none;">
-                    <span class="toggle-icon">▶</span> ⚙️ Setup
-                </h3>
-                <div id="configSettings" class="section-content">
                 
-                <!-- Default Settings -->
-                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
-                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Default Settings</h4>
+                <!-- Staff Hours (Non-billable) -->
+                <div style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border: 1px solid #ffeaa7;">
+                    <h5 style="margin-bottom: 15px; color: #2c3e50;">👔 Staff Hours (Salary - Not Billable)</h5>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label for="staffHours" style="font-weight: 600; color: #2c3e50;">Total Staff Hours:</label>
+                        <input type="number" id="staffHours" value="0" min="0" step="0.1" style="width: 120px; text-align: center;" oninput="calculate()">
+                        <span style="font-size: 12px; color: #666;">(Management, coordination, admin time)</span>
+                    </div>
+                </div>
+                
+                <!-- Labor Reconciliation -->
+                <div style="margin-bottom: 15px; padding: 12px; background: #e8f4fd; border-radius: 6px; border-left: 4px solid #3498db;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: 600; color: #2c3e50;">Labor Hours Reconciliation:</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
+                        <span>Calculated Required: <strong id="calculatedLaborHours">0.0 hrs</strong></span>
+                        <span>Allocated Total: <strong id="allocatedLaborHours">0.0 hrs</strong></span>
+                        <span id="laborReconciliation" style="font-weight: bold;">✅ Balanced</span>
+                    </div>
+                </div>
+                </div>
+                
+                <!-- Default Settings Subsection -->
+                <div style="margin-bottom: 25px;">
+                    <h4 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">⚙️ Default Settings</h4>
+                    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
                     <div class="setup-grid">
                         <div class="setup-item">
                             <label for="terminationsPerCable">Terminations per Cable:</label>
@@ -2065,13 +2089,16 @@
 
                 </div>
                 
-                <!-- Default Settings Controls -->
-                <div style="margin-top: 15px; text-align: center; display: flex; gap: 10px; justify-content: center;">
-                                    <button onclick="saveDefaultSettings()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Default Settings</button>
-                <button onclick="loadDefaultSettings()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Default Settings</button>
+                    <!-- Default Settings Controls -->
+                    <div style="margin-top: 15px; text-align: center; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="saveDefaultSettings()" style="background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">💾 Save Default Settings</button>
+                        <button onclick="loadDefaultSettings()" style="background: #95a5a6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">📂 Load Default Settings</button>
+                    </div>
+                </div>
+                </div>
+                
                 </div>
             </div>
-        </div>
         
         
         </div>
@@ -2111,7 +2138,7 @@
         };
         
         let currentVendor = 1;
-        let currentLaborMode = 'single';
+
         let cableLengthMode = 'average';
         
         function toggleVendorActive(vendorNum) {
@@ -2236,18 +2263,28 @@
             calculate();
         }
         
+
+        
         function setLaborMode(mode) {
-            currentLaborMode = mode;
-            document.querySelectorAll('.toggle-group .toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            const singleLabor = document.getElementById('singleLabor');
+            const dualLabor = document.getElementById('dualLabor');
+            const toggleButtons = document.querySelectorAll('.toggle-btn');
+            
+            // Reset all toggle buttons
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
             
             if (mode === 'single') {
-                document.getElementById('singleLabor').style.display = 'block';
-                document.getElementById('splitLabor').style.display = 'none';
-            } else {
-                document.getElementById('singleLabor').style.display = 'none';
-                document.getElementById('splitLabor').style.display = 'block';
+                singleLabor.style.display = 'block';
+                dualLabor.style.display = 'none';
+                // Activate first toggle button
+                if (toggleButtons[0]) toggleButtons[0].classList.add('active');
+            } else if (mode === 'dual') {
+                singleLabor.style.display = 'none';
+                dualLabor.style.display = 'block';
+                // Activate second toggle button
+                if (toggleButtons[1]) toggleButtons[1].classList.add('active');
             }
+            
             calculate();
         }
         
@@ -2255,30 +2292,83 @@
             const preset = document.getElementById('laborPreset').value;
             
             switch(preset) {
+                case 'custom':
+                    // Don't change any values for custom configuration
+                    break;
                 case 'zeroed':
+                    // Zero out all labor rates and hours (1 tech with 0 rates/hours)
+                    // Single mode fields
+                    document.getElementById('numTechnicians').value = 1;
                     document.getElementById('hourlyRate').value = 0;
-                    document.getElementById('leadRate').value = 0;
-                    document.getElementById('techRate').value = 0;
+                    document.getElementById('workHoursPerDay').value = 0;
+                    // Dual mode fields
+                    document.getElementById('techACount').value = 1;
+                    document.getElementById('techARate').value = 0;
+                    document.getElementById('techAHours').value = 0;
+                    document.getElementById('techBCount').value = 1;
+                    document.getElementById('techBRate').value = 0;
+                    document.getElementById('techBHours').value = 0;
+                    document.getElementById('staffHours').value = 0;
                     break;
                 case 'rateA':
+                    // Rate A at $25/hr - Single mode
+                    setLaborMode('single');
+                    document.getElementById('numTechnicians').value = 1;
                     document.getElementById('hourlyRate').value = 25;
-                    document.getElementById('leadRate').value = 45;
-                    document.getElementById('techRate').value = 15;
+                    document.getElementById('workHoursPerDay').value = 0;
+                    // Also set dual mode values for consistency
+                    document.getElementById('techACount').value = 1;
+                    document.getElementById('techARate').value = 25;
+                    document.getElementById('techAHours').value = 0;
+                    document.getElementById('techBCount').value = 1;
+                    document.getElementById('techBRate').value = 125;
+                    document.getElementById('techBHours').value = 0;
+                    document.getElementById('staffHours').value = 0;
                     break;
                 case 'rateB':
+                    // Rate A at $55/hr - Single mode
+                    setLaborMode('single');
+                    document.getElementById('numTechnicians').value = 1;
                     document.getElementById('hourlyRate').value = 55;
-                    document.getElementById('leadRate').value = 75;
-                    document.getElementById('techRate').value = 45;
+                    document.getElementById('workHoursPerDay').value = 0;
+                    // Also set dual mode values for consistency
+                    document.getElementById('techACount').value = 1;
+                    document.getElementById('techARate').value = 55;
+                    document.getElementById('techAHours').value = 0;
+                    document.getElementById('techBCount').value = 1;
+                    document.getElementById('techBRate').value = 125;
+                    document.getElementById('techBHours').value = 0;
+                    document.getElementById('staffHours').value = 0;
                     break;
                 case 'rateC':
+                    // Rate A at $75/hr - Single mode
+                    setLaborMode('single');
+                    document.getElementById('numTechnicians').value = 1;
                     document.getElementById('hourlyRate').value = 75;
-                    document.getElementById('leadRate').value = 95;
-                    document.getElementById('techRate').value = 65;
+                    document.getElementById('workHoursPerDay').value = 0;
+                    // Also set dual mode values for consistency
+                    document.getElementById('techACount').value = 1;
+                    document.getElementById('techARate').value = 75;
+                    document.getElementById('techAHours').value = 0;
+                    document.getElementById('techBCount').value = 1;
+                    document.getElementById('techBRate').value = 125;
+                    document.getElementById('techBHours').value = 0;
+                    document.getElementById('staffHours').value = 0;
                     break;
                 case 'rateD':
+                    // Rate B specialized at $125/hr - Dual mode
+                    setLaborMode('dual');
+                    document.getElementById('techACount').value = 1;
+                    document.getElementById('techARate').value = 25;
+                    document.getElementById('techAHours').value = 0;
+                    document.getElementById('techBCount').value = 1;
+                    document.getElementById('techBRate').value = 125;
+                    document.getElementById('techBHours').value = 0;
+                    // Also set single mode values for consistency
+                    document.getElementById('numTechnicians').value = 1;
                     document.getElementById('hourlyRate').value = 125;
-                    document.getElementById('leadRate').value = 155;
-                    document.getElementById('techRate').value = 105;
+                    document.getElementById('workHoursPerDay').value = 0;
+                    document.getElementById('staffHours').value = 0;
                     break;
             }
             calculate();
@@ -2305,7 +2395,7 @@
                     cableLengthMode: cableLengthMode,
                     vendorPricing: vendorPricing,
                     currentVendor: currentVendor,
-                    currentLaborMode: currentLaborMode,
+                    laborMode: (window.getComputedStyle(document.getElementById('dualLabor')).display !== 'none') ? 'dual' : 'single',
                     autoSaveEnabled: document.getElementById('autoSave') ? document.getElementById('autoSave').checked : false
                 };
                 
@@ -2444,12 +2534,20 @@
                     updateVendorPricing();
                     
                     // Reset labor configuration to defaults
-                    currentLaborMode = 'single';
+        
                     document.getElementById('laborPreset').value = 'custom';
-                    document.getElementById('numTechnicians').value = '0';
-                    document.getElementById('hourlyRate').value = '0';
-                    document.getElementById('workHoursPerDay').value = '8';
-                    document.getElementById('overtimeToggle').checked = false;
+                    document.getElementById('numTechnicians').value = '1';
+                    document.getElementById('hourlyRate').value = '25';
+                    document.getElementById('workHoursPerDay').value = '0';
+                    // Reset dual mode defaults
+                    document.getElementById('techACount').value = '1';
+                    document.getElementById('techARate').value = '25';
+                    document.getElementById('techAHours').value = '0';
+                    document.getElementById('techBCount').value = '1';
+                    document.getElementById('techBRate').value = '125';
+                    document.getElementById('techBHours').value = '0';
+                    document.getElementById('staffHours').value = '0';
+            
                     
                     // Reset installation tasks to zero
                     document.getElementById('cableRunTime').value = '0';
@@ -2476,6 +2574,9 @@
                     
                     // Set cable length mode after all other resets
                     setCableLengthMode('average');
+                    
+                    // Reset to single labor mode
+                    setLaborMode('single');
                     
                     // Debug: Check vendor data after reset
                     console.log('Vendor data after reset:', vendorPricing);
@@ -2510,6 +2611,11 @@
                     currentVendor: currentVendor,
                     autoSaveEnabled: document.getElementById('autoSave') ? document.getElementById('autoSave').checked : false
                 };
+                
+                // Add current labor mode to saved data
+                const dualLaborElement = document.getElementById('dualLabor');
+                const isDualModeActive = window.getComputedStyle(dualLaborElement).display !== 'none';
+                projectData.laborMode = isDualModeActive ? 'dual' : 'single';
                 
                 localStorage.setItem('projectDefaults', JSON.stringify(projectData));
                 alert('Current settings have been saved as defaults!');
@@ -2759,16 +2865,16 @@
                     console.log('Current vendor set successfully');
                 }
                 
-                if (data.currentLaborMode) {
-                    console.log('Setting current labor mode to:', data.currentLaborMode);
-                    currentLaborMode = data.currentLaborMode;
-                    setLaborMode(currentLaborMode);
-                    console.log('Current labor mode set successfully');
-                }
+
                 
                 // Load auto-save state
                 if (document.getElementById('autoSave')) {
                     document.getElementById('autoSave').checked = (data.autoSaveEnabled !== undefined) ? data.autoSaveEnabled : true;
+                }
+                
+                // Restore labor mode if saved
+                if (data.laborMode) {
+                    setLaborMode(data.laborMode);
                 }
                 
                 calculate();
@@ -3373,10 +3479,7 @@
             if (isNaN(wasteFactor)) wasteFactor = 0;
             var connectorWasteFactor = parseFloat(document.getElementById('connectorWasteFactor').value);
             if (isNaN(connectorWasteFactor)) connectorWasteFactor = 0;
-            var useOvertime = document.getElementById('overtimeToggle').checked;
-            
-
-            
+            // Calculate total project hours
             var totalTerms = totalCableQuantity * termsPerCable;
             var termHours = (totalTerms * timePerTerm) / 60; // Convert minutes to hours
             var runHours = (totalCableQuantity * runTime) / 60;
@@ -3384,55 +3487,132 @@
             var labelingHours = (totalCableQuantity * labelingTime) / 60;
             var totalHours = termHours + runHours + testHours + rackTime + labelingHours + cleanupTime + cutoverTime + decommissioningTime;
             
-            // Labor calculation based on mode
+            // Labor calculation using single/dual mode system
             var laborCost = 0;
             var laborDetails = '';
+            var laborHours = 0;
             
-            if (currentLaborMode === 'single') {
-                var techs = parseInt(document.getElementById('numTechnicians').value);
-                if (isNaN(techs)) techs = 0;
-                var rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
-                var workHours = techs > 0 ? totalHours / techs : 0;
-                var days = workHours / hoursPerDay;
+            // Determine which mode is active
+            var dualLaborElement = document.getElementById('dualLabor');
+            var singleModeActive = window.getComputedStyle(dualLaborElement).display === 'none';
+            var staffHours = parseFloat(document.getElementById('staffHours').value) || 0;
             
-            if (useOvertime && workHours > 8) {
-                var regularHours = Math.min(workHours, 8);
-                var overtimeHours = Math.min(workHours - 8, 4);
-                var doubleTimeHours = Math.max(workHours - 12, 0);
+            if (singleModeActive) {
+                // Single rate mode
+                var numTechs = parseInt(document.getElementById('numTechnicians').value) || 0;
+                var techRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+                var hoursPerDay = parseFloat(document.getElementById('workHoursPerDay').value) || 0;
                 
-                var regularPay = regularHours * rate;
-                var overtimePay = overtimeHours * rate * 1.5;
-                var doubleTimePay = doubleTimeHours * rate * 2;
+                laborHours = numTechs * hoursPerDay;
                 
-                laborCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techs);
-                
-                if (doubleTimeHours > 0) {
-                    laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
-                                  overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0) + ', ' +
-                                  doubleTimeHours.toFixed(1) + 'hrs@$' + (rate * 2).toFixed(0);
-                } else if (overtimeHours > 0) {
-                    laborDetails = techs + ' techs: ' + regularHours.toFixed(1) + 'hrs@$' + rate + ', ' + 
-                                  overtimeHours.toFixed(1) + 'hrs@$' + (rate * 1.5).toFixed(0);
+                if (numTechs > 0 && hoursPerDay > 0) {
+                    if (hoursPerDay > 8) {
+                        // Automatic overtime calculation
+                        var regularHours = Math.min(hoursPerDay, 8);
+                        var overtimeHours = Math.min(hoursPerDay - 8, 4);
+                        var doubleTimeHours = Math.max(hoursPerDay - 12, 0);
+                        
+                        var regularPay = regularHours * techRate;
+                        var overtimePay = overtimeHours * techRate * 1.5;
+                        var doubleTimePay = doubleTimeHours * techRate * 2;
+                        
+                        laborCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * numTechs);
+                    } else {
+                        laborCost = Math.ceil(hoursPerDay * numTechs * techRate);
+                    }
                 }
             } else {
-                laborCost = Math.ceil(workHours * techs * rate);
-                laborDetails = techs + ' techs × ' + workHours.toFixed(1) + ' hrs × $' + rate + '/hr';
+                // Dual rate mode (Tech A + Tech B)
+                var techACount = parseInt(document.getElementById('techACount').value) || 0;
+                var techARate = parseFloat(document.getElementById('techARate').value) || 0;
+                var techAHours = parseFloat(document.getElementById('techAHours').value) || 0;
+                
+                var techBCount = parseInt(document.getElementById('techBCount').value) || 0;
+                var techBRate = parseFloat(document.getElementById('techBRate').value) || 0;
+                var techBHours = parseFloat(document.getElementById('techBHours').value) || 0;
+                
+                laborHours = (techACount * techAHours) + (techBCount * techBHours);
+                
+                var techACost = 0;
+                var techBCost = 0;
+                
+                // Calculate Tech A cost with automatic overtime
+                if (techACount > 0 && techAHours > 0) {
+                    if (techAHours > 8) {
+                        var regularHours = Math.min(techAHours, 8);
+                        var overtimeHours = Math.min(techAHours - 8, 4);
+                        var doubleTimeHours = Math.max(techAHours - 12, 0);
+                        
+                        var regularPay = regularHours * techARate;
+                        var overtimePay = overtimeHours * techARate * 1.5;
+                        var doubleTimePay = doubleTimeHours * techARate * 2;
+                        
+                        techACost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techACount);
+                    } else {
+                        techACost = Math.ceil(techAHours * techACount * techARate);
+                    }
+                }
+                
+                // Calculate Tech B cost with automatic overtime
+                if (techBCount > 0 && techBHours > 0) {
+                    if (techBHours > 8) {
+                        var regularHours = Math.min(techBHours, 8);
+                        var overtimeHours = Math.min(techBHours - 8, 4);
+                        var doubleTimeHours = Math.max(techBHours - 12, 0);
+                        
+                        var regularPay = regularHours * techBRate;
+                        var overtimePay = overtimeHours * techBRate * 1.5;
+                        var doubleTimePay = doubleTimeHours * techBRate * 2;
+                        
+                        techBCost = Math.ceil((regularPay + overtimePay + doubleTimePay) * techBCount);
+                    } else {
+                        techBCost = Math.ceil(techBHours * techBCount * techBRate);
+                    }
+                }
+                
+                laborCost = techACost + techBCost;
             }
+            
+            // Build labor details string
+            var laborParts = [];
+            if (singleModeActive) {
+                if (numTechs > 0 && hoursPerDay > 0) {
+                    laborParts.push(numTechs + ' techs × ' + hoursPerDay.toFixed(1) + ' hrs × $' + techRate + '/hr');
+                }
             } else {
-                var leads = parseInt(document.getElementById('numLeads').value) || 0;
-                var techs = parseInt(document.getElementById('numTechs').value) || 0;
-                var leadRate = parseFloat(document.getElementById('leadRate').value) || 0;
-                var techRate = parseFloat(document.getElementById('techRate').value) || 0;
-                
-                var leadHours = totalHours * 0.3; // 30% of time for lead
-                var techHours = totalHours * 0.7; // 70% of time for techs
-                
-                var leadCost = Math.ceil(leadHours * leads * leadRate);
-                var techCost = Math.ceil(techHours * techs * techRate);
-                laborCost = leadCost + techCost;
-                
-                laborDetails = leads + ' leads × ' + leadHours.toFixed(1) + ' hrs × $' + leadRate + '/hr + ' +
-                              techs + ' techs × ' + techHours.toFixed(1) + ' hrs × $' + techRate + '/hr';
+                if (techACount > 0 && techAHours > 0) {
+                    laborParts.push(techACount + ' Rate A × ' + techAHours.toFixed(1) + ' hrs × $' + techARate + '/hr');
+                }
+                if (techBCount > 0 && techBHours > 0) {
+                    laborParts.push(techBCount + ' Rate B × ' + techBHours.toFixed(1) + ' hrs × $' + techBRate + '/hr');
+                }
+            }
+            if (staffHours > 0) {
+                laborParts.push(staffHours.toFixed(1) + ' staff hrs (salary)');
+            }
+            
+            laborDetails = laborParts.length > 0 ? laborParts.join(' + ') : 'No labor allocated';
+            
+            // Update labor reconciliation
+            var calculatedHours = totalHours;
+            var allocatedHours = laborHours + staffHours;
+            
+            document.getElementById('calculatedLaborHours').textContent = calculatedHours.toFixed(1) + ' hrs';
+            document.getElementById('allocatedLaborHours').textContent = allocatedHours.toFixed(1) + ' hrs';
+            
+            var reconciliationEl = document.getElementById('laborReconciliation');
+            var diff = Math.abs(allocatedHours - calculatedHours);
+            var tolerance = Math.max(0.5, calculatedHours * 0.1); // 10% tolerance or 0.5 hrs minimum
+            
+            if (diff <= tolerance) {
+                reconciliationEl.textContent = '✅ Reconciled';
+                reconciliationEl.style.color = '#27ae60';
+            } else if (allocatedHours > calculatedHours) {
+                reconciliationEl.textContent = '⚠️ Over-allocated (' + (allocatedHours - calculatedHours).toFixed(1) + ' hrs)';
+                reconciliationEl.style.color = '#f39c12';
+            } else {
+                reconciliationEl.textContent = '❌ Under-allocated (' + (calculatedHours - allocatedHours).toFixed(1) + ' hrs)';
+                reconciliationEl.style.color = '#e74c3c';
             }
             
             var cableMat = 0;
@@ -3530,10 +3710,14 @@
             
             // Calculate staff hours total
             var staffHoursTotal = 0;
+            // Include staff hours from line items
             document.querySelectorAll('#staffLineItems .line-item').forEach(item => {
                 const hours = parseFloat(item.querySelector('.staff-hours').value) || 0;
                 staffHoursTotal += hours;
             });
+            // Include labor staff hours from Labor section
+            var laborStaffHours = parseFloat(document.getElementById('staffHours').value) || 0;
+            staffHoursTotal += laborStaffHours;
             
             // Calculate total cost - Setup Configuration values are for inventory cost indication only, not factored into total
             var totalCost = laborCost + equipmentCost + vendorQuotesTotal + activeVendorTotal;
@@ -3631,14 +3815,33 @@
                 spoolMismatch = true; // Use this flag to show the notification
             }
             
-            var workHours = totalHours / Math.max(1, (currentLaborMode === 'single' ? parseInt(document.getElementById('numTechnicians').value) || 1 : 
-                                                     (parseInt(document.getElementById('numLeads').value) || 0) + (parseInt(document.getElementById('numTechs').value) || 0)));
+            var totalTechs = 1; // Default to 1 to avoid division by zero
+            if (singleModeActive) {
+                totalTechs = Math.max(1, parseInt(document.getElementById('numTechnicians').value) || 1);
+            } else {
+                var techACount = parseInt(document.getElementById('techACount').value) || 0;
+                var techBCount = parseInt(document.getElementById('techBCount').value) || 0;
+                totalTechs = Math.max(1, techACount + techBCount);
+            }
+            var workHours = totalHours / totalTechs;
+            var hoursPerDay = 8; // Default 8 hours per day
             var days = workHours / hoursPerDay;
             
             document.getElementById('totalTerminations').textContent = totalTerms;
             document.getElementById('totalCables').textContent = totalCableQuantity;
-            document.getElementById('terminationHours').textContent = termHours.toFixed(1) + ' hrs';
-            document.getElementById('terminationDetails').textContent = (totalTerms * timePerTerm).toFixed(1) + ' minutes';
+            // Calculate total minutes from the already calculated termHours
+            var totalMinutes = Math.round(termHours * 60);
+            var hours = Math.floor(totalMinutes / 60);
+            var remainingMinutes = totalMinutes % 60;
+            
+            // Format the display
+            var timeDisplay = hours > 0 ? hours + ' hrs ' + remainingMinutes + ' min' : remainingMinutes + ' min';
+            
+            // Show calculation breakdown in detail
+            var detailDisplay = totalTerms + ' connections × ' + timePerTerm.toFixed(1) + ' min each';
+            
+            document.getElementById('terminationHours').textContent = timeDisplay;
+            document.getElementById('terminationDetails').textContent = detailDisplay;
             document.getElementById('projectDays').textContent = days.toFixed(1) + ' days';
             document.getElementById('totalHours').textContent = totalHours.toFixed(1) + ' total hours';
             document.getElementById('laborCost').textContent = '$' + laborCost;
@@ -3917,7 +4120,7 @@
             csvData.push('Cable Spool Length (feet),' + document.getElementById('spoolLength').value);
             csvData.push('Cable Waste Factor (%),' + document.getElementById('wasteFactor').value);
             csvData.push('Connector Waste Factor (%),' + document.getElementById('connectorWasteFactor').value);
-            csvData.push('Apply Overtime,' + (document.getElementById('overtimeToggle').checked ? 'Yes' : 'No'));
+            csvData.push('Overtime Rule,Automatic (1.5x after 8hrs, 2x after 12hrs)');
             csvData.push('');
             
             // Add Cable Configuration Details
@@ -4128,63 +4331,8 @@
             // Check landscape and optimize header
             checkLandscapeAndOptimize();
             
-            // Auto-load functionality
-            const autoSavedProject = localStorage.getItem('autoSavedProject');
-            console.log('Raw autoSavedProject from localStorage:', autoSavedProject);
-            if (autoSavedProject) {
-                try {
-                    const projectData = JSON.parse(autoSavedProject);
-                    console.log('Parsed project data:', projectData);
-                    console.log('Project data inputs:', projectData.inputs);
-                    loadProjectData(projectData);
-                    updateProjectHeader(); // Ensure header is updated after auto-load
-                    console.log('Auto-saved project loaded successfully');
-                } catch (error) {
-                    console.error('Error loading auto-saved project:', error);
-                }
-            } else {
-                // If no autoSavedProject, initialize with autoSaveEnabled: true and default values
-                const projectData = {
-                    autoSaveEnabled: true
-                };
-                localStorage.setItem('autoSavedProject', JSON.stringify(projectData));
-                const autoSaveCheckbox = document.getElementById('autoSave');
-                if (autoSaveCheckbox) {
-                    autoSaveCheckbox.checked = true;
-                }
-                
-                // Set default values for cable configuration
-                document.getElementById('numCables').value = '1';
-                document.getElementById('avgCableLength').value = '25';
-                
-                // Set default values for calculated mode
-                const calcQtyInput = document.querySelector('#calculatedLengthMode .cable-qty');
-                const calcLengthInput = document.querySelector('#calculatedLengthMode .cable-length');
-                if (calcQtyInput) calcQtyInput.value = '1';
-                if (calcLengthInput) calcLengthInput.value = '25';
-                
-                // Add event listeners to any newly created elements
-                addEventListenersToLineItems();
-                
-                // Ensure the default cable mode is set correctly
-                setCableLengthMode('average');
-            }
-            
-            // Set default positions for collapsible sections
-            // Summary is open by default, Time Breakdown is collapsed by default
-            const resultsSection = document.getElementById('results');
-            const breakdownSection = document.getElementById('breakdown');
-            const cableConfigSection = document.getElementById('cableConfig');
-            
-            if (resultsSection) {
-                resultsSection.classList.remove('collapsed'); // Ensure summary is open
-            }
-            if (breakdownSection) {
-                breakdownSection.classList.add('collapsed'); // Ensure time breakdown is collapsed
-            }
-            if (cableConfigSection) {
-                cableConfigSection.classList.add('expanded'); // Ensure cable config is open
-            }
+            // Note: Default collapsed state for all sections is now set in the setTimeout 
+            // at the end of initialization to ensure it overrides any auto-saved states
             
             calculate();
         });
@@ -4310,6 +4458,66 @@
                 });
             }
             
+            // Calculate waste-adjusted requirements
+            const connectorWasteFactor = parseFloat(document.getElementById('connectorWasteFactor').value) || 0;
+            var requiredWithWaste = Math.ceil(requiredConnectors * (1 + connectorWasteFactor / 100));
+            
+            // Calculate connector requirements by type
+            var bncRequired = 0;
+            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
+            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
+            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+            var bncRequiredWithWaste = Math.ceil(bncRequired * (1 + connectorWasteFactor / 100));
+            
+            var cat6Required = 0;
+            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
+            var cat6RequiredWithWaste = Math.ceil(cat6Required * (1 + connectorWasteFactor / 100));
+            
+            // Define status functions for waste-aware reconciliation
+            function getBncStatus() {
+                if (bncRequired === 0) return 'N/A';
+                const ordered = bncConnectorsOrdered + bncTerminationsOrdered;
+                const tolerance = Math.max(1, Math.ceil(bncRequired * 0.05)); // 5% tolerance or minimum 1
+                
+                if (connectorWasteFactor > 0) {
+                    // Compare against waste-adjusted amount with tolerance
+                    if (ordered >= bncRequiredWithWaste - tolerance && ordered <= bncRequiredWithWaste + tolerance) {
+                        return 'RECONCILED (with waste factor)';
+                    } else if (ordered < bncRequiredWithWaste - tolerance) {
+                        return 'SHORTAGE';
+                    } else {
+                        return 'OVERAGE';
+                    }
+                } else {
+                    // Standard comparison without waste
+                    if (ordered < bncRequired) return 'SHORTAGE';
+                    if (ordered > bncRequired) return 'OVERAGE';
+                    return 'MATCH';
+                }
+            }
+            
+            function getCat6Status() {
+                if (cat6Required === 0) return 'N/A';
+                const ordered = cat6ConnectorsOrdered + cat6TerminationsOrdered;
+                const tolerance = Math.max(1, Math.ceil(cat6Required * 0.05)); // 5% tolerance or minimum 1
+                
+                if (connectorWasteFactor > 0) {
+                    // Compare against waste-adjusted amount with tolerance
+                    if (ordered >= cat6RequiredWithWaste - tolerance && ordered <= cat6RequiredWithWaste + tolerance) {
+                        return 'RECONCILED (with waste factor)';
+                    } else if (ordered < cat6RequiredWithWaste - tolerance) {
+                        return 'SHORTAGE';
+                    } else {
+                        return 'OVERAGE';
+                    }
+                } else {
+                    // Standard comparison without waste
+                    if (ordered < cat6Required) return 'SHORTAGE';
+                    if (ordered > cat6Required) return 'OVERAGE';
+                    return 'MATCH';
+                }
+            }
+            
             // Generate reconciliation report with timestamp
             reconciliationReport.push('=== CONNECTOR/TERMINATION RECONCILIATION ===');
             reconciliationReport.push(`Reconciliation Date: ${formatDate}`);
@@ -4317,14 +4525,13 @@
             reconciliationReport.push(`Project: ${document.getElementById('projectName').value || 'Unnamed Project'}`);
             reconciliationReport.push(`Vendor: ${currentVendor}`);
             reconciliationReport.push('');
-            reconciliationReport.push(`Total terminations required: ${requiredConnectors}`);
+            reconciliationReport.push(`Total terminations required (base): ${requiredConnectors}`);
+            if (connectorWasteFactor > 0) {
+                reconciliationReport.push(`Total with ${connectorWasteFactor}% waste factor: ${requiredWithWaste}`);
+                reconciliationReport.push(`📍 NOTE: Ordered quantities should be compared against waste-adjusted totals`);
+            }
             reconciliationReport.push('');
-            
-            // Check BNC requirements
-            var bncRequired = 0;
-            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
-            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
-            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
+
             
             var reconciliationData = {
                 timestamp: isoTimestamp,
@@ -4335,10 +4542,9 @@
                 totalRequired: requiredConnectors,
                 bnc: {
                     required: bncRequired,
+                    requiredWithWaste: bncRequiredWithWaste,
                     ordered: bncConnectorsOrdered + bncTerminationsOrdered,
-                    status: bncRequired === 0 ? 'N/A' : 
-                           (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) ? 'SHORTAGE' :
-                           (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) ? 'OVERAGE' : 'MATCH'
+                    status: getBncStatus()
                 },
                 cat6: {
                     required: 0,
@@ -4349,37 +4555,53 @@
             
             if (bncRequired > 0) {
                 reconciliationReport.push(`BNC Connectors/Terminations:`);
-                reconciliationReport.push(`  Required: ${bncRequired}`);
+                reconciliationReport.push(`  Required (base): ${bncRequired}`);
+                if (connectorWasteFactor > 0) {
+                    reconciliationReport.push(`  Required (with ${connectorWasteFactor}% waste): ${bncRequiredWithWaste}`);
+                }
                 reconciliationReport.push(`  Ordered: ${bncConnectorsOrdered + bncTerminationsOrdered}`);
-                if (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) {
-                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${bncRequired - (bncConnectorsOrdered + bncTerminationsOrdered)} more`);
-                } else if (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) {
-                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(bncConnectorsOrdered + bncTerminationsOrdered) - bncRequired} extra`);
-                } else {
+                
+                const status = getBncStatus();
+                if (status === 'RECONCILED (with waste factor)') {
+                    reconciliationReport.push(`  ✅ RECONCILED: Order quantity accounts for waste factor`);
+                } else if (status === 'SHORTAGE') {
+                    const targetQty = connectorWasteFactor > 0 ? bncRequiredWithWaste : bncRequired;
+                    const shortage = targetQty - (bncConnectorsOrdered + bncTerminationsOrdered);
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${shortage} more`);
+                } else if (status === 'OVERAGE') {
+                    const targetQty = connectorWasteFactor > 0 ? bncRequiredWithWaste : bncRequired;
+                    const overage = (bncConnectorsOrdered + bncTerminationsOrdered) - targetQty;
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${overage} extra`);
+                } else if (status === 'MATCH') {
                     reconciliationReport.push(`  ✅ Perfect match`);
                 }
                 reconciliationReport.push('');
             }
-            
-            // Check Cat6 requirements
-            var cat6Required = 0;
-            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
-            
             // Update cat6 data in reconciliation data
             reconciliationData.cat6.required = cat6Required;
-            reconciliationData.cat6.status = cat6Required === 0 ? 'N/A' : 
-                                           (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) ? 'SHORTAGE' :
-                                           (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) ? 'OVERAGE' : 'MATCH';
+            reconciliationData.cat6.requiredWithWaste = cat6RequiredWithWaste;
+            reconciliationData.cat6.status = getCat6Status();
             
             if (cat6Required > 0) {
                 reconciliationReport.push(`Cat6 Connectors/Terminations:`);
-                reconciliationReport.push(`  Required: ${cat6Required}`);
+                reconciliationReport.push(`  Required (base): ${cat6Required}`);
+                if (connectorWasteFactor > 0) {
+                    reconciliationReport.push(`  Required (with ${connectorWasteFactor}% waste): ${cat6RequiredWithWaste}`);
+                }
                 reconciliationReport.push(`  Ordered: ${cat6ConnectorsOrdered + cat6TerminationsOrdered}`);
-                if (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) {
-                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${cat6Required - (cat6ConnectorsOrdered + cat6TerminationsOrdered)} more`);
-                } else if (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) {
-                    reconciliationReport.push(`  ℹ️  Over-ordered: ${(cat6ConnectorsOrdered + cat6TerminationsOrdered) - cat6Required} extra`);
-                } else {
+                
+                const status = getCat6Status();
+                if (status === 'RECONCILED (with waste factor)') {
+                    reconciliationReport.push(`  ✅ RECONCILED: Order quantity accounts for waste factor`);
+                } else if (status === 'SHORTAGE') {
+                    const targetQty = connectorWasteFactor > 0 ? cat6RequiredWithWaste : cat6Required;
+                    const shortage = targetQty - (cat6ConnectorsOrdered + cat6TerminationsOrdered);
+                    reconciliationReport.push(`  ⚠️  NEED TO ORDER: ${shortage} more`);
+                } else if (status === 'OVERAGE') {
+                    const targetQty = connectorWasteFactor > 0 ? cat6RequiredWithWaste : cat6Required;
+                    const overage = (cat6ConnectorsOrdered + cat6TerminationsOrdered) - targetQty;
+                    reconciliationReport.push(`  ℹ️  Over-ordered: ${overage} extra`);
+                } else if (status === 'MATCH') {
                     reconciliationReport.push(`  ✅ Perfect match`);
                 }
                 reconciliationReport.push('');
@@ -4504,49 +4726,36 @@
                 });
             }
             
-            // Check BNC requirements
-            var bncRequired = 0;
-            if (cableTypes['1855']) bncRequired += cableTypes['1855'];
-            if (cableTypes['1505']) bncRequired += cableTypes['1505'];
-            if (cableTypes['1694']) bncRequired += cableTypes['1694'];
-            
-            // Check Cat6 requirements
-            var cat6Required = 0;
-            if (cableTypes['cat6']) cat6Required += cableTypes['cat6'];
-            
             // Check cable quantity mismatches
             var cableMismatchData = window.cableMismatchData || { hasMismatch: false };
             var hasCableMismatch = cableMismatchData.hasMismatch;
             
-            // Determine overall status
+            // Use the new waste-aware status functions
+            var bncStatus = bncRequired > 0 ? getBncStatus() : 'N/A';
+            var cat6Status = cat6Required > 0 ? getCat6Status() : 'N/A';
+            
+            // Determine overall status using waste-aware results
             var hasShortages = false;
             var hasOverages = false;
             var hasIssues = false;
-            var bncStatus = 'N/A';
-            var cat6Status = 'N/A';
+            var hasReconciled = false;
             
-            if (bncRequired > 0) {
-                if (bncConnectorsOrdered + bncTerminationsOrdered < bncRequired) {
-                    bncStatus = 'SHORTAGE';
-                    hasShortages = true;
-                } else if (bncConnectorsOrdered + bncTerminationsOrdered > bncRequired) {
-                    bncStatus = 'OVERAGE';
-                    hasOverages = true;
-                } else {
-                    bncStatus = 'MATCH';
-                }
+            // Check BNC status
+            if (bncStatus === 'SHORTAGE') {
+                hasShortages = true;
+            } else if (bncStatus === 'OVERAGE') {
+                hasOverages = true;
+            } else if (bncStatus === 'RECONCILED (with waste factor)') {
+                hasReconciled = true;
             }
             
-            if (cat6Required > 0) {
-                if (cat6ConnectorsOrdered + cat6TerminationsOrdered < cat6Required) {
-                    cat6Status = 'SHORTAGE';
-                    hasShortages = true;
-                } else if (cat6ConnectorsOrdered + cat6TerminationsOrdered > cat6Required) {
-                    cat6Status = 'OVERAGE';
-                    hasOverages = true;
-                } else {
-                    cat6Status = 'MATCH';
-                }
+            // Check Cat6 status
+            if (cat6Status === 'SHORTAGE') {
+                hasShortages = true;
+            } else if (cat6Status === 'OVERAGE') {
+                hasOverages = true;
+            } else if (cat6Status === 'RECONCILED (with waste factor)') {
+                hasReconciled = true;
             }
             
             // Include cable mismatch in overall status
@@ -4567,7 +4776,7 @@
                 statusElement.style.background = '#27ae60';
             }
             
-            // Update quick status
+            // Update quick status with waste-aware logic
             let quickStatus = '';
             if (hasShortages) {
                 quickStatus = '⚠️ Shortages detected - items need to be ordered';
@@ -4575,6 +4784,8 @@
                 quickStatus = '⚠️ Cable quantity mismatches detected';
             } else if (hasOverages) {
                 quickStatus = 'ℹ️ Overages detected - extra items ordered';
+            } else if (hasReconciled) {
+                quickStatus = '✅ Reconciled - order quantities account for waste factors';
             } else {
                 quickStatus = '✅ Perfect match - all requirements met';
             }
@@ -5347,8 +5558,10 @@
             }
         });
         
-        // Initialize page components
-        setTimeout(() => {
+        // Initialize page components with proper DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - initializing...');
+            
             initializeCableTypeColors();
             // Force cable type width override and apply colors
             const cableTypes = document.querySelectorAll('.cable-type');
@@ -5359,9 +5572,76 @@
                 updateCableTypeColor(select);
             });
             
+            // Auto-load functionality
+            const autoSavedProject = localStorage.getItem('autoSavedProject');
+            console.log('Raw autoSavedProject from localStorage:', autoSavedProject);
+            if (autoSavedProject) {
+                try {
+                    const projectData = JSON.parse(autoSavedProject);
+                    console.log('Parsed project data:', projectData);
+                    loadProjectData(projectData);
+                    console.log('Auto-saved project loaded successfully on DOMContentLoaded');
+                } catch (error) {
+                    console.error('Error loading auto-saved project on DOMContentLoaded:', error);
+                }
+            }
+            
             // Initialize project history logging
             logProjectChange('Application Started', 'TEdevProjectCalc application loaded and initialized');
-        }, 100); // Small delay to ensure DOM is ready
+            
+            // Ensure single labor mode is active by default and calculations are up to date
+            setLaborMode('single');
+            
+            // Final calculation after everything is loaded
+            setTimeout(() => {
+                calculate();
+                console.log('Initial calculation completed');
+            }, 50);
+            
+        });
+
+        // Simple function to collapse all sections using existing toggle methods
+        function forceAllSectionsCollapsed() {
+            console.log('🔧 Collapsing all sections...');
+            
+            try {
+                // For sections that use 'collapsed' class (results, breakdown, reconciliation)
+                const resultsSection = document.getElementById('results');
+                if (resultsSection && !resultsSection.classList.contains('collapsed')) {
+                    console.log('📊 Collapsing Project Summary');
+                    toggleMobileSection('results');
+                }
+                
+                const breakdownSection = document.getElementById('breakdown');
+                if (breakdownSection && !breakdownSection.classList.contains('collapsed')) {
+                    console.log('🔍 Collapsing Time Breakdown');
+                    toggleBreakdown();
+                }
+                
+                const reconciliationSection = document.getElementById('reconciliationSection');
+                if (reconciliationSection && !reconciliationSection.classList.contains('collapsed')) {
+                    console.log('📋 Collapsing Reconciliation');
+                    reconciliationSection.classList.add('collapsed');
+                }
+                
+                // For sections that use 'expanded' class (section-content elements)
+                const sectionsToCollapse = ['cableConfig', 'materialsEquipment', 'vendorPricing', 'staffLineItems', 'setupConfig'];
+                sectionsToCollapse.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section && section.classList.contains('expanded')) {
+                        console.log(`⚙️ Collapsing ${sectionId}`);
+                        toggleSection(sectionId);
+                    }
+                });
+                
+                console.log('✅ All sections collapsed');
+            } catch (error) {
+                console.error('❌ Error collapsing sections:', error);
+            }
+        }
+        
+        // Run after everything is loaded with a delay to override auto-saved states
+        setTimeout(forceAllSectionsCollapsed, 600);
     </script>
 </body>
 </html>
