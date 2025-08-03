@@ -1,0 +1,431 @@
+/* Responsive Design for KGO Project Calculator */
+
+/* Mobile First Approach */
+
+/* Extra Small devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        height: auto;
+    }
+    
+    .left-panel,
+    .right-panel {
+        padding: 15px;
+    }
+    
+    .project-header {
+        padding: 10px 15px;
+    }
+    
+    .header-grid {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .header-item {
+        width: 100%;
+    }
+    
+    .header-item input {
+        width: 100%;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .result-card {
+        padding: 12px;
+    }
+    
+    .result-value {
+        font-size: 1.25rem;
+    }
+    
+    .input-group {
+        padding: 15px;
+    }
+    
+    .line-item {
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+    }
+    
+    .line-item input,
+    .line-item select {
+        width: 100%;
+    }
+    
+    .toggle-group {
+        flex-direction: column;
+    }
+    
+    .toggle-btn {
+        border-radius: 4px !important;
+        margin-right: 0 !important;
+        margin-bottom: -1px;
+    }
+    
+    .toggle-btn:first-child {
+        border-radius: 4px 4px 0 0 !important;
+    }
+    
+    .toggle-btn:last-child {
+        border-radius: 0 0 4px 4px !important;
+        margin-bottom: 0;
+    }
+    
+    .section-header {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .section-content {
+        padding: 12px;
+    }
+    
+    .breakdown-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .main-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        height: auto;
+    }
+    
+    .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .line-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .line-item input,
+    .line-item select {
+        min-width: 120px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .main-layout {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .results-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .left-panel,
+    .right-panel {
+        padding: 15px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .results-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1600px;
+    }
+    
+    .results-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+    .main-layout {
+        height: calc(100vh - 50px);
+    }
+    
+    .left-panel,
+    .right-panel {
+        padding: 10px;
+    }
+    
+    .results {
+        padding: 15px;
+    }
+    
+    .breakdown {
+        padding: 15px;
+    }
+    
+    .input-group {
+        padding: 12px;
+    }
+    
+    .section-header {
+        padding: 8px 12px;
+    }
+    
+    .section-content {
+        padding: 12px;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .section-header,
+    .toggle-btn,
+    .line-item,
+    .result-card {
+        border-width: 0.5px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .container {
+        max-width: none;
+        background: white;
+        box-shadow: none;
+    }
+    
+    .main-layout {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        height: auto;
+    }
+    
+    .left-panel,
+    .right-panel {
+        background: white;
+        border: 1px solid #000;
+        padding: 15px;
+    }
+    
+    .project-header {
+        background: #f8f9fa !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .section-header {
+        background: #f8f9fa !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .section-content {
+        display: block !important;
+        border: 1px solid #000;
+        border-top: none;
+    }
+    
+    .result-card {
+        border: 1px solid #000;
+        background: white;
+    }
+    
+    .line-item {
+        border: 1px solid #000;
+        background: white;
+    }
+    
+    .toggle-btn,
+    .add-item-btn,
+    .remove-btn {
+        display: none !important;
+    }
+    
+    .breakdown-item {
+        border-bottom: 1px solid #000;
+    }
+    
+    .modal,
+    .notification,
+    .loading-spinner {
+        display: none !important;
+    }
+    
+    /* Hide scrollbars */
+    .left-panel,
+    .right-panel {
+        overflow: visible;
+    }
+    
+    /* Ensure text is readable */
+    * {
+        color: #000 !important;
+        background: white !important;
+    }
+    
+    /* Page breaks */
+    .input-group {
+        page-break-inside: avoid;
+    }
+    
+    .results {
+        page-break-inside: avoid;
+    }
+    
+    .breakdown {
+        page-break-inside: avoid;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Dark mode support - can be expanded later */
+    body {
+        background: #1a1a1a;
+        color: #e0e0e0;
+    }
+    
+    .container {
+        background: #2d2d2d;
+    }
+    
+    .left-panel {
+        background: #f8f9fa !important;
+    }
+    
+    .input-group {
+        background: white !important;
+        border-color: #dee2e6 !important;
+    }
+    
+    .section-header {
+        background: #f8f9fa !important;
+        color: #495057 !important;
+        border-color: #dee2e6 !important;
+    }
+    
+    .section-content {
+        background: white !important;
+        border-color: #dee2e6 !important;
+    }
+    
+    /* Override dark mode for reconciliation section */
+    #reconciliationSection {
+        background: white !important;
+    }
+    
+    #reconciliationSection.expanded {
+        background: white !important;
+    }
+    
+    /* Keep Project Summary cards white with black text as user prefers */
+    .result-card {
+        background: white !important;
+        border-color: #dee2e6;
+        color: #333 !important;
+    }
+    
+    .result-card h4 {
+        color: #333 !important;
+    }
+    
+    .result-value {
+        color: #333 !important;
+    }
+    
+    .result-detail {
+        color: #666 !important;
+    }
+    
+    input,
+    select {
+        background: #333;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+    
+    input:focus,
+    select:focus {
+        border-color: #007bff;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+@media (any-hover: none) {
+    /* Touch devices */
+    .toggle-btn:hover,
+    .add-item-btn:hover,
+    .remove-btn:hover,
+    .section-header:hover {
+        background: inherit;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .section-header {
+        border: 2px solid #000;
+    }
+    
+    .input-group {
+        border: 2px solid #000;
+    }
+    
+    .result-card {
+        border: 2px solid #000;
+    }
+    
+    .line-item {
+        border: 2px solid #000;
+    }
+    
+    .toggle-btn {
+        border: 2px solid #000;
+    }
+    
+    .toggle-btn.active {
+        border-color: #000;
+    }
+} 

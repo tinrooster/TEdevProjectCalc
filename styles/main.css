@@ -1,0 +1,1025 @@
+/* Main Styles for KGO Project Calculator */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    color: #333;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: white;
+    min-height: 100vh;
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    height: calc(100vh - 60px);
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+    overflow-y: auto;
+    min-height: 0;
+    max-height: calc(100vh - 60px);
+}
+
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px;
+    background: white;
+}
+
+.input-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Input Groups and Sections */
+.input-group {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+.input-group h3 {
+    color: #495057;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Section Headers */
+.section-header {
+    background: #f8f9fa !important;
+    color: #495057 !important;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.section-header:hover {
+    background: #e9ecef !important;
+}
+
+/* Only apply blue background to expanded sections that are NOT reconciliation */
+.section-header.expanded:not([data-section="reconciliationSection"]) {
+    background: #007bff !important;
+    color: white !important;
+}
+
+.section-header.expanded:not([data-section="reconciliationSection"]):hover {
+    background: #0056b3 !important;
+}
+
+/* Keep reconciliation section header light even when expanded */
+.section-header[data-section="reconciliationSection"] {
+    background: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+.section-header[data-section="reconciliationSection"]:hover {
+    background: #e9ecef !important;
+}
+
+.section-header[data-section="reconciliationSection"].expanded {
+    background: #f8f9fa !important;
+    color: #495057 !important;
+}
+
+/* Section Content */
+.section-content {
+    background: white !important;
+    padding: 16px;
+    border-bottom: 1px solid #dee2e6;
+    display: none;
+    overflow: visible;
+}
+
+.section-content.expanded {
+    display: block !important;
+    overflow: visible;
+}
+
+/* Ensure reconciliation section content is always white */
+#reconciliationSection {
+    background: white !important;
+}
+
+#reconciliationSection.expanded {
+    background: white !important;
+}
+
+/* Force white background on reconciliation section and its parent */
+.input-group:has(#reconciliationSection) {
+    background: white !important;
+}
+
+.input-group:has(#reconciliationSection) .section-content {
+    background: white !important;
+}
+
+/* Additional specificity for reconciliation section */
+div#reconciliationSection.section-content {
+    background: white !important;
+}
+
+div#reconciliationSection.section-content.expanded {
+    background: white !important;
+}
+
+/* Toggle Icon */
+.toggle-icon {
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.section-header.expanded .toggle-icon {
+    transform: rotate(90deg);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background: white;
+    color: #495057;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: white;
+    color: #495057;
+}
+
+input::placeholder {
+    color: #adb5bd;
+}
+
+.toggle-group {
+    display: flex;
+    gap: 0;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border: none;
+    cursor: pointer;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #495057;
+    transition: all 0.15s ease-in-out;
+    border-right: 1px solid #dee2e6;
+}
+
+.toggle-btn:last-child {
+    border-right: none;
+}
+
+.toggle-btn.active {
+    background: #007bff !important;
+    color: white !important;
+    border-color: #007bff !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Specific styling for cable length mode toggles */
+.toggle-btn[data-mode="average"].active,
+.toggle-btn[data-mode="calculated"].active {
+    background: #007bff !important;
+    color: white !important;
+    border-color: #007bff !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhanced toggle button styling for better visual feedback */
+.toggle-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.toggle-btn.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    pointer-events: none;
+}
+
+/* Cable Summary Section */
+.cable-summary {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.summary-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.summary-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.summary-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #007bff;
+}
+
+/* Cable Type Dropdown Styling */
+.cable-type {
+    padding: 8px 12px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    background: #007bff;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 80px;
+    text-align: center;
+}
+
+.cable-type:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+}
+
+.cable-type:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Cable type specific colors */
+.cable-type[data-value="1855"] {
+    background: #28a745;
+    border-color: #28a745;
+}
+
+.cable-type[data-value="1855"]:hover {
+    background: #1e7e34;
+    border-color: #1e7e34;
+}
+
+.cable-type[data-value="1505"] {
+    background: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.cable-type[data-value="1505"]:hover {
+    background: #117a8b;
+    border-color: #117a8b;
+}
+
+.cable-type[data-value="1694"] {
+    background: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.cable-type[data-value="1694"]:hover {
+    background: #e0a800;
+    border-color: #e0a800;
+    color: #212529;
+}
+
+.cable-type[data-value="cat6"] {
+    background: #6f42c1;
+    border-color: #6f42c1;
+}
+
+.cable-type[data-value="cat6"]:hover {
+    background: #5a32a3;
+    border-color: #5a32a3;
+}
+
+.cable-type[data-value="other"] {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+
+.cable-type[data-value="other"]:hover {
+    background: #545b62;
+    border-color: #545b62;
+}
+
+.toggle-btn:hover:not(.active) {
+    background: #e9ecef;
+}
+
+/* Results Section */
+.results {
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.results h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.result-card {
+    background: white !important;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Total Cables card styling removed - now matches other cards */
+
+/* Staff Hours card with light blue background to match Labor Hours Reconciliation */
+.result-card:has(h4:contains("Staff Hours")),
+.result-card:has(h4:contains("👥 Staff Hours")) {
+    background: #d1ecf1 !important;
+    border-left: 4px solid #17a2b8;
+}
+
+/* Cable Totals box with light blue background to match Labor Hours Reconciliation */
+.cable-summary .summary-box {
+    background: #d1ecf1 !important;
+    border-left: 4px solid #17a2b8;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.result-card h4 {
+    color: #333 !important;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.result-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333 !important;
+    margin-bottom: 5px;
+}
+
+.result-detail {
+    font-size: 0.75rem;
+    color: #666 !important;
+    line-height: 1.2;
+}
+
+.result-caption {
+    font-size: 0.7rem;
+    color: #6c757d;
+    margin-top: 6px;
+    line-height: 1.2;
+    border-top: 1px solid #e9ecef;
+    padding-top: 4px;
+}
+
+/* Breakdown Section */
+.breakdown {
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.breakdown h3 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.breakdown h3::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: #6c757d;
+    transition: transform 0.2s ease;
+}
+
+.breakdown.collapsed h3::after {
+    transform: rotate(-90deg);
+}
+
+.breakdown.collapsed .breakdown-item {
+    display: none;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f3f4;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.breakdown-item:last-child {
+    border-bottom: none;
+}
+
+.breakdown-item span {
+    color: #495057;
+}
+
+/* Line Items */
+.line-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.line-item input,
+.line-item select {
+    flex: 1;
+    margin: 0;
+}
+
+.line-item button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.line-item button:hover {
+    background: #c82333;
+}
+
+.add-item-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    transition: background-color 0.15s ease-in-out;
+    margin-top: 10px;
+}
+
+.add-item-btn:hover {
+    background: #218838;
+}
+
+/* Project Header */
+.project-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
+    color: #495057;
+    padding: 15px 20px;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+    position: relative;
+}
+
+/* Clickable double line separator below header */
+.project-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: 
+        linear-gradient(to bottom, 
+            #007bff 0px, #007bff 1px, 
+            transparent 1px, transparent 2px,
+            #007bff 2px, #007bff 3px, 
+            transparent 3px, transparent 4px
+        );
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.project-header:hover::after {
+    background: 
+        linear-gradient(to bottom, 
+            #0056b3 0px, #0056b3 1px, 
+            transparent 1px, transparent 2px,
+            #0056b3 2px, #0056b3 3px, 
+            transparent 3px, transparent 4px
+        );
+    box-shadow: 0 1px 3px rgba(0, 123, 255, 0.3);
+}
+
+.project-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff 0%, #28a745 25%, #ffc107 50%, #dc3545 75%, #6f42c1 100%);
+}
+
+.header-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.header-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-item label {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.header-item input {
+    background: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.header-item input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.header-item input::placeholder {
+    color: #adb5bd;
+}
+
+/* Enhanced Logo and App Name Styling */
+.project-header img {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.project-header img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.project-header .app-name {
+    transition: color 0.2s ease-in-out;
+}
+
+.project-header .app-name:hover {
+    color: #007bff;
+}
+
+/* Button styles are now handled by components.css */
+
+/* Help Modal Styles */
+.help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-modal-content {
+    background: white;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.help-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+    border-radius: 8px 8px 0 0;
+}
+
+.help-modal-header h3 {
+    margin: 0;
+    color: #495057;
+}
+
+.help-modal-body {
+    padding: 20px;
+    color: #495057;
+}
+
+.help-modal-body h4 {
+    color: #007bff;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.help-modal-body ul,
+.help-modal-body ol {
+    margin-left: 20px;
+}
+
+.help-modal-body li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+} 
+
+/* Setup Grid */
+.setup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 16px;
+}
+
+.setup-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.setup-item label {
+    font-size: 0.875rem;
+    color: #495057;
+    font-weight: 500;
+    margin: 0;
+}
+
+.setup-item input {
+    background: white !important;
+    border: 1px solid #ced4da;
+    color: #495057 !important;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.setup-item input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: white !important;
+    color: #495057 !important;
+}
+
+.setup-item input::placeholder {
+    color: #adb5bd;
+}
+
+/* Auto Save Section */
+.auto-save-section {
+    padding: 16px;
+    border-top: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+.auto-save-section .setup-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.auto-save-section input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+/* Labor Split Sections */
+.labor-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 16px;
+}
+
+.split-section h5 {
+    color: #495057;
+    margin: 0 0 10px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Staff Hours Section */
+.staff-hours {
+    padding: 16px;
+    border-top: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+.staff-hours label {
+    color: #495057;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.staff-hours input {
+    background: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.staff-hours input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Vendor Details */
+.vendor-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.vendor-name-row label {
+    color: #495057;
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.vendor-name-row input {
+    background: white;
+    border: 1px solid #ced4da;
+    color: #495057;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    flex: 1;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.vendor-name-row input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Vendor Status */
+.vendor-status {
+    font-size: 12px;
+    margin-left: 8px;
+}
+
+.active-status {
+    color: #28a745;
+}
+
+.inactive-status {
+    color: #6c757d;
+} 
+
+/* Override browser autofill styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #495057 !important;
+    background-color: white !important;
+}
+
+/* Ensure all input types maintain proper styling */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    background: white !important;
+    color: #495057 !important;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+    background: white !important;
+    color: #495057 !important;
+}
+
+/* Notification animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.notification {
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification.notification-removing {
+    animation: slideOut 0.3s ease-out;
+}
+
+/* Vendor Quote Status Styling */
+.vendor-quote-status {
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+.vendor-quote-status option[value="pending"] {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.vendor-quote-status option[value="approved"] {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Status-specific styling for the dropdown */
+.vendor-quote-status:has(option[value="pending"]:checked) {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+}
+
+.vendor-quote-status:has(option[value="approved"]:checked) {
+    background-color: #d4edda;
+    border-color: #a8e6cf;
+    color: #155724;
+}
+
+/* Alternative approach for status styling */
+.vendor-quote-status[data-status="pending"] {
+    background-color: #fff3cd !important;
+    border-color: #ffeaa7 !important;
+    color: #856404 !important;
+}
+
+.vendor-quote-status[data-status="approved"] {
+    background-color: #d4edda !important;
+    border-color: #a8e6cf !important;
+    color: #155724 !important;
+}
+
+/* Vendor quote line item styling */
+.vendor-quote.line-item {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.vendor-quote.line-item:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+/* Status indicator styling */
+.vendor-quote-status {
+    position: relative;
+}
+
+.vendor-quote-status::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #6c757d;
+}
+
+.vendor-quote-status[data-status="pending"]::before {
+    background-color: #ffc107;
+}
+
+.vendor-quote-status[data-status="approved"]::before {
+    background-color: #28a745;
+}
